@@ -6,6 +6,7 @@ import Login from './components/Login'
 import SubirRadiografia from './components/SubirRadiografia'
 
 //ABM medico
+import ListadoMedicos from './components/ABMMedico/ListadoMedicos';
 import AltaMedico from './components/ABMMedico/AltaMedico';
 import ModificarMedico from './components/ABMMedico/ModificarMedico';
 
@@ -15,6 +16,8 @@ const App = () => {
      <BrowserRouter>
         <Routes>
             <Route path="/subirRadiografia" element={<SubirRadiografia/>}/>
+
+            <Route path='/listadoMedicos' element={<ListadoMedicos></ListadoMedicos>}></Route>
             <Route path='/altaMedico' element={<AltaMedico></AltaMedico>}></Route>
             <Route path='/modificarMedico/:nlegajo' element={<ModificarMedico></ModificarMedico>}></Route>
             <Route path='/' element= {<Login/>}></Route>

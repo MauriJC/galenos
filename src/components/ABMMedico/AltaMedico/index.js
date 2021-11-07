@@ -1,10 +1,10 @@
 import React,{useState} from 'react'
-import axios from 'axios'
+import api from '../../../apis'
 import './styles.css'
 
 
 const AltaMedico = () => {
- const endpoint=''
+ 
 
 
   const [nombre, setnombre] = useState('');
@@ -36,7 +36,7 @@ const AltaMedico = () => {
 
 
 
-    const response = await axios.post(endpoint,formData)
+    const response = await api.post(`/medicos`,formData)
 
 
   }

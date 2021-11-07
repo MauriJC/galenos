@@ -1,15 +1,21 @@
-import axios from 'axios'
-import React,{useState} from 'react'
+import api from '../../../apis'
+import React,{useEffect, useState} from 'react'
 import {Link} from 'react-router-dom'
 
 
 const ListadoMedicos = () => {
     const [listaMedicos, setlistaMedicos] = useState([])
-    const endpoint = ''
+   
+
+    useEffect(()=>{
+      getListadoMedicos()
+      console.log('obteniendo medicos')
+    },[])
 
     const getListadoMedicos = async() =>{
-        const response = await axios.get(endpoint)
+        const response = await api.get(`/medicos`)
         setlistaMedicos(response.data);
+        console.log(listaMedicos)
 
 
     }
@@ -17,13 +23,13 @@ const ListadoMedicos = () => {
     const renderAdminFunctions= (medico)=>{
         return  (<div className="right floated content">
         <Link to={`/medicos/edit/${medico.legajo}`} className="ui button primary">
-          Edit
+          Modificar
         </Link>
         <Link
           to={`/medicos/delete/${medico.legajo}`}
           className="ui button negative"
         >
-          Delete
+          Borrar
         </Link>
       </div>
       )
@@ -32,17 +38,25 @@ const ListadoMedicos = () => {
   return (
 
     <div>
-       {listaMedicos.map(medico=>{
-           return  (<div className="item" key={medico.legajo}>
-           {this.renderAdminFunctions(medico)}
-           <i className="large middle aligned icon camera" />
-           <div className="content">
-             Nombre del medico 
-             <div className="description"> Descripcion del medico</div>
-           </div>
-         </div>
-       )
-       })} 
+       <h1 className='ui centered dividing header'>Listado de Medicos</h1>
+        <div className="ui celled list">
+              {listaMedicos.map(medico=>{
+                return  (<div className="item" key={medico.legajo}>
+                {renderAdminFunctions(medico)}
+                <i className="large middle aligned icon doctor" />
+                <div className="content">
+                  Nombre del medico: {medico.nombre}
+                  <div className="description"> Apellido del medico: {medico.apellido}</div>
+                </div>
+              </div>
+            )
+            })} 
+
+
+        </div>
+       
+
+       
      
     </div>
   )

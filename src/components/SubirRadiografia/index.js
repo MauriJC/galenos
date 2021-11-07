@@ -1,4 +1,4 @@
-import axios from 'axios'
+import api from '../../apis'
 import React, {useState} from 'react'
 //import { CajaFlex } from './styles'
 
@@ -15,7 +15,7 @@ const SubirRadiografia = () => {
 
 
   const getInfoAfiliado = async () => {
-    const response = await axios.get(endpoint, {
+    const response = await api.get(endpoint, {
       params: {
         q: nroAfiliado
       }
@@ -28,40 +28,41 @@ const SubirRadiografia = () => {
 
 
 
-const handleImage = (e)=>{
-  setRadiografia(e.target.files[0]);
-  console.log(radiografia)
+  const handleImage = (e)=>{
+    setRadiografia(e.target.files[0]);
+    console.log(radiografia)
 
-}
-  
-/*
-const prueba = ()=>{
-  
-    setInputFileState(!inputFileState)
-    setInfoAfiliado({name: 'Vicente Luis', dni:1232313})
-
-    
-    console.log('reemplazar por getInfoAfiliado')
   }
-
-*/
-
-const uploadInfoAfiliado= async() =>{
-  const formData = new FormData();
-  formData.append('name',infoAfiliado['name']);
-  formData.append('dni',infoAfiliado['dni']);
-  formData.append('file', radiografia);
-  console.log(formData.get('file'))
-
-  await axios.post(endpoint,formData)
-  .then(response=> 
-    console.log(response.data)
-    ).catch(error=>
-      console.log(error)
-    );
   
+  /*
+  const prueba = ()=>{
+    
+      setInputFileState(!inputFileState)
+      setInfoAfiliado({name: 'Vicente Luis', dni:1232313})
 
-}
+      
+      console.log('reemplazar por getInfoAfiliado')
+    }
+
+  */
+
+  const uploadInfoAfiliado= async() =>{
+    const formData = new FormData();
+    formData.append('name',infoAfiliado['name']);
+    formData.append('dni',infoAfiliado['dni']);
+    formData.append('file', radiografia);
+    console.log(formData.get('file'))
+
+    await api.post(endpoint,formData)
+    .then(response=> {
+      console.log(response.data)
+      console.log('upload exitoso')}
+      ).catch(error=>
+        console.log(error)
+      );
+    
+
+  }
 
 
   return (

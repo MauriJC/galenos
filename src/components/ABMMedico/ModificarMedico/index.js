@@ -1,10 +1,10 @@
-import axios from 'axios';
+import api from '../../../apis';
 import React,{useState, useEffect} from 'react'
 import { useParams } from 'react-router';
 
 const ModificarMedico = () => {
 
-    const endpoint = '';
+    
     const {nlegajo} = useParams()
 
     const [nombre, setnombre] = useState('');
@@ -20,23 +20,51 @@ const ModificarMedico = () => {
 
     useEffect(() => {
         console.log('renderizado')
-        //getInfoMedico()
-    })
+        console.log(nlegajo);
+        getInfoMedico()
+    },[])
 
-    const handleSubmit=(e)=>{
-    e.preventDefault();
-    console.log('nonoonoo');
+    const handleSubmit= async (e)=>{
+        e.preventDefault();
+       
+        const formData = new FormData()
+        formData.append('nombre',nombre)
+        formData.append('apellido',apellido)
+        formData.append('dni',dni)
+        formData.append('domicilio',domicilio)
+        formData.append('telefono',telefono)
+        formData.append('mail',mail)
+        formData.append('matricula',matricula)
+        formData.append('legajo',legajo)
+
+        const response = await api.put(`/medicos/${nlegajo}`,{
+            "id":nlegajo,
+            "nombre":nombre,
+            "apellido":apellido,
+
+
+        })
+        console.log('revisar si posteo')
     }
 
     const getInfoMedico = async()=>{
-        const response = await axios.get(endpoint,{
+        const response = await api.get(`/medicos/${nlegajo}`)
+        /**
+         * Despues poner estos params dentro de la request cuando este la api
+         * ,{
             params:{
                 q: nlegajo
             }
-        })
-
+        } */
+        console.log('entra a get medico')
         setnombre(response.data['nombre'])
-
+        setapellido(response.data['apellido'])
+        setdni(response.data['dni'])
+        setdomicilio(response.data['domicilio'])
+        settelefono(response.data['telefono'])
+        setmail(response.data['mail'])
+        setmatricula(response.data['matricula'])
+        setlegajo(response.data['legajo'])
     }
 
 
