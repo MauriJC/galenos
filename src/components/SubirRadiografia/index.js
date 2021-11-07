@@ -5,47 +5,69 @@ import React, {useState} from 'react'
 
 const SubirRadiografia = () => {
   const endpoint = ''
-  
+  console.log('me renderice de nuevo')
   const [nroAfiliado,setNroAfiliado]= useState(''); 
-  const [infoAfiliado, setInfoAfiliado] = useState([]);
-  const [radiografia, setRadiografia] = useState([]);
+  const [infoAfiliado, setInfoAfiliado] = useState(null);
+  const [radiografia, setRadiografia] = useState(null);
+  const [inputFileState, setInputFileState]= useState(true);
 
-  const buscarInfoAfiliado = async (nroAfiliado) => {
+ 
+
+
+  const getInfoAfiliado = async () => {
     const response = await axios.get(endpoint, {
-
       params: {
-        part: ''
-
+        q: nroAfiliado
       }
+
     });
-    setInfoAfiliado(response);
+    setInputFileState(false);
+    setInfoAfiliado(response.data);
 
   }
 
-const onSubmit = (e) =>{
-  e.preventDefault();
-  //console.log(nroAfiliado)
-}
+
 
 const handleImage = (e)=>{
   setRadiografia(e.target.files[0]);
+  console.log(radiografia)
 
 }
   
+/*
+const prueba = ()=>{
+  
+    setInputFileState(!inputFileState)
+    setInfoAfiliado({name: 'Vicente Luis', dni:1232313})
 
-const upload = () =>{
+    
+    console.log('reemplazar por getInfoAfiliado')
+  }
+
+*/
+
+const uploadInfoAfiliado= async() =>{
+  const formData = new FormData();
+  formData.append('name',infoAfiliado['name']);
+  formData.append('dni',infoAfiliado['dni']);
+  formData.append('file', radiografia);
+  console.log(formData.get('file'))
+
+  await axios.post(endpoint,formData)
+  .then(response=> 
+    console.log(response.data)
+    ).catch(error=>
+      console.log(error)
+    );
   
 
 }
-
 
 
   return (
     <div>
-      <form action="" onSubmit= {onSubmit} className='ui form'>
+      <form className='ui form'>
       <h1 className="ui centered dividing header">Subir Radiografia</h1>
-
-
 
         <div className='ui container'>
               <div className='inline fields'>
@@ -55,12 +77,20 @@ const upload = () =>{
                         <input type="text" 
                           value = {nroAfiliado}
                           placeholder = {'Ingrese Numero de afiliado'}
-                          onChange= {(e)=>setNroAfiliado(e.target.value)}
+                          onChange= {(e)=> setNroAfiliado(e.target.value)}
                           />
 
                     </div>
                     
-                <button className= 'ui button' onClick={buscarInfoAfiliado}> Buscar</button>
+                <button className= 'ui button' onClick={(e)=> 
+                { e.preventDefault(); 
+                  setInfoAfiliado({name:'luis', dni: '1231233'})
+                  setInputFileState(!inputFileState)
+                  }}>
+                    Buscar
+                </button>
+                  
+                  
                  
               </div>
           
@@ -70,17 +100,18 @@ const upload = () =>{
       <hr />
         
       <div className= 'ui container'>
-        <label htmlFor="">Apellido y nombre:</label>
+        <label htmlFor="">Apellido y nombre: {infoAfiliado? infoAfiliado['name'] : '' }
+          </label>
         <br />
-        <label htmlFor="">DNI:</label> 
+        <label htmlFor="">DNI: {infoAfiliado? infoAfiliado['dni'] : '' }</label> 
 
         <br />
         <label htmlFor="">Archivo: </label>
-        <input type="file" name="image" id="" onChange= {handleImage}/>
+        <input type="file" name="image" id="" onInput= {handleImage}  disabled={inputFileState}/>
         
         <br />
         <center>
-          <button className='ui button eight wide' onClick={(e)=>console.log(2)}>Cargar</button>
+          <button className='ui button eight wide' onClick={uploadInfoAfiliado}>Cargar</button>
         </center>
         
       </div>

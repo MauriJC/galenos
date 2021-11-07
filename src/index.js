@@ -1,16 +1,31 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {BrowserRouter, Route, Switch} from 'react-router-dom'
+import {BrowserRouter, Route, Routes} from 'react-router-dom';
+import Login from './components/Login'
+
 import SubirRadiografia from './components/SubirRadiografia'
+
+//ABM medico
+import AltaMedico from './components/ABMMedico/AltaMedico';
+import ModificarMedico from './components/ABMMedico/ModificarMedico';
 
 const App = () => {
 
   return (
-      <BrowserRouter>
-        <Switch>
-            <Route path='/subirRadiografia' component = {SubirRadiografia} ></Route>
-        </Switch>
-      </BrowserRouter>
+     <BrowserRouter>
+        <Routes>
+            <Route path="/subirRadiografia" element={<SubirRadiografia/>}/>
+            <Route path='/altaMedico' element={<AltaMedico></AltaMedico>}></Route>
+            <Route path='/modificarMedico/:nlegajo' element={<ModificarMedico></ModificarMedico>}></Route>
+            <Route path='/' element= {<Login/>}></Route>
+              
+           
+            <Route path="/" ></Route>
+        </Routes> 
+
+        </BrowserRouter>
+        
+     
     
   )
 }
