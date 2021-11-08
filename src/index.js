@@ -14,12 +14,14 @@ const App = () => {
 
   return (
      <BrowserRouter>
+     
         <Routes>
+            
             <Route path="/subirRadiografia" element={<SubirRadiografia/>}/>
 
-            <Route path='/listadoMedicos' element={<ListadoMedicos></ListadoMedicos>}></Route>
-            <Route path='/altaMedico' element={<AltaMedico></AltaMedico>}></Route>
-            <Route path='/modificarMedico/:nlegajo' element={<ModificarMedico></ModificarMedico>}></Route>
+            <Route path='/medicos/listadoMedicos' element={<ListadoMedicos></ListadoMedicos>}></Route>
+            <Route path='/medicos/altaMedico' element={<AltaMedico></AltaMedico>}></Route>
+            <Route path='/medicos/modificarMedico/:nlegajo' element={<ModificarMedico></ModificarMedico>}></Route>
             <Route path='/' element= {<Login/>}></Route>
               
            

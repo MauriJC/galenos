@@ -4,8 +4,8 @@ import React, {useState} from 'react'
 
 
 const SubirRadiografia = () => {
-  const endpoint = ''
-  console.log('me renderice de nuevo')
+  
+  
   const [nroAfiliado,setNroAfiliado]= useState(''); 
   const [infoAfiliado, setInfoAfiliado] = useState(null);
   const [radiografia, setRadiografia] = useState(null);
@@ -14,17 +14,24 @@ const SubirRadiografia = () => {
  
 
 
-  const getInfoAfiliado = async () => {
-    const response = await api.get(endpoint, {
+  const getInfoAfiliado = async (e) => {
+    e.preventDefault()
+    const response = await api.get(`/afiliados/${nroAfiliado}`);
+    setInputFileState(false);
+    setInfoAfiliado(response.data);
+    console.log(response.data)
+
+  }
+
+  /**
+   * 
+   * , {
       params: {
         q: nroAfiliado
       }
 
-    });
-    setInputFileState(false);
-    setInfoAfiliado(response.data);
-
-  }
+    }
+   */
 
 
 
@@ -48,12 +55,12 @@ const SubirRadiografia = () => {
 
   const uploadInfoAfiliado= async() =>{
     const formData = new FormData();
-    formData.append('name',infoAfiliado['name']);
+    formData.append('nombre',infoAfiliado['nombre']);
     formData.append('dni',infoAfiliado['dni']);
     formData.append('file', radiografia);
     console.log(formData.get('file'))
 
-    await api.post(endpoint,formData)
+    await api.post(`/afiliados/${nroAfiliado}`,formData)
     .then(response=> {
       console.log(response.data)
       console.log('upload exitoso')}
@@ -83,11 +90,7 @@ const SubirRadiografia = () => {
 
                     </div>
                     
-                <button className= 'ui button' onClick={(e)=> 
-                { e.preventDefault(); 
-                  setInfoAfiliado({name:'luis', dni: '1231233'})
-                  setInputFileState(!inputFileState)
-                  }}>
+                <button className= 'ui button' onClick={getInfoAfiliado}>
                     Buscar
                 </button>
                   
@@ -101,7 +104,7 @@ const SubirRadiografia = () => {
       <hr />
         
       <div className= 'ui container'>
-        <label htmlFor="">Apellido y nombre: {infoAfiliado? infoAfiliado['name'] : '' }
+        <label htmlFor="">Apellido y nombre: {infoAfiliado? `${infoAfiliado['apellido']}  ${infoAfiliado['nombre']}` : '' }
           </label>
         <br />
         <label htmlFor="">DNI: {infoAfiliado? infoAfiliado['dni'] : '' }</label> 
