@@ -36,8 +36,34 @@ const ListadoMedicos = () => {
         >
           <i className="trash icon"></i>
         </Link>
+        <button className="ui button negative"
+        onClick={deleteMedico}
+        >
+            <i className="trash icon"></i>
+        </button>
       </div>
       )
+    }
+
+
+    const renderCrear=()=> {
+       
+        return (
+          <div style={{ textAlign: 'right' }}>
+            <Link to="/medicos/altamedico" className="ui button primary">
+              Alta medico 
+            </Link>
+          </div>
+        );
+      }
+    
+
+
+    const deleteMedico = async () =>{
+      await api.delete('/borrarmedico/')
+      .then(response=> console.log(response))
+      .catch(error=> console.log(error))
+
     }
 
   return (

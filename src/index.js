@@ -10,6 +10,11 @@ import ListadoMedicos from './components/ABMMedico/ListadoMedicos';
 import AltaMedico from './components/ABMMedico/AltaMedico';
 import ModificarMedico from './components/ABMMedico/ModificarMedico';
 
+//ABM radiologo
+import AltaRadiologo from './components/ABMRadiologo/AltaRadiologo';
+import ModificarRadiologo from './components/ABMRadiologo/ModificarRadiologo';
+import ListadoRadiologos from './components/ABMRadiologo/ListadoRadiologos';
+
 const App = () => {
 
   return (
@@ -22,10 +27,13 @@ const App = () => {
             <Route path='/medicos/listadoMedicos' element={<ListadoMedicos></ListadoMedicos>}></Route>
             <Route path='/medicos/altaMedico' element={<AltaMedico></AltaMedico>}></Route>
             <Route path='/medicos/modificarMedico/:nlegajo' element={<ModificarMedico></ModificarMedico>}></Route>
+
+            <Route path='/radiologos/listadoRadiologos' element={<ListadoRadiologos/>}></Route>
+            <Route path='/radiologos/altaradiologo' element={<AltaRadiologo></AltaRadiologo>}></Route>
+            <Route path='/radiologos/modificarRadiolgo' element={<ModificarRadiologo></ModificarRadiologo>}></Route>
+
             <Route path='/' element= {<Login/>}></Route>
               
-           
-            <Route path="/" ></Route>
         </Routes> 
 
         </BrowserRouter>

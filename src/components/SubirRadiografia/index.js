@@ -16,7 +16,13 @@ const SubirRadiografia = () => {
 
   const getInfoAfiliado = async (e) => {
     e.preventDefault()
-    const response = await api.get(`/afiliados/${nroAfiliado}`);
+    const headers = 
+        {
+            "Content-Type":"application/json"
+        }
+
+
+    const response = await api.get(`/afiliados/${nroAfiliado}`,{headers});
     setInputFileState(false);
     setInfoAfiliado(response.data);
     console.log(response.data)
@@ -60,7 +66,12 @@ const SubirRadiografia = () => {
     formData.append('file', radiografia);
     console.log(formData.get('file'))
 
-    await api.post(`/afiliados/${nroAfiliado}`,formData)
+    const headers = 
+        {
+            "Content-Type":"application/json"
+        }
+
+    await api.post(`/afiliados/${nroAfiliado}`,formData,{headers})
     .then(response=> {
       console.log(response.data)
       console.log('upload exitoso')}
