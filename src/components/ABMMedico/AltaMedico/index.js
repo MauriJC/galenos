@@ -53,10 +53,12 @@ const AltaMedico = () => {
   const [calleSuperior, setcalleSuperior] = useState('')
   const [calleInferior, setcalleInferior] = useState('')
   const [fechaDesde, setfechaDesde] = useState('')
-  const [fechaNacimiento, setfechaNacimiento] = useState('')
+  const [fechaNacimiento, setfechaNacimiento] = useState('')    
+
+  
   
 
-  console.log(fechaNacimiento)
+ 
 
 /**
  *   const handleSubmit=(e)=>{
@@ -93,8 +95,15 @@ const AltaMedico = () => {
     
 
     await api.post(`/altamedico`,medico,{headers})
-    .then(response=>console.log(response))
-    .catch(error=> console.log(error))
+    .then(response=>{
+        if(response.data.status==200)    
+        swal(response.data.status,response.data.message,"success")
+        
+        if(response.data.status==500){
+            swal(response.data.status,response.data.message,"error")
+        }
+    })
+    .catch(error=> swal(error.data.status,error.data.message,'error'))
   }
 
     const renderPaises=()=>{
@@ -329,8 +338,8 @@ const AltaMedico = () => {
 
 
       <div className="ui header centered">
-          <button className='ui button' onClick={postInfoMedico}>Confirmar</button>
-          <button className='ui button' onClick={(e)=>e.preventDefault()}>Cancelar</button>
+          <button className='ui blue button' onClick={postInfoMedico}>Confirmar</button>
+          <button className='ui negative button' onClick={(e)=>e.preventDefault()}>Cancelar</button>
 
       </div>
 

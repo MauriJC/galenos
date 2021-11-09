@@ -68,7 +68,7 @@ const ListadoRadiologos = () => {
                 {renderAdminFunctions(radiologo)}
                     <i className="large middle aligned icon doctor" />
                     <div className="content">
-                    Nombre del médico: {radiologo.nombre}
+                    Nombre del radiologo: {radiologo.nombre}
                     <div className="description"> Apellido del radiologo: {radiologo.apellido}</div>
                     </div>
                 </div>

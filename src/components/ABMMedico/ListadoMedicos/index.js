@@ -1,6 +1,7 @@
 import api from '../../../apis'
 import React,{useEffect, useState} from 'react'
 import {Link} from 'react-router-dom'
+import swal from 'sweetalert'
 
 
 const ListadoMedicos = () => {
@@ -11,6 +12,7 @@ const ListadoMedicos = () => {
     useEffect(()=>{
       getListadoMedicos()
       console.log('obteniendo medicos')
+      console.log(listaMedicos)
     },[])
 
 
@@ -18,12 +20,23 @@ const ListadoMedicos = () => {
 
 
     const getListadoMedicos = async() =>{
-        const response = await api.get(`/medicos`)
-        setlistaMedicos(response.data);
+        const response = await api.get(`/altamedico`)
+        setlistaMedicos(response.data.medicos);
         console.log(listaMedicos)
 
 
     }
+
+    const deleteMedico = async () =>{
+      await api.delete('/borrarmedico/')
+      .then(response=> console.log(response))
+      .catch(error=> console.log(error))
+
+    }
+
+
+
+
 
     const renderAdminFunctions= (medico)=>{
         return  (<div className="right floated content">
@@ -59,12 +72,7 @@ const ListadoMedicos = () => {
     
 
 
-    const deleteMedico = async () =>{
-      await api.delete('/borrarmedico/')
-      .then(response=> console.log(response))
-      .catch(error=> console.log(error))
-
-    }
+  
 
   return (
 
@@ -85,6 +93,8 @@ const ListadoMedicos = () => {
 
 
         </div>
+
+        {renderCrear()}
        
 
        

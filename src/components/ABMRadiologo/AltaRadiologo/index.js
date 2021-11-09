@@ -21,6 +21,7 @@ const AltaRadiologo = () => {
     const [calleInferior, setcalleInferior] = useState('')
     const [fechaDesde, setfechaDesde] = useState('')
     const [fechaNacimiento, setfechaNacimiento] = useState('')
+    const [legajo, setlegajo] = useState('');
 
 
 
@@ -91,7 +92,7 @@ const AltaRadiologo = () => {
                         <option >Seleccione Pais</option>
                         {paises.map(pais=>{
                             return (
-                                <option value={pais}>{pais}</option>
+                                <option value={pais} key={pais}>{pais}</option>
                             )
                         })}
                     </select>
@@ -102,19 +103,19 @@ const AltaRadiologo = () => {
 
     const renderProvincias =()=>{
     return (
-    <div className="field">
+        <div className="field">
             <label> Provincia </label>
-            <select className="ui fluid dropdown" onChange={e=>setprovincia(e.target.value)} value={provincia}>
+            <select className="ui fluid dropdown" onChange={e=>setprovincia(e.target.value)} value={provincia} >
                 <option value='' >Seleccione Provincia</option>
                 {provinciasArg.map(provincia=>{
-                    return (<option value={provincia}>{provincia}</option>)
+                    return (<option value={provincia} key={provincia}>{provincia}</option>)
                 })}
                 
             </select>
 
         </div>
         )
-        }    
+    }    
 
 
 
@@ -212,6 +213,12 @@ const AltaRadiologo = () => {
             {renderLocalidades()}
         </div>
 
+        <div className="inline fields">
+
+                <label htmlFor="">Fecha desde:</label>
+                <input type="date" name="" id="" value= {fechaDesde} onChange={e=>setfechaDesde(e.target.value)}/>
+        </div>
+
 
 
 
@@ -297,6 +304,19 @@ const AltaRadiologo = () => {
                 <input type="text" 
                 value={matricula}
                 onChange={(e)=>setmatricula(e.target.value)}
+                />
+
+            </div>
+
+        </div>
+
+
+        <div className="inline fields">
+            <div className="nine wide field">
+                <label htmlFor="">Legajo </label>
+                <input type="text" 
+                value={legajo}
+                onChange={(e)=>setlegajo(e.target.value)}
                 />
 
             </div>

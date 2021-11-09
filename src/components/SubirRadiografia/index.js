@@ -1,5 +1,7 @@
 import api from '../../apis'
-import React, {useState} from 'react'
+import React, {useState,useEffect} from 'react'
+import swal from 'sweetalert';
+
 //import { CajaFlex } from './styles'
 
 
@@ -10,8 +12,24 @@ const SubirRadiografia = () => {
   const [infoAfiliado, setInfoAfiliado] = useState(null);
   const [radiografia, setRadiografia] = useState(null);
   const [inputFileState, setInputFileState]= useState(true);
+  
+  const [nromatricularadiologo, setnromatricularadiologo] = useState('')
+  const [listadoRadiologos, setlistadoRadiologos] = useState([])
+  const [listaMedicos, setlistaMedicos] = useState([])
+  const [matriculaMedico, setmatriculaMedico] = useState('')
+  const [fechaRadiografia, setfechaRadiografia] = useState('')
+
+  //revisar para cambiar
+  const [tipoRadiografia, settipoRadiografia] = useState('Radiografía de Torax')
+  const [descripcion, setdescripcion] = useState('')
+
 
  
+  useEffect(() => {
+    getRadiologos();
+    getListadoMedicos();
+    
+  })
 
 
   const getInfoAfiliado = async (e) => {
@@ -21,59 +39,116 @@ const SubirRadiografia = () => {
             "Content-Type":"application/json"
         }
 
+    const params = {
+      paciente: nroAfiliado
+    }
 
-    const response = await api.get(`/afiliados/${nroAfiliado}`,{headers});
+
+    const response = await api.get(`/pacientes`,{params},{headers});
     setInputFileState(false);
-    setInfoAfiliado(response.data);
-    console.log(response.data)
+    setInfoAfiliado(response.data.paciente);
+    
+    if(response.data.status === 200){ swal(`${response.data.status}`) }
+    if(response.data.status === 404) {swal(`${response.data.status}`,response.data.message,'error')}
+    
+    
 
   }
 
-  /**
-   * 
-   * , {
-      params: {
-        q: nroAfiliado
-      }
 
+
+  const getRadiologos =async()=>{
+    const headers = 
+    {
+        "Content-Type":"application/json"
     }
-   */
+
+    const response = await api.get('/radiologos',{headers})
+    console.log(response.data)
+    setlistadoRadiologos(response.data)
+    //response.data.filter(radiologo)
+
+
+  }
 
 
 
+
+  const getListadoMedicos = async() =>{
+    const response = await api.get(`/altamedico`)
+    setlistaMedicos(response.data.medicos);
+    console.log(listaMedicos)
+
+
+}
+
+  const renderRadiologos =()=>{
+    return (
+    <div className="field">
+            <label> Radiologo </label>
+            <select className="ui fluid dropdown" onChange={e=>setnromatricularadiologo(e.target.value)} value={nromatricularadiologo}>
+                <option value='' >Seleccione radiologo</option>
+                {listadoRadiologos.map(radiologo=>{
+                    return (<option value={radiologo.numero_matricula}>{radiologo.nombre}</option>)
+                })}
+                 
+            </select>
+
+        </div>
+         )
+        }
+        
+        
+
+    const renderMedicos = () =>{
+      return (
+        <div className="field">
+            <label> Medico </label>
+            <select className="ui fluid dropdown" onChange={e=>setmatriculaMedico(e.target.value)} value={matriculaMedico}>
+                <option value='' >Seleccione medico</option>
+                {listaMedicos.map(medico=>{
+                    return (<option value={medico.numero_matricula}>{medico.nombre}</option>)
+                })}
+                 
+            </select>
+
+        </div>
+
+      )
+    }
+    
+
+
+  
   const handleImage = (e)=>{
     setRadiografia(e.target.files[0]);
     console.log(radiografia)
 
   }
   
-  /*
-  const prueba = ()=>{
-    
-      setInputFileState(!inputFileState)
-      setInfoAfiliado({name: 'Vicente Luis', dni:1232313})
+  
 
-      
-      console.log('reemplazar por getInfoAfiliado')
-    }
+  const uploadRx= async() =>{
 
-  */
+     
+    const formData= new FormData()
+    formData.append('numero_afiliado',infoAfiliado['numero_afiliado'])
+    formData.append('matricula_medico',matriculaMedico)
+    formData.append('estudio',tipoRadiografia)
+    formData.append('matricula_radiologo',nromatricularadiologo)
+    formData.append('radiografia',radiografia)
+    formData.append('descripcion',descripcion)
+    formData.append('fecha',fechaRadiografia)
 
-  const uploadInfoAfiliado= async() =>{
-    const formData = new FormData();
-    formData.append('nombre',infoAfiliado['nombre']);
-    formData.append('dni',infoAfiliado['dni']);
-    formData.append('file', radiografia);
-    console.log(formData.get('file'))
 
     const headers = 
         {
-            "Content-Type":"application/json"
+            "Content-Type":"multipart/form-data"
         }
 
-    await api.post(`/afiliados/${nroAfiliado}`,formData,{headers})
+    await api.post(`/subiradiografia`,formData ,{headers})
     .then(response=> {
-      console.log(response.data)
+      console.log(response.data.status)
       console.log('upload exitoso')}
       ).catch(error=>
         console.log(error)
@@ -112,22 +187,76 @@ const SubirRadiografia = () => {
           </div>
       </form>
 
+      <div className="ui container">
+        {renderRadiologos()}
+      </div>
+
+      <div className="ui container">
+        {renderMedicos()}
+      </div>
+
+      <div className="ui container">
+        <div className="ui form">
+          <div className="inline fields">
+            <label htmlFor="">Fecha</label>
+            <input type="date" value={fechaRadiografia} onChange={e=>setfechaRadiografia(e.target.value)} />
+        
+
+          </div>
+
+          <div className="inline fields">
+              <label>Tipo de estudio</label>
+              <input type="text" value={tipoRadiografia} onChange={e=> settipoRadiografia(e.target.value)} />
+          </div>
+
+        </div>
+      </div>
+        
+
+     
+
+
+      
+
+
+     
+      
+
+
+
+
+
       <hr />
         
       <div className= 'ui container'>
-        <label htmlFor="">Apellido y nombre: {infoAfiliado? `${infoAfiliado['apellido']}  ${infoAfiliado['nombre']}` : '' }
-          </label>
-        <br />
-        <label htmlFor="">DNI: {infoAfiliado? infoAfiliado['dni'] : '' }</label> 
+        <div className="ui form">
 
-        <br />
-        <label htmlFor="">Archivo: </label>
-        <input type="file" name="image" id="" onInput= {handleImage}  disabled={inputFileState}/>
+          <label htmlFor="">Apellido y nombre: {infoAfiliado? `${infoAfiliado['apellido']}  ${infoAfiliado['nombre']}` : '' }
+            </label>
+          <br />
+          <label htmlFor="">DNI: {infoAfiliado? infoAfiliado['dni'] : '' }</label> 
+
+          <br />
+          <label htmlFor="">Archivo: </label>
+          <input type="file" name="image" id="" accept='image/' onInput= {handleImage}  disabled={inputFileState}/>
+          
+          
+          <br />
+          <div className="inline fields"> 
+              <label htmlFor="">Observaciones: </label>
+              <input type="text" value={descripcion} onChange={e=> setdescripcion(e.target.value)} />
+          </div>
+          
+
+
+
+          <center>
+            <button className='ui button eight wide' onClick={uploadRx}>Cargar</button>
+          </center>
         
-        <br />
-        <center>
-          <button className='ui button eight wide' onClick={uploadInfoAfiliado}>Cargar</button>
-        </center>
+        </div>
+
+        
         
       </div>
 
