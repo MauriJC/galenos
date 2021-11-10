@@ -2,6 +2,7 @@ import api from '../../apis'
 import React, {useState,useEffect} from 'react'
 import swal from 'sweetalert';
 
+
 //import { CajaFlex } from './styles'
 
 
@@ -19,9 +20,13 @@ const SubirRadiografia = () => {
   const [matriculaMedico, setmatriculaMedico] = useState('')
   const [fechaRadiografia, setfechaRadiografia] = useState('')
 
-  //revisar para cambiar
   const [tipoRadiografia, settipoRadiografia] = useState('Radiografía de Torax')
   const [descripcion, setdescripcion] = useState('')
+
+  const [loaderState, setloaderState] = useState('disabled')
+  const [loaderCargar, setloaderCargar] = useState('disabled')
+
+
 
 
  
@@ -29,7 +34,7 @@ const SubirRadiografia = () => {
     getRadiologos();
     getListadoMedicos();
     
-  })
+  },[])
 
 
   const getInfoAfiliado = async (e) => {
@@ -43,13 +48,25 @@ const SubirRadiografia = () => {
       paciente: nroAfiliado
     }
 
+    setloaderState('active')
 
-    const response = await api.get(`/pacientes`,{params},{headers});
+
+    const response = await api.get(`/altapaciente`,{params},{headers});
     setInputFileState(false);
     setInfoAfiliado(response.data.paciente);
+
     
-    if(response.data.status === 200){ swal(`${response.data.status}`) }
-    if(response.data.status === 404) {swal(`${response.data.status}`,response.data.message,'error')}
+    
+    
+    if(response.data.status === 200){ 
+      swal(`${response.data.status}`) 
+      setloaderState('disabled')
+    }
+    if(response.data.status === 404) {
+      swal(`${response.data.status}`,response.data.message,'error')
+      setloaderState('disabled')
+    }
+    
     
     
 
@@ -122,23 +139,24 @@ const SubirRadiografia = () => {
   
   const handleImage = (e)=>{
     setRadiografia(e.target.files[0]);
-    console.log(radiografia)
+    console.log('radiografia',radiografia)
 
   }
   
   
 
   const uploadRx= async() =>{
-
+    
      
     const formData= new FormData()
     formData.append('numero_afiliado',infoAfiliado['numero_afiliado'])
-    formData.append('matricula_medico',matriculaMedico)
     formData.append('estudio',tipoRadiografia)
-    formData.append('matricula_radiologo',nromatricularadiologo)
+    formData.append('matricula_medico',parseInt(matriculaMedico)    )    
+    formData.append('matricula_radiologo',parseInt(nromatricularadiologo))
     formData.append('radiografia',radiografia)
     formData.append('descripcion',descripcion)
     formData.append('fecha',fechaRadiografia)
+
 
 
     const headers = 
@@ -146,19 +164,37 @@ const SubirRadiografia = () => {
             "Content-Type":"multipart/form-data"
         }
 
-    await api.post(`/subiradiografia`,formData ,{headers})
-    .then(response=> {
-      console.log(response.data.status)
-      console.log('upload exitoso')}
-      ).catch(error=>
-        console.log(error)
-      );
+    setloaderCargar('active')
+
+    await api.post(`/subiradiografia`,formData ,{headers}).then(
+      response=>{
+        console.log(response.data.status)
+        if(response.data.status==='recursada'){
+          setloaderCargar('disabled')
+          swal({
+            title: "Subida exitosa!",
+            text:"La radiografia ha sido enviada correctamente",
+            type:"success"
+          }).then(function() {
+            window.location = "/menu"
+          }
+
+          )
+        }
+        
+
+      }
+    )
+    .catch(error=>console.log(error))
+    
+  }
     
 
-  }
+  
 
 
   return (
+    
     <div>
       <form className='ui form'>
       <h1 className="ui centered dividing header">Subir Radiografia</h1>
@@ -179,6 +215,12 @@ const SubirRadiografia = () => {
                 <button className= 'ui button' onClick={getInfoAfiliado}>
                     Buscar
                 </button>
+
+                <div class={`ui ${loaderState} inline loader`}></div>
+
+                
+
+                
                   
                   
                  
@@ -252,6 +294,9 @@ const SubirRadiografia = () => {
 
           <center>
             <button className='ui button eight wide' onClick={uploadRx}>Cargar</button>
+            <div class={`ui ${loaderState} inline loader`}></div>
+
+            
           </center>
         
         </div>
@@ -261,10 +306,16 @@ const SubirRadiografia = () => {
       </div>
 
 
+      
+  
+
 
 
 
     </div>
+
+  
+
   )
 }
 

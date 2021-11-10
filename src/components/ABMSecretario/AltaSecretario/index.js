@@ -1,15 +1,12 @@
 import React,{useState} from 'react'
 import api from '../../../apis'
-import './styles.css'
 import swal from 'sweetalert'
 
+///FALTA SETEAR EL ENDPOINT
 
+const AltaSecretario = () => {
 
-//falta agregar fecha desde
-
-
-const AltaMedico = () => {
- 
+    //auxiliares 
     const paises = ['Argentina','Peru']
     const provinciasArg = [
         "Buenos Aires",
@@ -38,75 +35,27 @@ const AltaMedico = () => {
         "Tucumán"
     ]
 
+    const [nombre, setnombre] = useState('');
+    const [apellido, setapellido] = useState('');
+    const [dni, setdni] = useState('');
+    const [direccion, setdireccion] = useState('');
+    const [telefono, settelefono] = useState('');
+    const [mail, setmail] = useState('');
   
-  const [nombre, setnombre] = useState('');
-  const [apellido, setapellido] = useState('');
-  const [dni, setdni] = useState('');
-  const [direccion, setdireccion] = useState('');
-  const [telefono, settelefono] = useState('');
-  const [mail, setmail] = useState('');
-  const [matricula, setmatricula] = useState('');
-  const [legajo, setlegajo] = useState('');
-  const [provincia, setprovincia] = useState('')
-  const [pais, setpais] = useState('')
-  const [localidad, setlocalidad] = useState('')
-  const [calleSuperior, setcalleSuperior] = useState('')
-  const [calleInferior, setcalleInferior] = useState('')
-  const [fechaDesde, setfechaDesde] = useState('')
-  const [fechaNacimiento, setfechaNacimiento] = useState('')    
-  const [loaderState, setloaderState] = useState('disabled')
-
-  
-  
-
- 
-
-//API comms
-    const postInfoMedico = async (e) =>{
-        e.preventDefault()
-        
-        const medico ={
-            nombre: nombre,
-            apellido: apellido,
-            dni: dni,
-            direccion: direccion,
-            telefono:telefono,
-            email:mail,
-            numero_matricula:matricula,
-            legajo:legajo,
-            localidad:localidad,
-            entre_calle_sup:calleSuperior,
-            entre_calle_inf:calleInferior,
-            fecha_desde: fechaDesde,
-            fecha_nacimiento: fechaNacimiento
-        }
-
-        const headers = 
-            {
-                "Content-Type":"application/json"
-            }
-        
-        setloaderState('active')
-
-        await api.post(`/altamedico`,medico,{headers})
-        .then(response=>{
-            if(response.data.status==200){    
-                setloaderState('disabled')
-                swal(response.data.status,response.data.message,"success").then(window.location='/menu')
-            
-            }
-            
-            if(response.data.status==500){
-                swal(response.data.status,response.data.message,"error")
-                setloaderState('disabled')
-            }
-        })
-        .catch(error=> swal(error.data.status,error.data.message,'error'))
-    }
+    const [legajo, setlegajo] = useState('');
+    const [provincia, setprovincia] = useState('')
+    const [pais, setpais] = useState('')
+    const [localidad, setlocalidad] = useState('')
+    const [calleSuperior, setcalleSuperior] = useState('')
+    const [calleInferior, setcalleInferior] = useState('')
+    const [fechaDesde, setfechaDesde] = useState('')
+    const [fechaNacimiento, setfechaNacimiento] = useState('')    
 
 
 
-  //renders
+
+
+    //renders
     const renderPaises=()=>{
         return(
                 <div className="field">
@@ -166,10 +115,54 @@ const AltaMedico = () => {
     }
 
 
+
+    //API comms
+
+    const postSecretario = async()=>{
+        const secretario ={
+            nombre: nombre,
+            apellido: apellido,
+            dni: dni,
+            direccion: direccion,
+            telefono:telefono,
+            email:mail,
+            legajo:legajo,
+            localidad:localidad,
+            entre_calle_sup:calleSuperior,
+            entre_calle_inf:calleInferior,
+            fecha_desde: fechaDesde,
+            fecha_nacimiento: fechaNacimiento
+        }
+    
+        const headers = 
+            {
+                "Content-Type":"application/json"
+            }
+
+
+            await api.post(`/`,secretario,{headers})
+            .then(response=>{
+                if(response.data.status==200)    
+                    swal(response.data.status,response.data.message,"success")
+                    window.location='/menu'
+
+                
+                if(response.data.status==500){
+                    swal(response.data.status,response.data.message,"error")
+                }
+            })
+            .catch(error=> swal(error.data.status,error.data.message,'error'))
+
+
+    }
+
+
+
+
   return (
     <div className='ui container'>
         <div className="ui center aligned segment">
-            <h1>Alta de médico</h1>
+            <h1>Alta secretario</h1>
         </div>
         <div className="ui segment">
             <div className="ui center aligned form">
@@ -275,15 +268,8 @@ const AltaMedico = () => {
 
                     <div className="field">
                         <div className="two fields">
-
                             <div className="field">
-                                <label>Número de matrícula</label>
-                                <input type="text" 
-                                value={matricula}
-                                onChange={e=>setmatricula(e.target.value)}/>
-                            </div>
-                            <div className="field">
-                                <label>Número de legajo </label>
+                                <label>Numero de legajo </label>
                                 <input type="text" 
                                 value={legajo}
                                 onChange={(e)=>setlegajo(e.target.value)}
@@ -302,9 +288,8 @@ const AltaMedico = () => {
             </div>
 
             <div className="ui center aligned segment">
-                <button className='ui blue button' onClick={postInfoMedico}>Confirmar</button>
+                <button className='ui blue button' onClick={postSecretario}>Confirmar</button>
                 <button className='ui negative button' onClick={(e)=>e.preventDefault()}>Cancelar</button>
-                <div class={`ui ${loaderState} inline loader`}></div>
 
             </div>
 
@@ -315,4 +300,4 @@ const AltaMedico = () => {
   )
 }
 
-export default AltaMedico
+export default AltaSecretario

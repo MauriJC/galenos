@@ -1,6 +1,7 @@
 import React from 'react'
 import { useState } from 'react'
 import './styles.css'
+import { Link } from 'react-router-dom'
 
 const Login = () => {
     const [username, setusername] = useState('')
@@ -58,7 +59,7 @@ console.log(formu.get('nombre')) */
                         />
                     </div>
                     </div>
-                    <div className="ui fluid large blue submit button">Login</div>
+                    <Link to='/menu' className="ui fluid large blue submit button">Login</Link>
                 </div>
 
                 <div className="ui error message"></div>

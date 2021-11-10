@@ -11,30 +11,34 @@ const ListadoDiagnosticos = () => {
     const [infoPaciente, setinfoPaciente] = useState({})
     const [nombreMedico, setnombreMedico] = useState('')
 
-    console.log(nombreMedico)
+    console.log(matricula, nroAfiliado)
 
     
 
     useEffect(()=>{
-        
-
+        console.log('renderizando')   
+        getMedicos()
         const medicoSeleccionado = listaMedicos.filter(medico=> medico.numero_matricula == matricula)
         
-        
-        setnombreMedico(medicoSeleccionado[0].nombre)
+        if(medicoSeleccionado.length != 0 ){ 
+            //console.log('entra')
+            setnombreMedico(medicoSeleccionado[0].nombre)}
 
         //getMedicos()
-    })
+    },[matricula])
 
     //API comms
     const getMedicos = async()=>{
+        console.log('obteniendo medicos')
         const response = await api.get(`/altamedico`)
+        
         setlistaMedicos(response.data.medicos);
 
     }
 
-
-    const getInfoPaciente=async(e)=>{
+    /** 
+     * 
+     * const getInfoPaciente=async(e)=>{
         e.preventDefault()
          const headers = {
             "Content-Type":"application/json"
@@ -48,6 +52,26 @@ const ListadoDiagnosticos = () => {
         const response = await api.get(`/pacientes`,{params},{headers});
         setinfoPaciente(response.data.paciente);
     }
+    */
+    
+
+
+    const getDiagnosticos = async()=>{
+        const headers=  {
+            "Content-Type":"application/json"
+        }
+
+        const params= {
+            matricula_medico:matricula,
+            numero_afiliado: nroAfiliado
+        }
+
+        const response = await api.get('/radiografias',{params},{headers})
+        console.log(response)
+
+        setdiagnosticos(response.data)
+
+    }
 
 
 
@@ -57,7 +81,7 @@ const ListadoDiagnosticos = () => {
         <div className="field">
             <label> Medico </label>
             <select className="ui selection dropdown" onChange={e=>setmatricula(e.target.value)} value={matricula}>
-                <option value='' >Seleccione radiologo</option>
+                <option value='' >Seleccione médico</option>
                 {listaMedicos.map(medico=>{
                     return (<option value={medico.numero_matricula}>{medico.nombre}</option>)
                 })}
@@ -75,14 +99,14 @@ const ListadoDiagnosticos = () => {
             return(
             <div className="item">
                 <div className="right floated content">
-                    <Link className='ui button' to={`/ver/${diagnostico.id}`}>
+                    <Link className='ui button' to={`ver/${diagnostico.id}/${nroAfiliado}`}>
                         <i className="eye icon"></i>
                     </Link>
                 </div>
                 <img src="" alt="" />
                 <div className="content">
                     <div className="header">Diagnostico n {diagnostico.id}</div> 
-                    Fecha:
+                    Fecha: {diagnostico.fecha}
 
                 </div>
             </div>
@@ -109,7 +133,7 @@ const ListadoDiagnosticos = () => {
                     {renderListaMedicos()}
                 </div>
                 <div className="ui center aligned inverted segment">
-                    <button className='ui primary button' onClick={()=>console.log('auch')}>Listar</button>
+                    <button className='ui primary button' onClick={getDiagnosticos}>Listar</button>
                 </div>
                     
                 

@@ -44,16 +44,11 @@ const ListadoMedicos = () => {
             <i className="edit icon"></i>
         </Link>
         <Link
-          to={`/medicos/borrarmedico/${medico.legajo}`}
+          to={`/medicos/bajamedico/${medico.legajo}`}
           className="ui button negative"
         >
           <i className="trash icon"></i>
         </Link>
-        <button className="ui button negative"
-        onClick={deleteMedico}
-        >
-            <i className="trash icon"></i>
-        </button>
       </div>
       )
     }

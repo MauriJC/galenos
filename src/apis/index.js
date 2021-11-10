@@ -1,6 +1,9 @@
 import axios from 'axios';
 
+//
+//http://b321-2803-9800-9441-ba78-4cd8-6d5d-2490-a9ac.ngrok.io
+
 export default axios.create({
-    baseURL: 'http://a84e-2803-9800-9443-48f3-fd9b-a51b-4f4d-3b44.ngrok.io'
+    baseURL: 'https://galenodiagnosticos.herokuapp.com/'
 }
 );
