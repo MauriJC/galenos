@@ -36,6 +36,8 @@ import ListadoSecretarios from './components/ABMSecretario/ListadoSecretarios';
 import BajaSecretario from './components/ABMSecretario/BajaSecretario';
 import ModificarSecretario from './components/ABMSecretario/ModificarSecretario';
 import BajaMedico from './components/ABMMedico/BajaMedico';
+import BajaRadiologo from './components/ABMRadiologo/BajaRadiologo';
+import BajaPaciente from './components/ABMPaciente/BajaPaciente';
 
 
 //Diagnosticos
@@ -57,14 +59,16 @@ const App = () => {
             <Route path='/radiologos/listadoRadiologos' element={<ListadoRadiologos/>}></Route>
             <Route path='/radiologos/altaradiologo' element={<AltaRadiologo></AltaRadiologo>}></Route>
             <Route path='/radiologos/modificarRadiologo/:nmatricula' element={<ModificarRadiologo></ModificarRadiologo>}></Route>
+            <Route path='/radiologos/bajaradiologo/:nmatricula' element={<BajaRadiologo></BajaRadiologo>}></Route>
 
             <Route path='/pacientes/altapaciente' element={<AltaPaciente/>}></Route>
-            <Route path='/pacientes/modificarpaciente/:id' element={<ModificarPaciente/>}></Route>
+            <Route path='/pacientes/modificarpaciente/:nafiliado' element={<ModificarPaciente/>}></Route>
             <Route path='/pacientes/listadopacientes' element={<ListadoPacientes/>}></Route>
+            <Route path='/pacientes/bajapaciente/:nafiliado' element={<BajaPaciente></BajaPaciente>}></Route>
 
             <Route path='/secretarios/altasecretario' element={<AltaSecretario></AltaSecretario>}></Route>
             <Route path='/secretarios/listadosecretarios' element={<ListadoSecretarios></ListadoSecretarios>}></Route>
-            <Route path='/secretarios/bajasecretario/:legajo' element={<BajaSecretario></BajaSecretario>}></Route>
+            <Route path='/secretarios/bajasecretario/:nlegajo' element={<BajaSecretario></BajaSecretario>}></Route>
             <Route path='/secretarios/modificarsecretario/:nlegajo' element={<ModificarSecretario></ModificarSecretario>}></Route>
 
             <Route path='/diagnosticos/listadodiagnosticos' element = {<ListadoDiagnosticos/>}></Route>

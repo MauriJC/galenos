@@ -9,7 +9,7 @@ import { useParams } from 'react-router'
 const ModificarPaciente = () => {
 
 
-  let {id} = useParams()
+  let {nafiliado} = useParams()
   
 
   const paises = ['Argentina','Peru']
@@ -54,12 +54,10 @@ const ModificarPaciente = () => {
   const [mail, setmail] = useState('');
   const [fechaNacimiento, setfechaNacimiento] = useState('')
   const [nroAfiliado, setnroAfiliado] = useState('')
+  const [id, setid] = useState('')
 
  
 
-  useEffect(()=>{
-    getPaciente()
-  },[])
 
 
   //renders
@@ -121,13 +119,28 @@ const renderProvincias =()=>{
 
   }
 
+  useEffect(()=>{
+    getPaciente()
+  },[])
+
 
   // API comms
 
   const getPaciente = async()=>{
 
-    const response = await api.get('/altapaciente')
-    console.log(response.data.message)
+    const headers = {
+        "Content-Type":"application/json"
+    }
+
+    console.log('el nafiliado es',nafiliado)
+    
+
+    const params = {
+        numero_afiliado : parseInt(nafiliado) 
+    }
+
+    const response = await api.get('/altapaciente',{params},{headers})
+    console.log(response.data)
 
         setnombre(response.data.message[0]['nombre'])
         setapellido(response.data.message[0]['apellido'])
@@ -162,7 +175,7 @@ const renderProvincias =()=>{
           fecha_desde: fechaDesde,
           fecha_nacimiento: fechaNacimiento,
           numero_afiliado: nroAfiliado,
-          domicilio:direccion
+          
       }
 
       const headers = 
@@ -181,7 +194,9 @@ const renderProvincias =()=>{
               swal(response.data.status,response.data.message,"error")
           }
       })
-      .catch(error=> console.log(error))
+      .catch(error=> 
+        console.log('error')
+        )
 
   }
 

@@ -44,7 +44,7 @@ const ListadoRadiologos = () => {
             <i className="edit icon"></i>
         </Link>
         <Link
-          to={`/radiologos/bajaradiologo/${radiologo.id}`}
+          to={`/radiologos/bajaradiologo/${radiologo.numero_matricula}`}
           className="ui button negative"
         >
           <i className="trash icon"></i>

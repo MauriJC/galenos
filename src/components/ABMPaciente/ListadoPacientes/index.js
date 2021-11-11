@@ -34,11 +34,11 @@ const ListadoPacientes = () => {
     //renders
     const renderAdminFunctions= (paciente)=>{
         return  (<div className="right floated content">
-        <Link to={`/pacientes/modificarpaciente/${paciente.id}`} className="ui button primary">
+        <Link to={`/pacientes/modificarpaciente/${paciente.numero_afiliado}`} className="ui button primary">
             <i className="edit icon"></i>
         </Link>
         <Link
-          to={`/pacientes/bajapaciente/${paciente.id}`}
+          to={`/pacientes/bajapaciente/${paciente.numero_afiliado}`}
           className="ui button negative"
         >
           <i className="trash icon"></i>

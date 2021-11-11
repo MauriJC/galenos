@@ -1,13 +1,13 @@
-import React from 'react'
-import { useState } from 'react'
+import React,{useState,useEffect} from 'react'
+import { useParams } from 'react-router';
 import api from '../../../apis'
-import {Link} from 'react-router-dom'
-import swal from 'sweetalert'
+import { Link } from 'react-router-dom';
+import swal from 'sweetalert';
 
+const BajaRadiologo = () => {
+    let {nmatricula} = useParams()
 
-const AltaRadiologo = () => {
-
-       
+         
     const [nombre, setnombre] = useState('');
     const [apellido, setapellido] = useState('');
     const [dni, setdni] = useState('');
@@ -23,6 +23,7 @@ const AltaRadiologo = () => {
     const [fechaDesde, setfechaDesde] = useState('')
     const [fechaNacimiento, setfechaNacimiento] = useState('')
     const [legajo, setlegajo] = useState('');
+    const [id, setid] = useState('')
 
 
 
@@ -56,41 +57,69 @@ const AltaRadiologo = () => {
 
 
 
-    const postInfoRadiologo = async (e) =>{
-        e.preventDefault()
+    useEffect(()=>{
+        getRadiologo()
+    },[])
 
-        console.log(legajo)
-        
-        const radiologo  ={
-            nombre: nombre,
-            apellido: apellido,
-            dni: dni,
-            direccion: direccion,
-            telefono:telefono,
-            email:mail,
-            numero_matricula:matricula,
-            localidad:localidad,
-            entre_calle_sup:calleSuperior,
-            entre_calle_inf:calleInferior,
-            fecha_desde: fechaDesde,
-            fecha_nacimiento: fechaNacimiento,
-            legajo:legajo
+
+    //API comms
+
+    const getRadiologo =async()=>{
+        const headers = 
+        {
+            "Content-Type":"application/json"
         }
 
-        const headers = 
-            {
-                "Content-Type":"application/json"
-            }
-
+        const params = {
+            numero_matricula : nmatricula
+        }
+    
+        const response = await api.get(`/radiologos`,{params},{headers})
+        console.log(response.data)
+        const datos = response.data
+        setapellido(datos.apellido)
+        setdni(datos.dni)
+        setmail(datos.email)
+        setfechaNacimiento(datos.fecha_nacimiento)
+        setlegajo(datos.legajo)
+        setnombre(datos.nombre)
+        setmatricula(datos.numero_matricula)
+        settelefono(datos.telefono)
+        setid(datos.id)
         
-        
+      
+    
+    
+      }
 
-        await api.post(`/radiologos`,radiologo ,{headers})
-        .then(response=>{console.log(response)
-        swal(`${response.data.status}`,response.data.message)})
-        .catch(error=> console.log(error))
-    }
 
+
+      const deleteRadiologo = async()=>{
+        const params = {
+            matricula: nmatricula   
+        }
+
+        const headers =   {
+            "Content-Type":"application/json"
+        }
+
+
+
+
+        const response = await api.delete(`/radiologos`,{params},{headers})
+        console.log(response.data.status)
+        if(response.data.status == '200' ){
+            swal(response.data.status,response.data.message,"success")
+        }
+
+        swal(`${response.data.status}`,response.data.message,'error')
+
+      }
+
+
+
+
+    //renders
     const renderPaises=()=>{
         return(
                 <div className="field">
@@ -159,7 +188,7 @@ const AltaRadiologo = () => {
   return (
     <div className='ui container'>
         <div className="ui form">
-            <h1 className='ui centered dividing header'>Alta Radiologo</h1>
+            <h1 className='ui centered dividing header'>Baja Radiologo</h1>
 
 
                 <div className="inline fields">
@@ -222,7 +251,7 @@ const AltaRadiologo = () => {
 
         <div className="inline fields">
 
-                <label>Fecha desde:</label>
+                <label htmlFor="">Fecha desde:</label>
                 <input type="date" name="" id="" value= {fechaDesde} onChange={e=>setfechaDesde(e.target.value)}/>
         </div>
 
@@ -331,8 +360,8 @@ const AltaRadiologo = () => {
         </div>
 
         <div className="ui header centered">
-            <button className='ui blue button' onClick={postInfoRadiologo}>Confirmar</button>
-            <Link className='ui negative button' to='/radiologos/listadoradiologos' >Cancelar</Link>
+            <button className='ui blue button' onClick={deleteRadiologo}>Confirmar</button>
+            <Link  to ='/radiologos/listadoradiologos'className='ui negative button'>Cancelar</Link>
 
         </div>
 
@@ -356,7 +385,8 @@ const AltaRadiologo = () => {
 
 
     </div>
+ 
   )
 }
 
-export default AltaRadiologo
+export default BajaRadiologo
