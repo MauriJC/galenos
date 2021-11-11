@@ -57,6 +57,8 @@ const AltaRadiologo = () => {
 
     const postInfoRadiologo = async (e) =>{
         e.preventDefault()
+
+        console.log(legajo)
         
         const radiologo  ={
             nombre: nombre,
@@ -70,16 +72,19 @@ const AltaRadiologo = () => {
             entre_calle_sup:calleSuperior,
             entre_calle_inf:calleInferior,
             fecha_desde: fechaDesde,
-            fecha_nacimiento: fechaNacimiento
+            fecha_nacimiento: fechaNacimiento,
+            legajo:legajo
         }
 
         const headers = 
             {
                 "Content-Type":"application/json"
             }
+
+        
         
 
-        await api.post(`/altaradiologo`,radiologo ,{headers})
+        await api.post(`/radiologos`,radiologo ,{headers})
         .then(response=>console.log(response))
         .catch(error=> console.log(error))
     }
@@ -215,7 +220,7 @@ const AltaRadiologo = () => {
 
         <div className="inline fields">
 
-                <label htmlFor="">Fecha desde:</label>
+                <label>Fecha desde:</label>
                 <input type="date" name="" id="" value= {fechaDesde} onChange={e=>setfechaDesde(e.target.value)}/>
         </div>
 
@@ -325,7 +330,7 @@ const AltaRadiologo = () => {
 
         <div className="ui header centered">
             <button className='ui blue button' onClick={postInfoRadiologo}>Confirmar</button>
-            <button className='ui negative button' onClick={(e)=>e.preventDefault()}>Cancelar</button>
+            <Link className='ui negative button' to='/radiologos/listadoradiologos' >Cancelar</Link>
 
         </div>
 

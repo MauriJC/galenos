@@ -11,12 +11,12 @@ const ListadoDiagnosticos = () => {
     const [infoPaciente, setinfoPaciente] = useState({})
     const [nombreMedico, setnombreMedico] = useState('')
 
-    console.log(matricula, nroAfiliado)
+    //console.log(matricula, nroAfiliado)
 
     
 
     useEffect(()=>{
-        console.log('renderizando')   
+         
         getMedicos()
         const medicoSeleccionado = listaMedicos.filter(medico=> medico.numero_matricula == matricula)
         
@@ -67,7 +67,7 @@ const ListadoDiagnosticos = () => {
         }
 
         const response = await api.get('/radiografias',{params},{headers})
-        console.log(response)
+        console.log(response.data)
 
         setdiagnosticos(response.data)
 
@@ -83,7 +83,7 @@ const ListadoDiagnosticos = () => {
             <select className="ui selection dropdown" onChange={e=>setmatricula(e.target.value)} value={matricula}>
                 <option value='' >Seleccione médico</option>
                 {listaMedicos.map(medico=>{
-                    return (<option value={medico.numero_matricula}>{medico.nombre}</option>)
+                    return (<option key={medico.numero_matricula} value={medico.numero_matricula}>{medico.nombre}</option>)
                 })}
                  
             </select>
@@ -149,6 +149,15 @@ const ListadoDiagnosticos = () => {
                 {renderDiagnosticos()}
             </div>
         </div>
+
+
+        <div style={{ textAlign: 'right' }}>
+            <Link to="/menu" className="ui button positive">
+              Volver al menu 
+            </Link>
+          </div>
+
+
 
 
 

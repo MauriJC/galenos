@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import {Link} from 'react-router-dom'
+import api from '../../../apis'
 
 const ListadoRadiologos = () => {
 
@@ -12,33 +13,42 @@ const ListadoRadiologos = () => {
     
 
     useEffect(()=>{
-
+      getRadiologos()
 
     },[])
 
 
-    const deleteradiologo = ()=>{
-        console.log('delete radiologo')
+    //API comms
+
+    const getRadiologos =async()=>{
+      const headers = 
+      {
+          "Content-Type":"application/json"
+      }
+  
+      const response = await api.get('/radiologos',{headers})
+      console.log(response.data)
+      setlistaRadiologos(response.data)
+      //response.data.filter(radiologo)
+  
+  
     }
 
 
+
+    // renders
     
     const renderAdminFunctions= (radiologo)=>{
         return  (<div className="right floated content">
-        <Link to={`/radiologos/modificarradiologo/${radiologo.legajo}`} className="ui button primary">
+        <Link to={`/radiologos/modificarradiologo/${radiologo.numero_matricula}`} className="ui button primary">
             <i className="edit icon"></i>
         </Link>
         <Link
-          to={`/radiologos/borrarradiologo/${radiologo.legajo}`}
+          to={`/radiologos/bajaradiologo/${radiologo.id}`}
           className="ui button negative"
         >
           <i className="trash icon"></i>
         </Link>
-        <button className="ui button negative"
-        onClick={deleteradiologo}
-        >
-            <i className="trash icon"></i>
-        </button>
       </div>
       )
     }
@@ -60,29 +70,43 @@ const ListadoRadiologos = () => {
 
   return (
     
-    <div>
-       <h1 className='ui centered dividing header'>Listado de Radiologos</h1>
-        <div className="ui celled list">
-              {listaRadiologos.map(radiologo=>{
-                return  (<div className="item" key={''}>
-                {renderAdminFunctions(radiologo)}
-                    <i className="large middle aligned icon doctor" />
-                    <div className="content">
-                    Nombre del radiologo: {radiologo.nombre}
-                    <div className="description"> Apellido del radiologo: {radiologo.apellido}</div>
-                    </div>
-                </div>
-            )
-            })} 
+    <div className='ui container'>
+      <div className="ui center aligned segment">
+         <h1 className='header'>Listado de Radiologos</h1>
+      </div>
 
 
-        </div>
 
-        {renderCrear()}
+
+      <div className="ui segment">
+          <div className="ui celled list">
+                {listaRadiologos.map(radiologo=>{
+                  return  (<div className="item" key={radiologo.numero_matricula}>
+                  {renderAdminFunctions(radiologo)}
+                      <i className="large middle aligned icon doctor" />
+                      <div className="content">
+                      Nombre del radiologo: {radiologo.nombre}
+                      <div className="description"> Apellido del radiologo: {radiologo.apellido}</div>
+                      </div>
+                  </div>
+              )
+              })} 
+
+
+          </div>
+
+          {renderCrear()}
+        
+
        
+      </div>
 
-       
-     
+
+          <div style={{ textAlign: 'right' }}>
+            <Link to="/menu" className="ui button positive">
+              Volver al menu 
+            </Link>
+          </div>
     </div>
   )
 }

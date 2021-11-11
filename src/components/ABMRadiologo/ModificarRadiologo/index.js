@@ -1,8 +1,11 @@
-import React ,{useState} from 'react'
+import React ,{useEffect, useState} from 'react'
+import { useParams } from 'react-router';
 import api from '../../../apis'
 
 
 const ModificarRadiologo = () => {
+
+    let {nmatricula} = useParams()
 
          
     const [nombre, setnombre] = useState('');
@@ -20,6 +23,7 @@ const ModificarRadiologo = () => {
     const [fechaDesde, setfechaDesde] = useState('')
     const [fechaNacimiento, setfechaNacimiento] = useState('')
     const [legajo, setlegajo] = useState('');
+    const [id, setid] = useState('')
 
 
 
@@ -53,7 +57,45 @@ const ModificarRadiologo = () => {
 
 
 
-    const postInfoRadiologo = async (e) =>{
+    useEffect(()=>{
+        getRadiologo()
+    },[])
+
+
+    //API comms
+
+    const getRadiologo =async()=>{
+        const headers = 
+        {
+            "Content-Type":"application/json"
+        }
+
+        const params = {
+            numero_matricula : nmatricula
+        }
+    
+        const response = await api.get(`/radiologos`,{params},{headers})
+        console.log(response.data)
+        const datos = response.data
+        setapellido(datos.apellido)
+        setdni(datos.dni)
+        setmail(datos.email)
+        setfechaNacimiento(datos.fecha_nacimiento)
+        setlegajo(datos.legajo)
+        setnombre(datos.nombre)
+        setmatricula(datos.numero_matricula)
+        settelefono(datos.telefono)
+        setid(datos.id)
+        
+      
+    
+    
+      }
+
+
+
+
+    const putInfoRadiologo = async (e) =>{
         e.preventDefault()
         
         const radiologo  ={
@@ -68,7 +110,8 @@ const ModificarRadiologo = () => {
             entre_calle_sup:calleSuperior,
             entre_calle_inf:calleInferior,
             fecha_desde: fechaDesde,
-            fecha_nacimiento: fechaNacimiento
+            fecha_nacimiento: fechaNacimiento,
+            legajo: legajo
         }
 
         const headers = 
@@ -77,11 +120,14 @@ const ModificarRadiologo = () => {
             }
         
 
-        await api.post(`/altaradiologo`,radiologo ,{headers})
+        await api.put(`/modificaradiologo/${id}`,radiologo ,{headers})
         .then(response=>console.log(response))
         .catch(error=> console.log(error))
     }
 
+
+
+    //renders
     const renderPaises=()=>{
         return(
                 <div className="field">
@@ -322,7 +368,7 @@ const ModificarRadiologo = () => {
         </div>
 
         <div className="ui header centered">
-            <button className='ui blue button' onClick={postInfoRadiologo}>Confirmar</button>
+            <button className='ui blue button' onClick={putInfoRadiologo}>Confirmar</button>
             <button className='ui negative button' onClick={(e)=>e.preventDefault()}>Cancelar</button>
 
         </div>

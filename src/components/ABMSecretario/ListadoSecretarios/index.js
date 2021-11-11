@@ -8,9 +8,23 @@ const ListadoSecretarios = () => {
     const [listaSecretarios, setlistaSecretarios] = useState([{legajo:1,nombre:'Jose' ,apellido:'Maldonado'}])
 
     useEffect(()=>{
-        //getSecretarios()
-    })
+        getSecretarios()
+    },[])
+    
 
+        //API comms
+
+        const getSecretarios=async()=>{
+          const headers = 
+          {
+              "Content-Type":"application/json"
+          }
+  
+          const response = await api.get('/altasecretario',{headers})
+          console.log(response)
+          setlistaSecretarios(response.data.secretarios)
+  
+      }
 
     //renders
 
@@ -43,19 +57,7 @@ const ListadoSecretarios = () => {
 
 
 
-    //API comms
 
-    const getSecretarios=async()=>{
-        const headers = 
-        {
-            "Content-Type":"application/json"
-        }
-
-        const response = await api.get('/',{headers})
-
-        setlistaSecretarios(response.data)
-
-    }
 
 
 
@@ -89,7 +91,11 @@ const ListadoSecretarios = () => {
       </div>
 
 
-
+            <div style={{ textAlign: 'right' }}>
+              <Link to="/menu" className="ui button positive">
+                Volver al menu 
+              </Link>
+            </div>
 
 
 

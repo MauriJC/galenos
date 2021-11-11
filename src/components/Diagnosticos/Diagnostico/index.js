@@ -9,8 +9,14 @@ const Diagnostico = () => {
     console.log(idDiagnostico)
     console.log(nroAfiliado)
 
-    const [info, setinfo] = useState({})
+    const [info, setinfo] = useState({radiografia:{
+        paciente:{
+            nombre:''
+        }
+    }})
     const [mail, setmail] = useState('')
+    const [loaderState, setloaderState] = useState('disabled')
+
 
     useEffect(()=>{
         getDiagnostico()
@@ -30,8 +36,11 @@ const Diagnostico = () => {
             
         }
 
+        setloaderState('active')
         const response = await api('/diagnostico',{params},{headers})
-        console.log(response)
+        console.log('la radio llega en formato:',typeof(response.data.radiografia.placa))
+
+        setloaderState('disabled')
 
         setinfo(response.data)
 
@@ -43,6 +52,7 @@ const Diagnostico = () => {
         <div className="ui segment">
             <div className="ui center aligned segment">
                 <h1 className='header'>Diagnostico {idDiagnostico}</h1>
+                <div class={`ui ${loaderState} centered inline loader`}></div>
             </div>
             
             <div className="ui segment">
@@ -50,8 +60,7 @@ const Diagnostico = () => {
                             <div className="ui equal width stackable internally celled grid">
                                 <div className="center aligned row">
                                     <div className="column">
-                                        <h3>Paciente:{info.radiografia.paciente.apellido}
-                                        {info.radiografia.paciente.nombre} </h3>
+                                        <h3>Paciente:{info.radiografia.paciente.apellido} {info.radiografia.paciente.nombre} </h3>
                                         <h3>Fecha: {info.fecha}</h3>
                                     </div>
 
@@ -73,7 +82,7 @@ const Diagnostico = () => {
 
 
             <div className="ui segment">
-                <img className="ui small left floated image" src='' alt='Radiografia'/>
+                <img className="ui small left floated image" src={info.radiografia.placa} alt='Radiografia'/>
                 <h4>Diagnostico de la IA: {info.resultado}</h4>
                 <h4>Recomendaciones:</h4>
                 <p>

@@ -294,7 +294,7 @@ const SubirRadiografia = () => {
 
           <center>
             <button className='ui button eight wide' onClick={uploadRx}>Cargar</button>
-            <div class={`ui ${loaderState} inline loader`}></div>
+            <div class={`ui ${loaderCargar} inline loader`}></div>
 
             
           </center>

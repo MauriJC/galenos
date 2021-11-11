@@ -30,13 +30,12 @@ import Diagnostico from './components/Diagnosticos/Diagnostico';
 
 import Menu from './components/Menu';
 
-
-
-
 import Prueba from './prueba';
 import AltaSecretario from './components/ABMSecretario/AltaSecretario';
 import ListadoSecretarios from './components/ABMSecretario/ListadoSecretarios';
 import BajaSecretario from './components/ABMSecretario/BajaSecretario';
+import ModificarSecretario from './components/ABMSecretario/ModificarSecretario';
+import BajaMedico from './components/ABMMedico/BajaMedico';
 
 
 //Diagnosticos
@@ -52,19 +51,21 @@ const App = () => {
 
             <Route path='/medicos/listadoMedicos' element={<ListadoMedicos></ListadoMedicos>}></Route>
             <Route path='/medicos/altaMedico' element={<AltaMedico></AltaMedico>}></Route>
-            <Route path='/medicos/modificarMedico/:nlegajo' element={<ModificarMedico></ModificarMedico>}></Route>
+            <Route path='/medicos/modificarMedico/:numero_matricula' element={<ModificarMedico></ModificarMedico>}></Route>
+            <Route path='/medicos/bajamedico/:nmatricula' element = {<BajaMedico></BajaMedico>}></Route>
 
             <Route path='/radiologos/listadoRadiologos' element={<ListadoRadiologos/>}></Route>
             <Route path='/radiologos/altaradiologo' element={<AltaRadiologo></AltaRadiologo>}></Route>
             <Route path='/radiologos/modificarRadiologo/:nmatricula' element={<ModificarRadiologo></ModificarRadiologo>}></Route>
 
             <Route path='/pacientes/altapaciente' element={<AltaPaciente/>}></Route>
-            <Route path='/pacientes/modificarpaciente' element={<ModificarPaciente/>}></Route>
+            <Route path='/pacientes/modificarpaciente/:id' element={<ModificarPaciente/>}></Route>
             <Route path='/pacientes/listadopacientes' element={<ListadoPacientes/>}></Route>
 
             <Route path='/secretarios/altasecretario' element={<AltaSecretario></AltaSecretario>}></Route>
             <Route path='/secretarios/listadosecretarios' element={<ListadoSecretarios></ListadoSecretarios>}></Route>
             <Route path='/secretarios/bajasecretario/:legajo' element={<BajaSecretario></BajaSecretario>}></Route>
+            <Route path='/secretarios/modificarsecretario/:nlegajo' element={<ModificarSecretario></ModificarSecretario>}></Route>
 
             <Route path='/diagnosticos/listadodiagnosticos' element = {<ListadoDiagnosticos/>}></Route>
             <Route path='/diagnosticos/listadodiagnosticos/ver/:idDiagnostico/:nroAfiliado' element = {<Diagnostico/>}></Route>

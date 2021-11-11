@@ -1,12 +1,11 @@
-import api from '../../../apis';
-import React,{useState, useEffect} from 'react'
+import React from 'react' 
 import { useParams } from 'react-router';
-import {Link} from 'react-router-dom'
+import { useState, useEffect } from 'react';
+import api from '../../../apis'
+import { Link } from 'react-router-dom';
 
-const ModificarMedico = () => {
-
-    //parametro con el que hare el get
-    const {numero_matricula} = useParams()
+const BajaMedico = () => {
+    const {nmatricula} = useParams()
 
     const [nombre, setnombre] = useState('');
     const [apellido, setapellido] = useState('');
@@ -59,12 +58,6 @@ const ModificarMedico = () => {
     ]
 
 
-
-    useEffect(() => {
-        console.log('renderizado')
-        console.log(numero_matricula);
-        getMedico()
-    },[])
 
 
     //renders
@@ -129,58 +122,29 @@ const ModificarMedico = () => {
 
 
 
+    useEffect(() => {
+        console.log('renderizado')
+        console.log(nmatricula);
+        getMedico()
+    },[])
+
 
 
 
 
 
     // API Comms
-    const handleSubmit= async (e)=>{
-        e.preventDefault();
-
-        const headers =   {
-            "Content-Type":"application/json"
-        }
-
-
-
-        const medico ={
-            nombre: nombre,
-            apellido: apellido,
-            dni: dni,
-            direccion: direccion,
-            telefono:telefono,
-            email:mail,
-            numero_matricula:matricula,
-            legajo:legajo,
-            localidad:localidad,
-            entre_calle_sup:calleSuperior,
-            entre_calle_inf:calleInferior,
-            fecha_desde: fechaDesde,
-            fecha_nacimiento: fechaNacimiento,
-            fecha_hasta : fechaHasta
-        }
-    
-       
-
-        const response = await api.put(`/modificarmedico/${id}`,medico,{headers})
-        console.log('Exito')
-    }
-
-
-
-
-    const getMedico = async()=>{
+      const getMedico = async()=>{
 
         const headers =   {
             "Content-Type":"application/json"
         }
 
         const params = {
-            matricula: numero_matricula
+            matricula: nmatricula
         }
 
-        console.log(numero_matricula)
+        console.log(nmatricula)
     
         const response = await api.get(`/altamedico`,{params},{headers})
        
@@ -215,12 +179,28 @@ const ModificarMedico = () => {
     }
 
 
+    const deleteMedico = async()=>{
+        const params = {
+            matricula: nmatricula   
+        }
+
+        const headers =   {
+            "Content-Type":"application/json"
+        }
+
+
+        const response = await api.delete(`/altamedico`,{params},{headers})
+        console.log(response)
+
+    }
+
+
 
   return (
     <div className="ui container">
     <div className='ui form centered'>
 
-      <h1 className='ui centered dividing header'>Modificar Medico</h1>
+      <h1 className='ui centered dividing header'>Baja de Medico</h1>
 
         
       <div className="inline fields">
@@ -397,7 +377,7 @@ const ModificarMedico = () => {
 
 
       <div className="ui header centered">
-          <button className='ui blue button' onClick={handleSubmit}>Confirmar</button>
+          <button className='ui blue button' onClick={deleteMedico} >Confirmar</button>
           <Link className='ui negative button' to = '/medicos/listadomedicos'>Cancelar</Link>
 
       </div>
@@ -413,4 +393,4 @@ const ModificarMedico = () => {
   )
 }
 
-export default ModificarMedico
+export default BajaMedico

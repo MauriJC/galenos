@@ -1,7 +1,7 @@
 import api from '../../../apis'
 import React,{useEffect, useState} from 'react'
 import {Link} from 'react-router-dom'
-import swal from 'sweetalert'
+
 
 
 const ListadoMedicos = () => {
@@ -27,24 +27,16 @@ const ListadoMedicos = () => {
 
     }
 
-    const deleteMedico = async () =>{
-      await api.delete('/borrarmedico/')
-      .then(response=> console.log(response))
-      .catch(error=> console.log(error))
-
-    }
-
-
 
 
 
     const renderAdminFunctions= (medico)=>{
         return  (<div className="right floated content">
-        <Link to={`/medicos/modificarMedico/${medico.legajo}`} className="ui button primary">
+        <Link to={`/medicos/modificarMedico/${medico.numero_matricula}`} className="ui button primary">
             <i className="edit icon"></i>
         </Link>
         <Link
-          to={`/medicos/bajamedico/${medico.legajo}`}
+          to={`/medicos/bajamedico/${medico.numero_matricula}`}
           className="ui button negative"
         >
           <i className="trash icon"></i>
@@ -71,27 +63,35 @@ const ListadoMedicos = () => {
 
   return (
 
-    <div>
-       <h1 className='ui centered dividing header'>Listado de Médicos</h1>
-        <div className="ui celled list">
-              {listaMedicos.map(medico=>{
-                return  (<div className="item" key={medico.legajo}>
-                {renderAdminFunctions(medico)}
-                <i className="large middle aligned icon doctor" />
-                <div className="content">
-                  Nombre del médico: {medico.nombre}
-                  <div className="description"> Apellido del médico: {medico.apellido}</div>
-                </div>
-              </div>
-            )
-            })} 
+    <div className='ui container'>
+       <div className="ui center aligned segment">
+        <h1 className='ui centered dividing header'>Listado de Médicos</h1>
+      </div>
+      <div className="ui segment">
+            <div className="ui celled list">
+                  {listaMedicos.map(medico=>{
+                    return  (<div className="item" key={medico.legajo}>
+                    {renderAdminFunctions(medico)}
+                    <i className="large middle aligned icon doctor" />
+                    <div className="content">
+                      Nombre del médico: {medico.nombre}
+                      <div className="description"> Apellido del médico: {medico.apellido}</div>
+                    </div>
+                  </div>
+                )
+                })} 
 
 
-        </div>
+            </div>
 
-        {renderCrear()}
+            {renderCrear()}
        
-
+      </div>
+          <div style={{ textAlign: 'right' }}>
+            <Link to="/menu" className="ui button positive">
+              Volver al menu 
+            </Link>
+          </div>
        
      
     </div>

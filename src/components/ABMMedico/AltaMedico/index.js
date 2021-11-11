@@ -1,6 +1,7 @@
 import React,{useState} from 'react'
 import api from '../../../apis'
 import './styles.css'
+import { Link } from 'react-router-dom'
 import swal from 'sweetalert'
 
 
@@ -303,7 +304,7 @@ const AltaMedico = () => {
 
             <div className="ui center aligned segment">
                 <button className='ui blue button' onClick={postInfoMedico}>Confirmar</button>
-                <button className='ui negative button' onClick={(e)=>e.preventDefault()}>Cancelar</button>
+                <Link to='/medicos/listadomedicos'className='ui negative button' >Cancelar</Link>
                 <div class={`ui ${loaderState} inline loader`}></div>
 
             </div>

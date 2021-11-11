@@ -1,13 +1,10 @@
-import React,{useState} from 'react'
+import React,{useState,useEffect} from 'react'
+import { Link } from 'react-router-dom'
+import { useParams } from 'react-router'
 import api from '../../../apis'
 import swal from 'sweetalert'
-import { Link } from 'react-router-dom'
 
-///FALTA SETEAR EL ENDPOINT
-
-const AltaSecretario = () => {
-
-    //auxiliares 
+const ModificarSecretario = () => {
     const paises = ['Argentina','Peru']
     const provinciasArg = [
         "Buenos Aires",
@@ -51,6 +48,10 @@ const AltaSecretario = () => {
     const [calleInferior, setcalleInferior] = useState('')
     const [fechaDesde, setfechaDesde] = useState('')
     const [fechaNacimiento, setfechaNacimiento] = useState('')    
+    const [id, setid] = useState('')
+
+
+    let {nlegajo} = useParams()
 
 
 
@@ -117,9 +118,45 @@ const AltaSecretario = () => {
 
 
 
+    useEffect(()=>{
+        getSecretario()
+    },[])
+
     //API comms
 
-    const postSecretario = async()=>{
+    const getSecretario = async()=>{
+        const headers=
+        {
+            "Content-Type":"application/json"
+        }
+
+        const params = {
+            legajo: nlegajo
+        }
+
+        const response = await api.get(`/altasecretario`,{params},{headers})
+        console.log(response.data)
+        
+        const sec = response.data.secretario
+        console.log('valor de sec',sec)
+
+        setapellido(sec.apellido)
+        setdni(sec.dni)
+        setmail(sec.email)
+        setfechaNacimiento(sec.fecha_nacimiento)
+        setid(sec.id)
+        setlegajo(sec.legajo)
+        setnombre(sec.nombre)
+        settelefono(sec.telefono)
+
+
+
+    }
+
+
+
+
+    const putSecretario = async()=>{
         const secretario ={
             nombre: nombre,
             apellido: apellido,
@@ -141,14 +178,15 @@ const AltaSecretario = () => {
             }
 
 
-            await api.post(`/altasecretario`,secretario,{headers})
+            await api.put(`/modificarsecretario/${id}`,secretario,{headers})
             .then(response=>{
-                if(response.data.status==200)    
-                    swal(response.data.status,response.data.message,"success")
+                console.log(response.status)
+                if(response.status==200)    
+                    swal(response.status,response.message,"success")
                     //window.location='/menu'
 
                 
-                if(response.data.status==500){
+                if(response.status==500){
                     swal(response.data.status,response.data.message,"error")
                 }
             })
@@ -163,7 +201,7 @@ const AltaSecretario = () => {
   return (
     <div className='ui container'>
         <div className="ui center aligned segment">
-            <h1>Alta secretario</h1>
+            <h1>Modificar secretario</h1>
         </div>
         <div className="ui segment">
             <div className="ui center aligned form">
@@ -289,7 +327,7 @@ const AltaSecretario = () => {
             </div>
 
             <div className="ui center aligned segment">
-                <button className='ui blue button' onClick={postSecretario}>Confirmar</button>
+                <button className='ui blue button' onClick={putSecretario}>Confirmar</button>
                 <Link className='ui negative button' to='/secretarios/listadosecretarios'>Cancelar</Link>
 
             </div>
@@ -299,6 +337,7 @@ const AltaSecretario = () => {
      
     </div>
   )
+
 }
 
-export default AltaSecretario
+export default ModificarSecretario
