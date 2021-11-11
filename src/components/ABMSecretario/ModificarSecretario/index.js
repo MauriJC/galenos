@@ -102,10 +102,9 @@ const ModificarSecretario = () => {
             value={localidad}
             >
                 <option value="">Localidad</option>
-                 <option value="San Miguel de Tucumán">San Miguel de Tucuman</option>
+                 <option value="San Miguel de Tucuman">San Miguel de Tucuman</option>
                  <option value="Aguilares">Aguilares</option>
-                 <option value="AZ">asdasd</option>
-                 <option value="AR">Rio Cuarto</option>
+
             </select>
             
 
@@ -135,10 +134,10 @@ const ModificarSecretario = () => {
         }
 
         const response = await api.get(`/altasecretario`,{params},{headers})
-        console.log(response.data)
+        //console.log(response.data)
         
         const sec = response.data.secretario
-        console.log('valor de sec',sec)
+        //console.log('valor de sec',sec)
 
         setapellido(sec.apellido)
         setdni(sec.dni)
@@ -180,17 +179,21 @@ const ModificarSecretario = () => {
 
             await api.put(`/modificarsecretario/${id}`,secretario,{headers})
             .then(response=>{
-                console.log(response.status)
+                console.log(response)
                 if(response.status==200)    
-                    swal(response.status,response.message,"success")
+                    swal(`${response.status}`,"Modificacion de secretario exitosa","success").then((ok)=>{
+                        if(ok){window.location='/secretarios/listadosecretarios'}
+                    } )
                     //window.location='/menu'
 
                 
                 if(response.status==500){
-                    swal(response.data.status,response.data.message,"error")
+                    swal(`${response.status}`,'Error 500',"error")
                 }
             })
-            .catch(error=> swal(error,error,'error'))
+            .catch(error=> {
+                console.log(error)
+                swal("Ha ocurrido un error",'','error')})
 
 
     }

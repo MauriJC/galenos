@@ -93,8 +93,11 @@ const AltaMedico = () => {
         .then(response=>{
             if(response.data.status==200){    
                 setloaderState('disabled')
-                swal(response.data.status,response.data.message,"success").then(window.location='/menu')
-            
+                swal(response.data.status,response.data.message,"success")
+                .then(ok=>{
+                        if(ok){window.location='/medicos/listadomedicos'}})
+                        
+                   
             }
             
             if(response.data.status==500){
@@ -152,10 +155,8 @@ const AltaMedico = () => {
             value={localidad}
             >
                 <option value="">Localidad</option>
-                 <option value="San Miguel de Tucumán">San Miguel de Tucuman</option>
+                 <option value="San Miguel de Tucuman">San Miguel de Tucuman</option>
                  <option value="Aguilares">Aguilares</option>
-                 <option value="AZ">asdasd</option>
-                 <option value="AR">Rio Cuarto</option>
             </select>
             
 

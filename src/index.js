@@ -9,19 +9,21 @@ import SubirRadiografia from './components/SubirRadiografia'
 import ListadoMedicos from './components/ABMMedico/ListadoMedicos';
 import AltaMedico from './components/ABMMedico/AltaMedico';
 import ModificarMedico from './components/ABMMedico/ModificarMedico';
+import BajaMedico from './components/ABMMedico/BajaMedico';
 
 //ABM radiologo
 import AltaRadiologo from './components/ABMRadiologo/AltaRadiologo';
 import ModificarRadiologo from './components/ABMRadiologo/ModificarRadiologo';
 import ListadoRadiologos from './components/ABMRadiologo/ListadoRadiologos';
+import BajaRadiologo from './components/ABMRadiologo/BajaRadiologo';
 
 
 //ABM paciente
 import AltaPaciente from './components/ABMPaciente/AltaPaciente';
 import ModificarPaciente from './components/ABMPaciente/ModificarPaciente';
 import ListadoPacientes from './components/ABMPaciente/ListadoPacientes';
+import BajaPaciente from './components/ABMPaciente/BajaPaciente';
 
-//ABM secretario
 
 
 import ListadoDiagnosticos from './components/Diagnosticos/ListadoDiagnosticos';
@@ -30,14 +32,16 @@ import Diagnostico from './components/Diagnosticos/Diagnostico';
 
 import Menu from './components/Menu';
 
-import Prueba from './prueba';
+//ABM secretario
+
 import AltaSecretario from './components/ABMSecretario/AltaSecretario';
 import ListadoSecretarios from './components/ABMSecretario/ListadoSecretarios';
 import BajaSecretario from './components/ABMSecretario/BajaSecretario';
 import ModificarSecretario from './components/ABMSecretario/ModificarSecretario';
-import BajaMedico from './components/ABMMedico/BajaMedico';
-import BajaRadiologo from './components/ABMRadiologo/BajaRadiologo';
-import BajaPaciente from './components/ABMPaciente/BajaPaciente';
+
+
+
+
 
 
 //Diagnosticos
@@ -79,7 +83,6 @@ const App = () => {
             <Route path='/' element= {<Login/>}></Route>
 
 
-            <Route path='/prueba' element= {<Prueba/>}></Route>
 
 
 

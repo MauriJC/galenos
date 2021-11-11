@@ -56,6 +56,9 @@ const ModificarPaciente = () => {
   const [nroAfiliado, setnroAfiliado] = useState('')
   const [id, setid] = useState('')
 
+
+  console.log(id)
+  
  
 
 
@@ -107,8 +110,6 @@ const renderProvincias =()=>{
               <option value="">Localidad</option>
                <option value="San Miguel de Tucuman">San Miguel de Tucuman</option>
                <option value="Aguilares">Aguilares</option>
-               <option value="AZ">asdasd</option>
-               <option value="AR">Rio Cuarto</option>
           </select>
           
 
@@ -136,47 +137,50 @@ const renderProvincias =()=>{
     
 
     const params = {
-        numero_afiliado : parseInt(nafiliado) 
+        paciente : nafiliado 
     }
 
     const response = await api.get('/altapaciente',{params},{headers})
     console.log(response.data)
 
-        setnombre(response.data.message[0]['nombre'])
-        setapellido(response.data.message[0]['apellido'])
-        setdni(response.data.message[0]['dni'])
-        setdireccion(response.data.message[0]['direccion'])
-        settelefono(response.data.message[0]['telefono'])
-        setmail(response.data.message[0]['email'])
-        setlocalidad(response.data.message[0].localidad)
-        setcalleSuperior(response.data.message[0].entre_calle_sup)
-        setcalleInferior(response.data.message[0].entre_calle_inf)
-        setfechaDesde(response.data.message[0].fecha_desde)
-        setfechaNacimiento(response.data.message[0].fecha_nacimiento)
-        setnroAfiliado(response.data.message[0].numero_afiliado)
+        setnombre(response.data.paciente['nombre'])
+        setapellido(response.data.paciente['apellido'])
+        setdni(response.data.paciente['dni'])
+        setdireccion(response.data.paciente['direccion'])
+        settelefono(response.data.paciente['telefono'])
+        setmail(response.data.paciente['email'])
+        setlocalidad(response.data.paciente.localidad)
+        setcalleSuperior(response.data.paciente.entre_calle_sup)
+        setcalleInferior(response.data.paciente.entre_calle_inf)
+        setfechaDesde(response.data.paciente.fecha_desde)
+        setfechaNacimiento(response.data.paciente.fecha_nacimiento)
+        setnroAfiliado(response.data.paciente.numero_afiliado)
+        setid(response.data.paciente.id)
         
 
   }
 
 
-  const uploadPaciente= async(e)=>{
-      e.preventDefault()
-  
+  const uploadPaciente= async()=>{
+      
       const paciente ={
           nombre: nombre,
           apellido: apellido,
           dni: dni,
-          domicilio: direccion,
           telefono:telefono,
           email:mail,
+          fecha_nacimiento: fechaNacimiento,
+          numero_afiliado: nroAfiliado,
+          id:id,
+
+          domicilio: direccion,
           localidad:localidad,
           entre_calle_sup:calleSuperior,
           entre_calle_inf:calleInferior,
-          fecha_desde: fechaDesde,
-          fecha_nacimiento: fechaNacimiento,
-          numero_afiliado: nroAfiliado,
+          fecha_desde: fechaDesde
           
       }
+
 
       const headers = 
           {
@@ -186,16 +190,22 @@ const renderProvincias =()=>{
 
       await api.put(`/modificarpaciente/${id}`,paciente,{headers})
       .then(response=>{
-          
-          if(response.data.status==='200') {   
-          swal(response.data.status,response.data.message,"success")
+          console.log('response',response)
+          if(response.status=='200') {   
+          swal(`${response.status}`,'Paciente modificado exitosamente',"success").then(
+            ok=>{
+                if(ok) window.location='/pacientes/listadopacientes'
+            }
+        )
           }
-          if(response.data.status==='500'){
-              swal(response.data.status,response.data.message,"error")
+          if(response.status=='500'){
+              swal(`${response.status}`,'Error 500',"error")
           }
       })
-      .catch(error=> 
-        console.log('error')
+      .catch(error=> {
+        swal('Ha ocurrido un error al modificar el paciente','error')
+        console.log(error)
+      }
         )
 
   }

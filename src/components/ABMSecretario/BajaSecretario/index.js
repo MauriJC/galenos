@@ -102,10 +102,8 @@ const BajaSecretario = () => {
             value={localidad}
             >
                 <option value="">Localidad</option>
-                 <option value="San Miguel de Tucumán">San Miguel de Tucuman</option>
+                 <option value="San Miguel de Tucuman">San Miguel de Tucuman</option>
                  <option value="Aguilares">Aguilares</option>
-                 <option value="AZ">asdasd</option>
-                 <option value="AR">Rio Cuarto</option>
             </select>
             
 
@@ -135,10 +133,10 @@ const BajaSecretario = () => {
         }
 
         const response = await api.get(`/altasecretario`,{params},{headers})
-        console.log(response.data)
+        //console.log(response.data)
         
         let sec = response.data.secretario
-        console.log('valor de sec',sec)
+        //console.log('valor de sec',sec)
         
         setapellido(sec.apellido)
         setdni(sec.dni)
@@ -161,8 +159,16 @@ const BajaSecretario = () => {
             legajo: nlegajo
         }
 
-        const response = api.delete(`/altasecretario`,{params},{headers})
-        swal(`${response.data.status}`,response.data.message)
+        await api.delete(`/altasecretario`,{params},{headers}).then(
+            response =>{
+                swal(`${response.data.status}`,response.data.message).then((ok)=>{
+                    if(ok){window.location='/secretarios/listadosecretarios'}
+                 }
+                 )
+            }
+        ).catch(error=> console.log(error))
+        
+        
 
 
     }

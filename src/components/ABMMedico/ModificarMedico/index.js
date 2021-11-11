@@ -2,6 +2,7 @@ import api from '../../../apis';
 import React,{useState, useEffect} from 'react'
 import { useParams } from 'react-router';
 import {Link} from 'react-router-dom'
+import swal from 'sweetalert';
 
 const ModificarMedico = () => {
 
@@ -61,8 +62,8 @@ const ModificarMedico = () => {
 
 
     useEffect(() => {
-        console.log('renderizado')
-        console.log(numero_matricula);
+        //console.log('renderizado')
+        //console.log(numero_matricula);
         getMedico()
     },[])
 
@@ -112,10 +113,9 @@ const ModificarMedico = () => {
             value={localidad}
             >
                 <option value="">Localidad</option>
-                 <option value="San Miguel">San Miguel de Tucuman</option>
+                 <option value="San Miguel de Tucuman">San Miguel de Tucuman</option>
                  <option value="Aguilares">Aguilares</option>
-                 <option value="AZ">asdasd</option>
-                 <option value="AR">Rio Cuarto</option>
+               
             </select>
             
 
@@ -163,8 +163,29 @@ const ModificarMedico = () => {
     
        
 
-        const response = await api.put(`/modificarmedico/${id}`,medico,{headers})
-        console.log('Exito')
+        await api.put(`/modificarmedico/${id}`,medico,{headers}).then(
+            response=>{
+                console.log(response)
+                if(response.status == 200){
+                    swal(`${response.status}`,`Modificacion del paciente exitosa`,"success").then(
+                        ok=>{
+                            if(ok) window.location='/medicos/listadomedicos'
+                        }
+                    )
+                }
+
+                if(response.status == 500){
+                    swal(`${response.status}`,"Error 500 en la modificacion del paciente","error")
+                }
+
+
+
+
+            }
+        ).catch(
+            error=> swal("Ha ocurrido un error inesperado")
+        )
+       
     }
 
 
@@ -180,11 +201,11 @@ const ModificarMedico = () => {
             matricula: numero_matricula
         }
 
-        console.log(numero_matricula)
+        //console.log(numero_matricula)
     
         const response = await api.get(`/altamedico`,{params},{headers})
        
-        console.log(response.data)
+        //console.log(response.data)
         
 
         setnombre(response.data.medico['nombre'])
@@ -200,15 +221,7 @@ const ModificarMedico = () => {
         setcalleInferior(response.data.medico.entre_calle_inf)
         setfechaDesde(response.data.medico.fecha_desde)
         setfechaNacimiento(response.data.medico.fecha_nacimiento)
-        setid(response.data.medico.id)
-         
-
-        //Solucion provisoria
-        
-        //const medicoamodificar= response.data.medicos.filter(medico=> medico.numero_matricula == numero_matricula)
-        //console.log(medicoamodificar)
-
-        
+        setid(response.data.medico.id)      
         
         
         

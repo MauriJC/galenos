@@ -75,7 +75,7 @@ const BajaRadiologo = () => {
         }
     
         const response = await api.get(`/radiologos`,{params},{headers})
-        console.log(response.data)
+        //console.log(response.data)
         const datos = response.data
         setapellido(datos.apellido)
         setdni(datos.dni)
@@ -106,13 +106,25 @@ const BajaRadiologo = () => {
 
 
 
-        const response = await api.delete(`/radiologos`,{params},{headers})
-        console.log(response.data.status)
-        if(response.data.status == '200' ){
-            swal(response.data.status,response.data.message,"success")
-        }
+        await api.delete(`/radiologos`,{params},{headers}).then(response=>{
+            console.log(response)
+            if(response.status == '200' ){
+                swal(`${response.status}`,response.data.message,"success").then(
+                    ok=>{
+                        if(ok) window.location='/radiologos/listadoradiologos'
+                    }
+                )
+            }
 
-        swal(`${response.data.status}`,response.data.message,'error')
+            if(response.status=='500'){
+                swal(`${response.status}`,response.data.message,"error")
+            } 
+        }).catch(
+            swal('Ocurrio un error inesperado','','error')
+        )
+        
+
+        
 
       }
 
@@ -166,8 +178,6 @@ const BajaRadiologo = () => {
                 <option value="">Localidad</option>
                 <option value="San Miguel de Tucuman">San Miguel de Tucuman</option>
                 <option value="Aguilares">Aguilares</option>
-                <option value="AZ">asdasd</option>
-                <option value="AR">Rio Cuarto</option>
             </select>
             
 

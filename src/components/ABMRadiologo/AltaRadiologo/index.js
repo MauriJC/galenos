@@ -86,9 +86,27 @@ const AltaRadiologo = () => {
         
 
         await api.post(`/radiologos`,radiologo ,{headers})
-        .then(response=>{console.log(response)
-        swal(`${response.data.status}`,response.data.message)})
-        .catch(error=> console.log(error))
+        .then(response=>{
+            console.log(response)
+            if(response.data.status ==200){
+                swal(`${response.data.status}`,response.data.message,"success").then(ok=>{
+                    if(ok) {
+                        window.location='/radiologos/listadoradiologos'
+                    }
+                })
+            }
+
+            if(response.data.status == 500){
+                swal(`${response.data.status}`,response.data.message,"error")
+            }
+
+            }
+        
+        ).catch(error=> {
+            console.log(error)
+            swal("Ocurrio un error inesperado",'','error')
+        
+        })
     }
 
     const renderPaises=()=>{
@@ -137,8 +155,6 @@ const AltaRadiologo = () => {
                 <option value="">Localidad</option>
                 <option value="San Miguel de Tucuman">San Miguel de Tucuman</option>
                 <option value="Aguilares">Aguilares</option>
-                <option value="AZ">asdasd</option>
-                <option value="AR">Rio Cuarto</option>
             </select>
             
 

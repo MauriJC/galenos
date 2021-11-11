@@ -97,8 +97,7 @@ const AltaPaciente = () => {
                 <option value="">Localidad</option>
                  <option value="San Miguel de Tucuman">San Miguel de Tucuman</option>
                  <option value="Aguilares">Aguilares</option>
-                 <option value="AZ">asdasd</option>
-                 <option value="AR">Rio Cuarto</option>
+
             </select>
             
 
@@ -137,12 +136,17 @@ const AltaPaciente = () => {
 
         await api.post(`/altapaciente`,paciente,{headers})
         .then(response=>{
+            console.log('response',response)
             
             if(response.data.status==='200') {   
-            swal(response.data.status,response.data.message,"success")
+            swal(response.data.status,response.data.message,"success").then(
+                ok=>{
+                    if(ok) window.location='/pacientes/listadopacientes'
+                }
+            )
             }
             if(response.data.status==='500'){
-                swal(response.data.status,response.data.message,"error")
+                swal(`${response.data.status}`,response.data.message,"error")
             }
         })
         .catch(error=> console.log(error))

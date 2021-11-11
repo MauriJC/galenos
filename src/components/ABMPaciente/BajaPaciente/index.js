@@ -51,6 +51,7 @@ const BajaPaciente = () => {
     const [mail, setmail] = useState('');
     const [fechaNacimiento, setfechaNacimiento] = useState('')
     const [nroAfiliado, setnroAfiliado] = useState('')
+    const [id, setid] = useState('')
   
    
   
@@ -103,8 +104,6 @@ const BajaPaciente = () => {
                 <option value="">Localidad</option>
                  <option value="San Miguel de Tucuman">San Miguel de Tucuman</option>
                  <option value="Aguilares">Aguilares</option>
-                 <option value="AZ">asdasd</option>
-                 <option value="AR">Rio Cuarto</option>
             </select>
             
   
@@ -125,25 +124,37 @@ const BajaPaciente = () => {
     // API comms
   
     const getPaciente = async()=>{
-  
-      const response = await api.get('/altapaciente')
-      //console.log(response.data.message)
-  
-          setnombre(response.data.message[0]['nombre'])
-          setapellido(response.data.message[0]['apellido'])
-          setdni(response.data.message[0]['dni'])
-          setdireccion(response.data.message[0]['direccion'])
-          settelefono(response.data.message[0]['telefono'])
-          setmail(response.data.message[0]['email'])
-          setlocalidad(response.data.message[0].localidad)
-          setcalleSuperior(response.data.message[0].entre_calle_sup)
-          setcalleInferior(response.data.message[0].entre_calle_inf)
-          setfechaDesde(response.data.message[0].fecha_desde)
-          setfechaNacimiento(response.data.message[0].fecha_nacimiento)
-          setnroAfiliado(response.data.message[0].numero_afiliado)
-          
-  
-    }
+
+        const headers = {
+            "Content-Type":"application/json"
+        }
+    
+        console.log('el nafiliado es',nafiliado)
+        
+    
+        const params = {
+            paciente : nafiliado 
+        }
+    
+        const response = await api.get('/altapaciente',{params},{headers})
+        console.log(response.data)
+    
+            setnombre(response.data.paciente['nombre'])
+            setapellido(response.data.paciente['apellido'])
+            setdni(response.data.paciente['dni'])
+            setdireccion(response.data.paciente['direccion'])
+            settelefono(response.data.paciente['telefono'])
+            setmail(response.data.paciente['email'])
+            setlocalidad(response.data.paciente.localidad)
+            setcalleSuperior(response.data.paciente.entre_calle_sup)
+            setcalleInferior(response.data.paciente.entre_calle_inf)
+            setfechaDesde(response.data.paciente.fecha_desde)
+            setfechaNacimiento(response.data.paciente.fecha_nacimiento)
+            setnroAfiliado(response.data.paciente.numero_afiliado)
+            setid(response.data.id)
+            
+    
+      }
 
 
     const deletePaciente = async()=>{
@@ -157,9 +168,26 @@ const BajaPaciente = () => {
             }
     
     
-            const response = await api.delete(`/altapaciente`,{params},{headers})
-            console.log(response)
-            swal(`${response.data.status}`,response.data.message)
+            await api.delete(`/altapaciente`,{params},{headers})
+            .then(response=>{
+                
+                if(response.data.status==200){
+                swal(`${response.data.status}`,response.data.message,"success").then(
+                    ok=>{
+                        if(ok) window.location='/pacientes/listadopacientes'
+                    }
+                )
+                }
+                if(response.data.status==500){
+                    swal(`${response.data.status}`,response.data.message,"error")
+                    }
+
+            })
+            .catch(error=>{
+                swal('Ha ocurrido un error en la baja del paciente',"",'error')
+            }
+            )
+            
     
         
 

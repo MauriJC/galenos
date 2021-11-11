@@ -3,6 +3,7 @@ import { useParams } from 'react-router';
 import { useState, useEffect } from 'react';
 import api from '../../../apis'
 import { Link } from 'react-router-dom';
+import swal from 'sweetalert';
 
 const BajaMedico = () => {
     const {nmatricula} = useParams()
@@ -105,7 +106,7 @@ const BajaMedico = () => {
             value={localidad}
             >
                 <option value="">Localidad</option>
-                 <option value="San Miguel">San Miguel de Tucuman</option>
+                 <option value="San Miguel de Tucuman">San Miguel de Tucuman</option>
                  <option value="Aguilares">Aguilares</option>
                  <option value="AZ">asdasd</option>
                  <option value="AR">Rio Cuarto</option>
@@ -189,8 +190,27 @@ const BajaMedico = () => {
         }
 
 
-        const response = await api.delete(`/altamedico`,{params},{headers})
-        console.log(response)
+        await api.delete(`/altamedico`,{params},{headers}).then(
+            response=>{
+                if(response.data.status == 200){
+                
+                   
+                        swal(`${response.data.status}`,response.data.message,"success").then(
+                           ok=>{
+                               if (ok)  window.location = '/medicos/listadomedicos'
+                           }
+                        )
+                       
+                    
+                }
+                if(response.data.status == 500)
+                swal(`${response.data.status}`,response.data.message,"error")
+            }
+        ).catch(
+            error=> swal ('Ha ocurrido un error en la baja del medico',',"error')
+        )
+        
+        
 
     }
 

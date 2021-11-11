@@ -1,5 +1,6 @@
 import React ,{useEffect, useState} from 'react'
 import { useParams } from 'react-router';
+import swal from 'sweetalert';
 import api from '../../../apis'
 
 
@@ -75,7 +76,7 @@ const ModificarRadiologo = () => {
         }
     
         const response = await api.get(`/radiologos`,{params},{headers})
-        console.log(response.data)
+        //console.log(response.data)
         const datos = response.data
         setapellido(datos.apellido)
         setdni(datos.dni)
@@ -121,7 +122,21 @@ const ModificarRadiologo = () => {
         
 
         await api.put(`/modificaradiologo/${id}`,radiologo ,{headers})
-        .then(response=>console.log(response))
+        .then(response=>{
+            console.log(response)
+            if(response.status == 200){
+                swal(`${response.status}`,'Radiologo modificado con exito','success').then(
+                    ok=>{
+                        if(ok){ window.location='/radiologos/listadoradiologos'}
+                    }
+                )
+            }
+
+            if(response.status==500){
+                swal(`${response.status}`,'Error 500','error')
+            }
+
+        })
         .catch(error=> console.log(error))
     }
 
@@ -174,8 +189,6 @@ const ModificarRadiologo = () => {
                 <option value="">Localidad</option>
                 <option value="San Miguel de Tucuman">San Miguel de Tucuman</option>
                 <option value="Aguilares">Aguilares</option>
-                <option value="AZ">asdasd</option>
-                <option value="AR">Rio Cuarto</option>
             </select>
             
 

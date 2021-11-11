@@ -101,10 +101,8 @@ const AltaSecretario = () => {
             value={localidad}
             >
                 <option value="">Localidad</option>
-                 <option value="San Miguel de Tucumán">San Miguel de Tucuman</option>
+                 <option value="San Miguel de Tucuman">San Miguel de Tucuman</option>
                  <option value="Aguilares">Aguilares</option>
-                 <option value="AZ">asdasd</option>
-                 <option value="AR">Rio Cuarto</option>
             </select>
             
 
@@ -144,15 +142,20 @@ const AltaSecretario = () => {
             await api.post(`/altasecretario`,secretario,{headers})
             .then(response=>{
                 if(response.data.status==200)    
-                    swal(response.data.status,response.data.message,"success")
-                    //window.location='/menu'
+                    swal(response.data.status,response.data.message,"success").then(ok=>{
+                        if(ok){
+                            window.location='/secretarios/listadosecretarios'
+                        }
+                    }
+                            )
+                    
 
                 
                 if(response.data.status==500){
                     swal(response.data.status,response.data.message,"error")
                 }
             })
-            .catch(error=> swal(error,error,'error'))
+            .catch(error=> swal(`Ocurrio un error inesperado`,'','error'))
 
 
     }
