@@ -1,6 +1,6 @@
 import React,{useState,useEffect} from 'react'
 import { Link } from 'react-router-dom'
-import { useParams } from 'react-router'
+import { useNavigate, useParams } from 'react-router'
 import api from '../../../apis'
 import swal from 'sweetalert'
 
@@ -52,6 +52,7 @@ const BajaSecretario = () => {
 
 
     let {nlegajo} = useParams()
+    let navigate = useNavigate()
 
 
 
@@ -162,7 +163,7 @@ const BajaSecretario = () => {
         await api.delete(`/altasecretario`,{params},{headers}).then(
             response =>{
                 swal(`${response.data.status}`,response.data.message).then((ok)=>{
-                    if(ok){window.location='/secretarios/listadosecretarios'}
+                    if(ok){navigate('/secretarios/listadosecretarios')}
                  }
                  )
             }

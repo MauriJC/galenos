@@ -1,6 +1,6 @@
 import React,{useState,useEffect} from 'react'
 import { Link } from 'react-router-dom'
-import { useParams } from 'react-router'
+import { useNavigate, useParams } from 'react-router'
 import api from '../../../apis'
 import swal from 'sweetalert'
 
@@ -52,6 +52,7 @@ const ModificarSecretario = () => {
 
 
     let {nlegajo} = useParams()
+    let navigate = useNavigate()
 
 
 
@@ -182,7 +183,7 @@ const ModificarSecretario = () => {
                 console.log(response)
                 if(response.status==200)    
                     swal(`${response.status}`,"Modificacion de secretario exitosa","success").then((ok)=>{
-                        if(ok){window.location='/secretarios/listadosecretarios'}
+                        if(ok){navigate('/secretarios/listadosecretarios')}
                     } )
                     //window.location='/menu'
 

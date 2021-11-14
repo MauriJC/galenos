@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {BrowserRouter, Route, Routes} from 'react-router-dom';
+import {BrowserRouter, Route, Routes, Router} from 'react-router-dom';
 import Login from './components/Login'
 
 import SubirRadiografia from './components/SubirRadiografia'

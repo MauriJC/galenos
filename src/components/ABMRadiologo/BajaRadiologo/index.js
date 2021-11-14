@@ -1,11 +1,12 @@
 import React,{useState,useEffect} from 'react'
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import api from '../../../apis'
 import { Link } from 'react-router-dom';
 import swal from 'sweetalert';
 
 const BajaRadiologo = () => {
     let {nmatricula} = useParams()
+    let navigate = useNavigate()
 
          
     const [nombre, setnombre] = useState('');
@@ -111,7 +112,7 @@ const BajaRadiologo = () => {
             if(response.status == '200' ){
                 swal(`${response.status}`,response.data.message,"success").then(
                     ok=>{
-                        if(ok) window.location='/radiologos/listadoradiologos'
+                        if(ok) navigate('/radiologos/listadoradiologos')
                     }
                 )
             }

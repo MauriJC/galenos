@@ -1,6 +1,6 @@
 import api from '../../../apis';
 import React,{useState, useEffect} from 'react'
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import {Link} from 'react-router-dom'
 import swal from 'sweetalert';
 
@@ -27,6 +27,8 @@ const ModificarMedico = () => {
     const [id, setid] = useState('')
 
     const [fechaNacimiento, setfechaNacimiento] = useState('')
+
+    let navigate = useNavigate()
 
 
 
@@ -169,7 +171,7 @@ const ModificarMedico = () => {
                 if(response.status == 200){
                     swal(`${response.status}`,`Modificacion del paciente exitosa`,"success").then(
                         ok=>{
-                            if(ok) window.location='/medicos/listadomedicos'
+                            if(ok) navigate('/medicos/listadomedicos')
                         }
                     )
                 }

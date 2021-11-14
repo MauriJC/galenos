@@ -1,5 +1,5 @@
 import React ,{useState,useEffect}from 'react'
-import { useParams } from 'react-router'
+import { useNavigate, useParams } from 'react-router'
 import api from '../../../apis'
 import { Link } from 'react-router-dom'
 import swal from 'sweetalert'
@@ -54,6 +54,7 @@ const BajaPaciente = () => {
     const [id, setid] = useState('')
   
    
+    let navigate = useNavigate()
   
 
   
@@ -174,7 +175,7 @@ const BajaPaciente = () => {
                 if(response.data.status==200){
                 swal(`${response.data.status}`,response.data.message,"success").then(
                     ok=>{
-                        if(ok) window.location='/pacientes/listadopacientes'
+                        if(ok) navigate('/pacientes/listadopacientes')
                     }
                 )
                 }

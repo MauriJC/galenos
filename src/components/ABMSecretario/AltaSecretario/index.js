@@ -2,6 +2,7 @@ import React,{useState} from 'react'
 import api from '../../../apis'
 import swal from 'sweetalert'
 import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router'
 
 ///FALTA SETEAR EL ENDPOINT
 
@@ -51,6 +52,8 @@ const AltaSecretario = () => {
     const [calleInferior, setcalleInferior] = useState('')
     const [fechaDesde, setfechaDesde] = useState('')
     const [fechaNacimiento, setfechaNacimiento] = useState('')    
+
+    let navigate = useNavigate()
 
 
 
@@ -144,7 +147,7 @@ const AltaSecretario = () => {
                 if(response.data.status==200)    
                     swal(response.data.status,response.data.message,"success").then(ok=>{
                         if(ok){
-                            window.location='/secretarios/listadosecretarios'
+                            navigate('/secretarios/listadosecretarios')
                         }
                     }
                             )

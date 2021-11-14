@@ -3,6 +3,7 @@ import { useState } from 'react'
 import api from '../../../apis'
 import {Link} from 'react-router-dom'
 import swal from 'sweetalert'
+import { useNavigate } from 'react-router'
 
 
 const AltaRadiologo = () => {
@@ -23,6 +24,8 @@ const AltaRadiologo = () => {
     const [fechaDesde, setfechaDesde] = useState('')
     const [fechaNacimiento, setfechaNacimiento] = useState('')
     const [legajo, setlegajo] = useState('');
+
+    let navigate = useNavigate()
 
 
 
@@ -91,7 +94,7 @@ const AltaRadiologo = () => {
             if(response.data.status ==200){
                 swal(`${response.data.status}`,response.data.message,"success").then(ok=>{
                     if(ok) {
-                        window.location='/radiologos/listadoradiologos'
+                        navigate('/radiologos/listadoradiologos')
                     }
                 })
             }

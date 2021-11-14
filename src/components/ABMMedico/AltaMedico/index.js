@@ -3,7 +3,7 @@ import api from '../../../apis'
 import './styles.css'
 import { Link } from 'react-router-dom'
 import swal from 'sweetalert'
-
+import { useNavigate } from 'react-router'
 
 
 //falta agregar fecha desde
@@ -57,6 +57,8 @@ const AltaMedico = () => {
   const [fechaNacimiento, setfechaNacimiento] = useState('')    
   const [loaderState, setloaderState] = useState('disabled')
 
+  let navigate = useNavigate()
+
   
   
 
@@ -95,7 +97,7 @@ const AltaMedico = () => {
                 setloaderState('disabled')
                 swal(response.data.status,response.data.message,"success")
                 .then(ok=>{
-                        if(ok){window.location='/medicos/listadomedicos'}})
+                        if(ok){navigate('/medicos/listadomedicos')}})
                         
                    
             }

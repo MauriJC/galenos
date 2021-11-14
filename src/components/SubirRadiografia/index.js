@@ -1,6 +1,7 @@
 import api from '../../apis'
 import React, {useState,useEffect} from 'react'
 import swal from 'sweetalert';
+import { useNavigate } from 'react-router';
 
 
 //import { CajaFlex } from './styles'
@@ -25,6 +26,8 @@ const SubirRadiografia = () => {
 
   const [loaderState, setloaderState] = useState('disabled')
   const [loaderCargar, setloaderCargar] = useState('disabled')
+
+  let navigate  = useNavigate()
 
 
 
@@ -54,12 +57,13 @@ const SubirRadiografia = () => {
     const response = await api.get(`/altapaciente`,{params},{headers});
     setInputFileState(false);
     setInfoAfiliado(response.data.paciente);
+  
 
     
     
     
     if(response.data.status === 200){ 
-      swal(`${response.data.status}`) 
+      swal(`${response.data.status}`,"Afiliado encontrado!","success") 
       setloaderState('disabled')
     }
     if(response.data.status === 404) {
@@ -136,12 +140,15 @@ const SubirRadiografia = () => {
     
 
 
-  
-  const handleImage = (e)=>{
+  /**
+   * 
+   * const handleImage = (e)=>{
     setRadiografia(e.target.files[0]);
     console.log('radiografia',radiografia)
 
   }
+  
+   */
   
   
 
@@ -176,7 +183,7 @@ const SubirRadiografia = () => {
             text:"La radiografia ha sido enviada correctamente",
             type:"success"
           }).then(function() {
-            window.location = "/menu"
+            navigate('/menu')
           }
 
           )
@@ -280,7 +287,7 @@ const SubirRadiografia = () => {
 
           <br />
           <label htmlFor="">Archivo: </label>
-          <input type="file" name="image" id="" accept='image/' onInput= {handleImage}  disabled={inputFileState}/>
+          <input type="file" name="image" id="" accept='image/' onChange= {e=>setRadiografia(e.target.files[0])}  disabled={inputFileState}/>
           
           
           <br />

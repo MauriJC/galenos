@@ -3,7 +3,7 @@ import { useState } from 'react'
 import api from '../../../apis'
 import swal from 'sweetalert'
 import { Link } from 'react-router-dom'
-import { useParams } from 'react-router'
+import { useNavigate, useParams } from 'react-router'
 
 
 const ModificarPaciente = () => {
@@ -56,8 +56,10 @@ const ModificarPaciente = () => {
   const [nroAfiliado, setnroAfiliado] = useState('')
   const [id, setid] = useState('')
 
+  let navigate = useNavigate()
 
-  console.log(id)
+
+  //console.log(id)
   
  
 
@@ -194,7 +196,7 @@ const renderProvincias =()=>{
           if(response.status=='200') {   
           swal(`${response.status}`,'Paciente modificado exitosamente',"success").then(
             ok=>{
-                if(ok) window.location='/pacientes/listadopacientes'
+                if(ok) navigate('/pacientes/listadopacientes')
             }
         )
           }

@@ -6,8 +6,8 @@ import api from '../../../apis'
 const Diagnostico = () => {
 
     let {idDiagnostico, nroAfiliado}= useParams()
-    console.log(idDiagnostico)
-    console.log(nroAfiliado)
+    //console.log(idDiagnostico)
+    //console.log(nroAfiliado)
 
     const [info, setinfo] = useState({radiografia:{
         paciente:{
@@ -33,12 +33,11 @@ const Diagnostico = () => {
         const params = {
             id_diagnostico:idDiagnostico,
             numero_afiliado: nroAfiliado
-            
         }
 
         setloaderState('active')
-        const response = await api('/diagnostico',{params},{headers})
-        console.log('la radio llega en formato:',typeof(response.data.radiografia.placa))
+        const response = await api.get('/diagnostico',{params},{headers})
+        //console.log('respuesta',response.data)
 
         setloaderState('disabled')
 
@@ -82,7 +81,7 @@ const Diagnostico = () => {
 
 
             <div className="ui segment">
-                <img className="ui small left floated image" src={info.radiografia.placa} alt='Radiografia'/>
+                <img className="ui small left floated image" src={`https://galenodiagnosticos.herokuapp.com${info.radiografia.placa}`} alt='Radiografia'/>
                 <h4>Diagnostico de la IA: {info.resultado}</h4>
                 <h4>Recomendaciones:</h4>
                 <p>

@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import {Link} from 'react-router-dom'
 import api from '../../../apis'
 import swal from 'sweetalert'
+import { useNavigate } from 'react-router'
 
 const AltaPaciente = () => {
 
@@ -46,6 +47,8 @@ const AltaPaciente = () => {
     const [telefono, settelefono] = useState('');
     const [mail, setmail] = useState('');
     const [fechaNacimiento, setfechaNacimiento] = useState('')
+
+    let navigate = useNavigate()
 
    
 
@@ -141,7 +144,7 @@ const AltaPaciente = () => {
             if(response.data.status==='200') {   
             swal(response.data.status,response.data.message,"success").then(
                 ok=>{
-                    if(ok) window.location='/pacientes/listadopacientes'
+                    if(ok) navigate('/pacientes/listadopacientes')
                 }
             )
             }

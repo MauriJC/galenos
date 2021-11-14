@@ -1,5 +1,5 @@
 import React ,{useEffect, useState} from 'react'
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import swal from 'sweetalert';
 import api from '../../../apis'
 
@@ -7,6 +7,7 @@ import api from '../../../apis'
 const ModificarRadiologo = () => {
 
     let {nmatricula} = useParams()
+    let navigate = useNavigate()
 
          
     const [nombre, setnombre] = useState('');
@@ -127,7 +128,7 @@ const ModificarRadiologo = () => {
             if(response.status == 200){
                 swal(`${response.status}`,'Radiologo modificado con exito','success').then(
                     ok=>{
-                        if(ok){ window.location='/radiologos/listadoradiologos'}
+                        if(ok){navigate('/radiologos/listadoradiologos')}
                     }
                 )
             }
