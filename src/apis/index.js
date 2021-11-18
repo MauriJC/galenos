@@ -1,7 +1,9 @@
 import axios from 'axios';
-///
+///https://galenodiagnosticos.herokuapp.com
+
+
 
 export default axios.create({
-    baseURL: 'https://galenodiagnosticos.herokuapp.com'
+    baseURL: 'http://159.223.186.3/'
 }
 );

@@ -81,7 +81,7 @@ const Diagnostico = () => {
 
 
             <div className="ui segment">
-                <img className="ui small left floated image" src={`https://galenodiagnosticos.herokuapp.com${info.radiografia.placa}`} alt='Radiografia'/>
+                <img className="ui small left floated image" src={`http://159.223.186.3/${info.radiografia.placa}`} alt='Radiografia'/>
                 <h4>Diagnostico de la IA: {info.resultado}</h4>
                 <h4>Recomendaciones:</h4>
                 <p>
