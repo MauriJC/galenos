@@ -92,7 +92,7 @@ const ListadoSecretarios = () => {
 
 
             <div style={{ textAlign: 'right' }}>
-              <Link to="/menu" className="ui button positive">
+              <Link to="/" className="ui button positive">
                 Volver al menu 
               </Link>
             </div>

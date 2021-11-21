@@ -2,6 +2,7 @@ import api from '../../apis'
 import React, {useState,useEffect} from 'react'
 import swal from 'sweetalert';
 import { useNavigate } from 'react-router';
+import { Link } from 'react-router-dom';
 
 
 //import { CajaFlex } from './styles'
@@ -183,7 +184,7 @@ const SubirRadiografia = () => {
             text:"La radiografia ha sido enviada correctamente",
             type:"success"
           }).then(function() {
-            navigate('/menu')
+            navigate('/')
           }
 
           )
@@ -302,6 +303,7 @@ const SubirRadiografia = () => {
           <center>
             <button className='ui button eight wide' onClick={uploadRx}>Cargar</button>
             <div class={`ui ${loaderCargar} inline loader`}></div>
+            <Link className='ui positive button eight wide' to='/'>Volver al menu </Link>
 
             
           </center>
