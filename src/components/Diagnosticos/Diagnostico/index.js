@@ -87,7 +87,7 @@ const Diagnostico = () => {
                 <p>
                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga illum beatae 
                     consequuntur quos inventore minima atque doloribus necessitatibus quo. Inventore sequi sunt magnam? Quo 
-                    veritatis culpa mollitia distinctio beatae nostrum.
+                    veritatis culpa mollitia distinctio beatae.
                 </p>
 
             </div>
