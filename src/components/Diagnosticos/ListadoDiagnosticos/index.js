@@ -1,3 +1,4 @@
+
 import React,{useEffect, useState} from 'react'
 import { Link } from 'react-router-dom';
 import api from '../../../apis'
@@ -13,7 +14,7 @@ const ListadoDiagnosticos = () => {
 
     //console.log(matricula, nroAfiliado)
 
-    
+    setinfoPaciente({});
 
     useEffect(()=>{
          
