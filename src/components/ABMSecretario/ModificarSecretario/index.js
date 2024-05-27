@@ -309,8 +309,7 @@ const ModificarSecretario = () => {
                         <input type="text" value={mail} onChange={e=>setmail(e.target.value)} placeholder='JohnDoe@gmail.com' />
                     </div>
 
-                    <div className="field">
-                        <div className="two fields">
+
                             <div className="field">
                                 <label>Numero de legajo </label>
                                 <input type="text" 
@@ -319,9 +318,6 @@ const ModificarSecretario = () => {
                                 placeholder='Legajo'
                                 />
                             </div>
-                            
-                        </div>
-                    </div>
 
 
 

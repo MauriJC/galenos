@@ -42,7 +42,7 @@ import ModificarSecretario from './components/ABMSecretario/ModificarSecretario'
 
 
 
-//<Route path='/' element= {<Login/>}></Route>
+//  <Route path='/' element= {<Login/>}></Route>
 
 //Diagnosticos
 
@@ -52,8 +52,9 @@ const App = () => {
      <BrowserRouter>
      
         <Routes>
-            
+      
             <Route path="/subirRadiografia" element={<SubirRadiografia/>}/>
+
 
             <Route path='/medicos/listadoMedicos' element={<ListadoMedicos></ListadoMedicos>}></Route>
             <Route path='/medicos/altaMedico' element={<AltaMedico></AltaMedico>}></Route>

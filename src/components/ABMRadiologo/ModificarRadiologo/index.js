@@ -2,6 +2,7 @@ import React ,{useEffect, useState} from 'react'
 import { useNavigate, useParams } from 'react-router';
 import swal from 'sweetalert';
 import api from '../../../apis'
+import { Link } from 'react-router-dom'
 
 
 const ModificarRadiologo = () => {
@@ -207,208 +208,162 @@ const ModificarRadiologo = () => {
 
 
 
-  return (
-    <div className='ui container'>
-        <div className="ui form">
-            <h1 className='ui centered dividing header'>Modificar Radiologo</h1>
+  return (  <div className='ui container'>
+  <div className="ui center aligned segment">
+      <h1>Modificar radiólogo</h1>
+  </div>
+
+  <div className="ui segment">
+      <div className="ui center aligned form">
+          <div className="field">
+              <div className="two fields">
+                  <div className="field">
+                      <label>Nombre</label>
+
+                      <input type="text"
+                          value={nombre}
+                          onChange={(e) => setnombre(e.target.value)}
+                      />
+                  </div>
+
+                  <div className="field">
+                      <label>Apellido</label>
+                      <input type="text"
+                          value={apellido}
+                          onChange={(e) => setapellido(e.target.value)}
+                      />
+                  </div>
+              </div>
+          </div>
+
+          <div className="field">
+
+              <div className="two fields">
+                  <div className="field">
+                      <label>DNI</label>
+                      <input type="text"
+                          value={dni}
+                          onChange={(e) => setdni(e.target.value)}
+                          placeholder='DNI'
+                      />
+                  </div>
+                  <div className="field">
+                      <label >Fecha de nacimiento</label>
+
+                      <input type="date" value={fechaNacimiento} onChange={e => setfechaNacimiento(e.target.value)} />
+                  </div>
+
+              </div>
 
 
-                <div className="inline fields">
-                    <div className="nine wide field">
-                        <label htmlFor=""> Nombre</label>
-                        <input type="text" 
-                        value={nombre}
-                        onChange={(e)=>setnombre(e.target.value)}
-                        />
+          </div>
 
-                    </div>
+          <h4 className="ui dividing header">Domicilio</h4>
 
-                </div>
+          {renderPaises()}
 
+          <div className="two fields">
+              {renderProvincias()}
 
-            <div className="inline fields">
-                <div className="nine wide field">
-                    <label htmlFor=""> Apellido</label>
-                    <input type="text" 
-                    value={apellido}
-                    onChange={(e)=>setapellido(e.target.value)}
-                    />
+              {renderLocalidades()}
+          </div>
 
+          <div className="field">
+              <label htmlFor="">Fecha desde:</label>
+              <input type="date" name="" id="" value={fechaDesde} onChange={e => setfechaDesde(e.target.value)} />
+          </div>
 
-                </div>
+          <div className="field">
 
-            </div>
-
-            <div className="inline fields">
-                <div className="nine wide field">
-                    <label htmlFor=""> DNI </label>
-                    <input type="text" 
-                    value={dni}
-                    onChange={(e)=>setdni(e.target.value)}
-                    />
-
-
-                </div>
-
-            </div>
-
-
-            <div className="inline fields">
-
-                <label htmlFor="">Fecha de nacimiento:</label>
-                <input type="date" name="" id="" value= {fechaNacimiento} onChange={e=>setfechaNacimiento(e.target.value)}/>
-            </div>
-
-
-        <h4 className="ui dividing header">Domicilio</h4>
-        
-        {renderPaises()}
-
-        
-        <div className="two fields">
-            {renderProvincias()}
-
-            {renderLocalidades()}
-        </div>
-
-        <div className="inline fields">
-
-                <label htmlFor="">Fecha desde:</label>
-                <input type="date" name="" id="" value= {fechaDesde} onChange={e=>setfechaDesde(e.target.value)}/>
-        </div>
-
-
-
-
-
-
-        
-
-
-
-        <div className="inline fields">
-            <div className="nine wide field">
               <label htmlFor="">Direccion </label>
-              <input type="text" 
-               value={direccion}
-               onChange={(e)=>setdireccion(e.target.value)}
+              <input type="text"
+                  value={direccion}
+                  onChange={(e) => setdireccion(e.target.value)}
               />
+          </div>
 
-            </div>
+          <div className="field">
+              <div className="two fields">
+                  <div className="field">                        <label htmlFor="">Calle Superior </label>
+                      <input type="text"
+                          value={calleSuperior}
+                          onChange={(e) => setcalleSuperior(e.target.value)}
+                      /></div>
+                  <div className="field">                    <div className="field">
+                      <label htmlFor="">Calle inferior </label>
+                      <input type="text"
+                          value={calleInferior}
+                          onChange={(e) => setcalleInferior(e.target.value)}
+                      />
+                  </div></div>
 
-        </div>
+
+              </div>
+
+          </div>
 
 
-        <div className="inline fields">
-          <div className="nine wide field">
-              <label htmlFor="">Calle Superior </label>
-              <input type="text" 
-               value={calleSuperior}
-               onChange={(e)=>setcalleSuperior(e.target.value)}
+
+          <div className=" field">
+              <label htmlFor="">Telefono </label>
+              <input type='text'
+                  value={telefono}
+                  onChange={(e) => settelefono(e.target.value)}
               />
+          </div>
 
-            </div>
-
-        </div>
-
-        <div className="inline fields">
-            <div className="nine wide field">
-                <label htmlFor="">Calle inferior </label>
-                <input type="text" 
-                value={calleInferior}
-                onChange={(e)=>setcalleInferior(e.target.value)}
-                />
-
-            </div>
-
-        </div>
+          <div className="field">
+              <label htmlFor="">E-mail</label>
+              <input type="email"
+                  value={mail}
+                  onChange={(e) => setmail(e.target.value)}
+              />
+          </div>
 
 
 
 
 
-
-        <div className="inline fields">
-            <div className="nine wide field">
-                <label htmlFor="">Telefono </label>
-                <input type='text' 
-                value={telefono}
-                onChange={(e)=>settelefono(e.target.value)}
-                />
-
-
-            </div>
-
-        </div>
-
-
-
-        <div className="inline fields">
-            <div className="nine wide field">
-                <label htmlFor="">Mail </label>
-                <input type="email" 
-                value={mail}
-                onChange={(e)=>setmail(e.target.value)}
-                />
-
-
-            </div>
-
-        </div>
-
-        <div className="inline fields ">
-            <div className="nine wide field">
-                <label htmlFor="">Nro de Matricula </label>
-                <input type="text" 
-                value={matricula}
-                onChange={(e)=>setmatricula(e.target.value)}
-                />
-
-            </div>
-
-        </div>
-
-
-        <div className="inline fields">
-            <div className="nine wide field">
-                <label htmlFor="">Legajo </label>
-                <input type="text" 
-                value={legajo}
-                onChange={(e)=>setlegajo(e.target.value)}
-                />
-
-            </div>
-
-        </div>
-
-        <div className="ui header centered">
-            <button className='ui blue button' onClick={putInfoRadiologo}>Confirmar</button>
-            <button className='ui negative button' onClick={(e)=>e.preventDefault()}>Cancelar</button>
-
-        </div>
+          <div className="field">
+              <div className="two fields">
+                  <div className="field">
+                      <label htmlFor="">Nro de Matricula </label>
+                      <input type="text"
+                          value={matricula}
+                          onChange={(e) => setmatricula(e.target.value)}
+                      /></div>
+                  <div className="field">
+                      <label htmlFor="">Nro de Legajo </label>
+                      <input type="text"
+                          value={legajo}
+                          onChange={(e) => setlegajo(e.target.value)}
+                      />
+                  </div>
+              </div>
 
 
 
 
+          </div>
 
 
 
 
+          <div className="ui header centered">
+              <button className='ui blue button' onClick={putInfoRadiologo}>Confirmar</button>
+              <Link className='ui negative button' to='/radiologos/listadoradiologos' >Cancelar</Link>
+
+          </div>
+
+      </div>
 
 
-        </div>
-        
-
-
-        
-      
-
-
-
-
-    </div>
+  </div>
+</div>
  
   )
 }
+
+
 
 export default ModificarRadiologo

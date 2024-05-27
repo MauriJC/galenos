@@ -262,20 +262,6 @@ const SubirRadiografia = () => {
         </div>
       </div>
         
-
-     
-
-
-      
-
-
-     
-      
-
-
-
-
-
       <hr />
         
       <div className= 'ui container'>
@@ -301,9 +287,9 @@ const SubirRadiografia = () => {
 
 
           <center>
-            <button className='ui button eight wide' onClick={uploadRx}>Cargar</button>
+            <button className='ui button blue eight wide' onClick={uploadRx}>Cargar</button>
             <div class={`ui ${loaderCargar} inline loader`}></div>
-            <Link className='ui positive button eight wide' to='/'>Volver al menu </Link>
+            <Link className='ui negative button eight wide' to='/'>Volver al menu </Link>
 
             
           </center>
