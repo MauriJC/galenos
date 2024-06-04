@@ -1,6 +1,7 @@
+/* Estilos generales para el navbar */
 .ui.secondary.pointing.menu {
-  font-size: 1em; 
-  padding: 0.5em 0; 
+  font-size: 1em;
+  padding: 0.5em 0;
   position: relative; /* Asegura que el menú dropdown se posicione relativo al navbar */
 }
 
@@ -27,7 +28,7 @@
 }
 
 .logout-button:hover {
-  background-color: rgba(255, 0, 0, 0.1); 
+  background-color: rgba(255, 0, 0, 0.1);
 }
 
 .logo-container {
@@ -36,7 +37,7 @@
 }
 
 .logo {
-  height: 22px; /* Ajusta el tamaño de la imagen del logo */
+  height: 26px; /* Ajusta el tamaño de la imagen del logo */
   object-fit: contain; /* Mantiene las proporciones de la imagen */
   margin-right: 5px; /* Espacio entre la imagen y el texto */
 }
@@ -46,9 +47,7 @@
   font-weight: bold;
 }
 
-/* Asegurar que el dropdown permanezca visible */
-.ui.simple.dropdown.item:hover .menu,
-.ui.simple.dropdown.item .menu:hover,
+/* Asegurar que el dropdown permanezca visible solo cuando el elemento tenga la clase 'active' */
 .ui.simple.dropdown.item.active .menu {
   display: block !important;
   visibility: visible !important;
@@ -62,5 +61,43 @@
   left: 0;
   position: absolute;
   z-index: 1000;
-  display: none; /* Ocultar el dropdown por defecto */
+  display: none;
+}
+
+/* Media queries para pantallas más pequeñas */
+@media (max-width: 768px) {
+  .ui.secondary.pointing.menu {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .ui.secondary.pointing.menu .right.menu {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .ui.menu .item {
+    width: 100%;
+    padding: 0.5em 1em;
+  }
+
+  .ui.simple.dropdown.item .menu .item {
+    font-size: 1em;
+    padding: 0.5em 1em;
+  }
+
+  .logout-button {
+    width: 100%;
+    text-align: center;
+    margin: 0;
+    padding: 0.5em 0;
+  }
+
+  .logo {
+    height: 20px;
+  }
+
+  .logo-text {
+    font-size: 1em;
+  }
 }
