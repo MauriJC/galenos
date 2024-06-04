@@ -1,0 +1,46 @@
+.ui.secondary.pointing.menu {
+    font-size: 1em; 
+    padding: 0.5em 0; 
+  }
+  
+  .header.item {
+    font-size: 1.1em; /* Aumenta el tamaño de la fuente para el header */
+    font-weight: bold; /* Haz que el texto del header sea más audaz */
+  }
+  
+  .ui.menu .item {
+    padding: 1em; /* Ajusta el padding de los ítems para hacerlos más grandes */
+  }
+  
+  .ui.simple.dropdown.item .menu .item {
+    font-size: 0.7em; /* Ajusta el tamaño de la fuente de los elementos del dropdown */
+  }
+  
+.logout-button {
+    font-size: 1em; /* Ajusta el tamaño de la fuente del botón de cerrar sesión */
+    font-weight: bold; /* Hace que el texto del botón sea más audaz */
+    color: red; /* Cambia el color del texto del botón */
+    padding: 1em; /* Ajusta el padding del botón */
+    border-radius: 5px; /* Redondea las esquinas del botón */
+    margin-left: 1em; /* Añade un margen a la izquierda del botón */
+  }
+  
+.logout-button:hover {
+    background-color: rgba(255, 0, 0, 0.1); 
+  }
+
+  .logo-container {
+    display: flex;
+    align-items: center;
+  }
+  
+  .logo {
+    height: 25px; /* Ajusta el tamaño de la imagen del logo */
+    object-fit: contain; /* Mantiene las proporciones de la imagen */
+    margin-right: 5px; /* Espacio entre la imagen y el texto */
+  }
+  
+  .logo-text {
+    font-size: 1.2em; /* Ajusta el tamaño del texto */
+    font-weight: bold;
+  }
