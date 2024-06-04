@@ -1,7 +1,7 @@
 import React from 'react';
 import { Doughnut } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
-
+import './Dashboard.css'
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 // Datos para el gráfico de patologías
@@ -59,16 +59,16 @@ const options = {
 
 const Dashboard = () => {
   return (
-    <div style={{ width: '80%', margin: '0 auto', display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap' }}>
-      <div style={{ width: '45%', marginBottom: '20px' }}>
-        <h2 style={{ textAlign: 'center' }}>Pacientes y patologías</h2>
-        <div style={{ width: '100%', height: '300px' }}>
+    <div className="dashboard-container">
+      <div className="dashboard-chart">
+        <h2>Pacientes y patologías</h2>
+        <div className="chart-wrapper">
           <Doughnut data={dataPathologias} options={options} />
         </div>
       </div>
-      <div style={{ width: '45%', marginBottom: '20px' }}>
-        <h2 style={{ textAlign: 'center' }}>Pacientes y ubicación en Tucumán</h2>
-        <div style={{ width: '100%', height: '300px' }}>
+      <div className="dashboard-chart">
+        <h2>Pacientes y ubicación en Tucumán</h2>
+        <div className="chart-wrapper">
           <Doughnut data={dataUbicaciones} options={options} />
         </div>
       </div>

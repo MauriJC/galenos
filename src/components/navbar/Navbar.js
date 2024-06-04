@@ -4,6 +4,7 @@ import './Navbar.css';
 
 const Navbar = () => {
   const [activeDropdown, setActiveDropdown] = useState(null);
+  const [menuVisible, setMenuVisible] = useState(false);
 
   const handleDropdownClick = (dropdownName) => {
     if (activeDropdown === dropdownName) {
@@ -13,6 +14,10 @@ const Navbar = () => {
     }
   };
 
+  const toggleMenuVisibility = () => {
+    setMenuVisible(!menuVisible);
+  };
+
   return (
     <nav className='ui secondary pointing menu'>
       <div className='ui container'>
@@ -20,7 +25,10 @@ const Navbar = () => {
           <img src={`${process.env.PUBLIC_URL}/logo2.png`} alt='GALENOS' className='logo' />
           <span className='logo-text'>GALENOS</span>
         </Link>
-        <div className='right menu'>
+        <button className='hamburger-menu' onClick={toggleMenuVisibility}>
+          <i className={`bars icon ${menuVisible ? 'open' : ''}`}></i>
+        </button>
+        <div className={`right menu ${menuVisible ? 'visible' : ''}`}>
           <div 
             className={`ui simple dropdown item ${activeDropdown === 'medicos' ? 'active' : ''}`}
             onClick={() => handleDropdownClick('medicos')}

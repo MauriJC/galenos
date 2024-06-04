@@ -64,6 +64,19 @@
   display: none;
 }
 
+/* Estilos para el botón de menú hamburguesa */
+.hamburger-menu {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 1.5em;
+  cursor: pointer;
+}
+
+.hamburger-menu .bars.icon {
+  font-size: 1.5em;
+}
+
 /* Media queries para pantallas más pequeñas */
 @media (max-width: 768px) {
   .ui.secondary.pointing.menu {
@@ -74,6 +87,11 @@
   .ui.secondary.pointing.menu .right.menu {
     flex-direction: column;
     width: 100%;
+    display: none;
+  }
+
+  .ui.secondary.pointing.menu .right.menu.visible {
+    display: flex;
   }
 
   .ui.menu .item {
@@ -99,5 +117,9 @@
 
   .logo-text {
     font-size: 1em;
+  }
+
+  .hamburger-menu {
+    display: block;
   }
 }
