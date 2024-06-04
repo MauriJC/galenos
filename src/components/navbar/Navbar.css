@@ -1,0 +1,125 @@
+/* Estilos generales para el navbar */
+.ui.secondary.pointing.menu {
+  font-size: 1em;
+  padding: 0.5em 0;
+  position: relative; /* Asegura que el menú dropdown se posicione relativo al navbar */
+}
+
+.header.item {
+  font-size: 1.1em; /* Aumenta el tamaño de la fuente para el header */
+  font-weight: bold; /* Haz que el texto del header sea más audaz */
+}
+
+.ui.menu .item {
+  padding: 1em; /* Ajusta el padding de los ítems para hacerlos más grandes */
+}
+
+.ui.simple.dropdown.item .menu .item {
+  font-size: 0.7em; /* Ajusta el tamaño de la fuente de los elementos del dropdown */
+}
+
+.logout-button {
+  font-size: 1em; /* Ajusta el tamaño de la fuente del botón de cerrar sesión */
+  font-weight: bold; /* Hace que el texto del botón sea más audaz */
+  color: red; /* Cambia el color del texto del botón */
+  padding: 1em; /* Ajusta el padding del botón */
+  border-radius: 5px; /* Redondea las esquinas del botón */
+  margin-left: 1em; /* Añade un margen a la izquierda del botón */
+}
+
+.logout-button:hover {
+  background-color: rgba(255, 0, 0, 0.1);
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  height: 26px; /* Ajusta el tamaño de la imagen del logo */
+  object-fit: contain; /* Mantiene las proporciones de la imagen */
+  margin-right: 5px; /* Espacio entre la imagen y el texto */
+}
+
+.logo-text {
+  font-size: 1.2em; /* Ajusta el tamaño del texto */
+  font-weight: bold;
+}
+
+/* Asegurar que el dropdown permanezca visible solo cuando el elemento tenga la clase 'active' */
+.ui.simple.dropdown.item.active .menu {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* Ajustar la posición del dropdown */
+.ui.simple.dropdown.item .menu {
+  margin-top: 0.5em; /* Asegúrate de que el menú esté pegado al botón */
+  top: 100%;
+  left: 0;
+  position: absolute;
+  z-index: 1000;
+  display: none;
+}
+
+/* Estilos para el botón de menú hamburguesa */
+.hamburger-menu {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 1.5em;
+  cursor: pointer;
+}
+
+.hamburger-menu .bars.icon {
+  font-size: 1.5em;
+}
+
+/* Media queries para pantallas más pequeñas */
+@media (max-width: 768px) {
+  .ui.secondary.pointing.menu {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .ui.secondary.pointing.menu .right.menu {
+    flex-direction: column;
+    width: 100%;
+    display: none;
+  }
+
+  .ui.secondary.pointing.menu .right.menu.visible {
+    display: flex;
+  }
+
+  .ui.menu .item {
+    width: 100%;
+    padding: 0.5em 1em;
+  }
+
+  .ui.simple.dropdown.item .menu .item {
+    font-size: 1em;
+    padding: 0.5em 1em;
+  }
+
+  .logout-button {
+    width: 100%;
+    text-align: center;
+    margin: 0;
+    padding: 0.5em 0;
+  }
+
+  .logo {
+    height: 20px;
+  }
+
+  .logo-text {
+    font-size: 1em;
+  }
+
+  .hamburger-menu {
+    display: block;
+  }
+}
