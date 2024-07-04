@@ -80,7 +80,7 @@ const Navbar = () => {
               <Link className='item' to='/secretarios/listadosecretarios'>Listado Secretarios</Link>
             </div>
           </div>
-          <Link className='ui item logout-button' to='/logout'>Cerrar sesión</Link>
+          <Link className='ui item logout-button' to='/login'>Cerrar sesión</Link>
         </div>
       </div>
     </nav>

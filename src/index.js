@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
 import 'semantic-ui-css/semantic.min.css';
 
 import Navbar from './components/navbar/Navbar';
@@ -37,19 +37,23 @@ import BajaSecretario from './components/ABMSecretario/BajaSecretario';
 import ModificarSecretario from './components/ABMSecretario/ModificarSecretario';
 
 const App = () => {
+  const location = useLocation();
+
+  const showNavbar = location.pathname !== '/login';
+
   return (
-    <BrowserRouter>
-      <Navbar />
+    <>
+      {showNavbar && <Navbar />}
       <div className='ui container'>
         <Routes>
-          <Route path='/subirRadiografia' element={<SubirRadiografia />} />
-          <Route path='/medicos/listadoMedicos' element={<ListadoMedicos />} />
-          <Route path='/medicos/altaMedico' element={<AltaMedico />} />
-          <Route path='/medicos/modificarMedico/:numero_matricula' element={<ModificarMedico />} />
+          <Route path='/subirradiografia' element={<SubirRadiografia />} />
+          <Route path='/medicos/listadomedicos' element={<ListadoMedicos />} />
+          <Route path='/medicos/altamedico' element={<AltaMedico />} />
+          <Route path='/medicos/modificarmedico/:numero_matricula' element={<ModificarMedico />} />
           <Route path='/medicos/bajamedico/:nmatricula' element={<BajaMedico />} />
-          <Route path='/radiologos/listadoRadiologos' element={<ListadoRadiologos />} />
+          <Route path='/radiologos/listadoradiologos' element={<ListadoRadiologos />} />
           <Route path='/radiologos/altaradiologo' element={<AltaRadiologo />} />
-          <Route path='/radiologos/modificarRadiologo/:nmatricula' element={<ModificarRadiologo />} />
+          <Route path='/radiologos/modificarradiologo/:nmatricula' element={<ModificarRadiologo />} />
           <Route path='/radiologos/bajaradiologo/:nmatricula' element={<BajaRadiologo />} />
           <Route path='/pacientes/altapaciente' element={<AltaPaciente />} />
           <Route path='/pacientes/modificarpaciente/:nafiliado' element={<ModificarPaciente />} />
@@ -62,10 +66,17 @@ const App = () => {
           <Route path='/diagnosticos/listadodiagnosticos' element={<ListadoDiagnosticos />} />
           <Route path='/diagnosticos/listadodiagnosticos/ver/:idDiagnostico/:nroAfiliado' element={<Diagnostico />} />
           <Route path='/' element={<Menu />} />
+          <Route path='/login' element={<Login />} />
         </Routes>
       </div>
-    </BrowserRouter>
+    </>
   );
 };
 
-ReactDOM.render(<App />, document.querySelector('#root'));
+const AppWrapper = () => (
+  <BrowserRouter>
+    <App />
+  </BrowserRouter>
+);
+
+ReactDOM.render(<AppWrapper />, document.querySelector('#root'));

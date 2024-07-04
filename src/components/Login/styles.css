@@ -1,10 +1,28 @@
-
+/* Limitando el ancho de la columna */
 .column {
   max-width: 450px;
+  margin: auto; /* Centra la columna horizontalmente */
 }
 
+/* Centrado vertical */
+.ui.middle.aligned.center.aligned.grid {
+  height: 100vh; /* Asegura que la altura sea del 100% del viewport */
+}
 
-.middle {
-  height: 100%;
+/* Ajuste para el formulario */
+.ui.large.form {
+  width: 100%; /* Asegura que el formulario tome todo el ancho disponible */
+}
 
+/* Espaciado adicional */
+.ui.stacked.secondary.segment {
+  padding: 2em; /* Añade padding para un mejor espaciado interno */
+}
+
+/* Flexbox para centrar el contenido */
+.ui.middle.aligned.center.aligned.grid {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Altura del 100% del viewport */
 }

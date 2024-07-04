@@ -1,45 +1,11 @@
-import React, { useState } from 'react'
-import api from '../../../apis'
-import './styles.css'
-import { Link } from 'react-router-dom'
-import swal from 'sweetalert'
-import { useNavigate } from 'react-router'
-
-
-//falta agregar fecha desde
-
+import React, { useState, useEffect } from 'react';
+import api from '../../../apis';
+import './styles.css';
+import { Link } from 'react-router-dom';
+import swal from 'sweetalert';
+import { useNavigate } from 'react-router';
 
 const AltaMedico = () => {
-
-    const paises = ['Argentina', 'Peru']
-    const provinciasArg = [
-        "Buenos Aires",
-        "Capital Federal",
-        "Catamarca",
-        "Chaco",
-        "Chubut",
-        "Córdoba",
-        "Corrientes",
-        "Entre Ríos",
-        "Formosa",
-        "Jujuy",
-        "La Pampa",
-        "La Rioja",
-        "Mendoza",
-        "Misiones",
-        "Neuquén",
-        "Río Negro",
-        "Salta",
-        "San Juan",
-        "San Luis",
-        "Santa Cruz",
-        "Santa Fe",
-        "Santiago del Estero",
-        "Tierra del Fuego",
-        "Tucumán"
-    ]
-
-
     const [nombre, setnombre] = useState('');
     const [apellido, setapellido] = useState('');
     const [dni, setdni] = useState('');
@@ -48,25 +14,32 @@ const AltaMedico = () => {
     const [mail, setmail] = useState('');
     const [matricula, setmatricula] = useState('');
     const [legajo, setlegajo] = useState('');
-    const [provincia, setprovincia] = useState('')
-    const [pais, setpais] = useState('')
-    const [localidad, setlocalidad] = useState('')
-    const [calleSuperior, setcalleSuperior] = useState('')
-    const [calleInferior, setcalleInferior] = useState('')
-    const [fechaDesde, setfechaDesde] = useState('')
-    const [fechaNacimiento, setfechaNacimiento] = useState('')
-    const [loaderState, setloaderState] = useState('disabled')
+    const [localidad, setlocalidad] = useState('');
+    const [calleSuperior, setcalleSuperior] = useState('');
+    const [calleInferior, setcalleInferior] = useState('');
+    const [fechaDesde, setfechaDesde] = useState('');
+    const [fechaNacimiento, setfechaNacimiento] = useState('');
+    const [loaderState, setloaderState] = useState('disabled');
+    const [localidades, setLocalidades] = useState([]);
 
-    let navigate = useNavigate()
+    let navigate = useNavigate();
 
+    useEffect(() => {
+        fetchLocalidades();
+    }, []);
 
+    const fetchLocalidades = async () => {
+        try {
+            const response = await api.get('/localidades');
+            setLocalidades(response.data);
+        } catch (error) {
+            console.error("Error fetching localidades:", error);
+            swal("Error", "No se pudieron cargar las localidades", "error");
+        }
+    };
 
-
-
-
-    //API comms
     const postInfoMedico = async (e) => {
-        e.preventDefault()
+        e.preventDefault();
 
         const medico = {
             nombre: nombre,
@@ -82,94 +55,43 @@ const AltaMedico = () => {
             entre_calle_inf: calleInferior,
             fecha_desde: fechaDesde,
             fecha_nacimiento: fechaNacimiento
-        }
+        };
 
-        const headers =
-        {
+        const headers = {
             "Content-Type": "application/json"
-        }
+        };
 
-        setloaderState('active')
+        setloaderState('active');
 
         await api.post(`/altamedico`, medico, { headers })
             .then(response => {
                 if (response.data.status == 200) {
-                    setloaderState('disabled')
+                    setloaderState('disabled');
                     swal(response.data.status, response.data.message, "success")
                         .then(ok => {
-                            if (ok) { navigate('/medicos/listadomedicos') }
-                        })
-
-
-                }
-
-                if (response.data.status == 500) {
-                    swal(response.data.status, response.data.message, "error")
-                    setloaderState('disabled')
+                            if (ok) navigate('/medicos/listadomedicos');
+                        });
+                } else if (response.data.status === 500) {
+                    swal(response.data.status, response.data.message, "error");
+                    setloaderState('disabled');
                 }
             })
-            .catch(error => swal(error.data.status, error.data.message, 'error'))
-    }
-
-
-
-    //renders
-    const renderPaises = () => {
-        return (
-            <div className="field">
-                <label>Pais</label>
-                <select className="ui fluid dropdown" onChange={e => setpais(e.target.value)} value={pais}>
-                    <option >Seleccione Pais</option>
-                    {paises.map(pais => {
-                        return (
-                            <option value={pais}>{pais}</option>
-                        )
-                    })}
-                </select>
-            </div>
-        )
-
-    }
-
-    const renderProvincias = () => {
-        return (
-            <div className="field">
-                <label> Provincia </label>
-                <select className="ui fluid dropdown" onChange={e => setprovincia(e.target.value)} value={provincia}>
-                    <option value='' >Seleccione Provincia</option>
-                    {provinciasArg.map(provincia => {
-                        return (<option value={provincia}>{provincia}</option>)
-                    })}
-
-                </select>
-
-            </div>
-        )
-    }
-
-
+            .catch(error => swal(error.data.status, error.data.message, 'error'));
+    };
 
     const renderLocalidades = () => {
         return (
             <div className="field">
-                <label> Localidad </label>
-
-                <select className="ui fluid dropdown" onChange={(e) => setlocalidad(e.target.value)}
-                    value={localidad}
-                >
-                    <option value="">Localidad</option>
-                    <option value="San Miguel de Tucuman">San Miguel de Tucuman</option>
-                    <option value="Aguilares">Aguilares</option>
+                <label>Localidad</label>
+                <select className="ui fluid dropdown" onChange={(e) => setlocalidad(e.target.value)} value={localidad}>
+                    <option value="">Seleccione Localidad</option>
+                    {localidades.map(loc => (
+                        <option value={loc.nombre} key={loc.id}>{loc.nombre}</option>
+                    ))}
                 </select>
-
-
             </div>
-
-        )
-
-
-    }
-
+        );
+    };
 
     return (
         <div className='ui container'>
@@ -215,7 +137,7 @@ const AltaMedico = () => {
                             />
                         </div>
                         <div className="eight wide field">
-                            <label >Fecha de nacimiento</label>
+                            <label>Fecha de nacimiento</label>
 
                             <input type="date" value={fechaNacimiento} onChange={e => setfechaNacimiento(e.target.value)} />
                         </div>
@@ -224,14 +146,7 @@ const AltaMedico = () => {
 
                     <h4 className="ui dividing header">Domicilio</h4>
 
-                    {renderPaises()}
-
-
-                    <div className="two fields">
-                        {renderProvincias()}
-
-                        {renderLocalidades()}
-                    </div>
+                    {renderLocalidades()}
 
                     <div className="field">
 
@@ -303,7 +218,7 @@ const AltaMedico = () => {
                 <div className="ui center aligned segment">
                     <button className='ui blue button' onClick={postInfoMedico}>Confirmar</button>
                     <Link to='/medicos/listadomedicos' className='ui negative button' >Cancelar</Link>
-                    <div class={`ui ${loaderState} inline loader`}></div>
+                    <div className={`ui ${loaderState} inline loader`}></div>
 
                 </div>
 
@@ -311,7 +226,7 @@ const AltaMedico = () => {
             </div>
 
         </div>
-    )
+    );
 }
 
-export default AltaMedico
+export default AltaMedico;
