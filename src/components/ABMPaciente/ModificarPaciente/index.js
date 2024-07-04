@@ -37,7 +37,7 @@ const ModificarPaciente = () => {
         "Santa Fe",
         "Santiago del Estero",
         "Tierra del Fuego",
-        "Tucumán"
+        "TUCUMAN"
     ]
 
     const [nombre, setnombre] = useState('');
