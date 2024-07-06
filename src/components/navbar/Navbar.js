@@ -29,6 +29,9 @@ const Navbar = () => {
           <i className={`bars icon ${menuVisible ? 'open' : ''}`}></i>
         </button>
         <div className={`right menu ${menuVisible ? 'visible' : ''}`}>
+          <Link className='item' to='/mapa'>
+            Mapa
+          </Link>
           <div 
             className={`ui simple dropdown item ${activeDropdown === 'medicos' ? 'active' : ''}`}
             onClick={() => handleDropdownClick('medicos')}
