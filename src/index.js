@@ -36,6 +36,8 @@ import ListadoSecretarios from './components/ABMSecretario/ListadoSecretarios';
 import BajaSecretario from './components/ABMSecretario/BajaSecretario';
 import ModificarSecretario from './components/ABMSecretario/ModificarSecretario';
 
+import ImagenBase64 from './components/Mapa';
+
 const App = () => {
   const location = useLocation();
 
@@ -65,6 +67,8 @@ const App = () => {
           <Route path='/secretarios/modificarsecretario/:nlegajo' element={<ModificarSecretario />} />
           <Route path='/diagnosticos/listadodiagnosticos' element={<ListadoDiagnosticos />} />
           <Route path='/diagnosticos/listadodiagnosticos/ver/:idDiagnostico/:nroAfiliado' element={<Diagnostico />} />
+          <Route path='/mapa' element={<ImagenBase64 />} />
+
           <Route path='/' element={<Menu />} />
           <Route path='/login' element={<Login />} />
         </Routes>
