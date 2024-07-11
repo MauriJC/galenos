@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Doughnut } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import axios from 'axios';
-import './Dashboard.css'
+import './Dashboard.css';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -98,46 +98,41 @@ const Dashboard = () => {
           ],
         });
 
-        const ubicacionesResponse = await axios.get('http://localhost:3001/altapaciente');
-        const altapaciente = ubicacionesResponse.data;
+        const response = await axios.get('http://localhost:3001/pacientesporlocalidad');
+        const altapaciente = response.data;
 
-        // Procesar datos para el gráfico de ubicaciones
-        const ubicaciones = altapaciente.reduce((acc, paciente) => {
-          const ubicacion = paciente.domicilio;
-          if (!acc[ubicacion]) {
-            acc[ubicacion] = 0;
-          }
-          acc[ubicacion]++;
-          return acc;
-        }, {});
+        // Verificar que altapaciente es un array
+        if (Array.isArray(altapaciente)) {
+          const labelsUbicaciones = altapaciente.map(entry => entry.localidad);
+          const dataUbicacionesCount = altapaciente.map(entry => entry.count);
 
-        const labelsUbicaciones = Object.keys(ubicaciones);
-        const dataUbicacionesCount = Object.values(ubicaciones);
-
-        setDataUbicaciones({
-          labels: labelsUbicaciones,
-          datasets: [
-            {
-              label: 'Número de pacientes',
-              data: dataUbicacionesCount,
-              backgroundColor: [
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(255, 159, 64, 0.2)',
-                'rgba(153, 102, 255, 0.2)',
-              ],
-              borderColor: [
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(255, 159, 64, 1)',
-                'rgba(153, 102, 255, 1)',
-              ],
-              borderWidth: 1,
-            },
-          ],
-        });
+          setDataUbicaciones({
+            labels: labelsUbicaciones,
+            datasets: [
+              {
+                label: 'Número de pacientes',
+                data: dataUbicacionesCount,
+                backgroundColor: [
+                  'rgba(54, 162, 235, 0.2)',
+                  'rgba(255, 206, 86, 0.2)',
+                  'rgba(75, 192, 192, 0.2)',
+                  'rgba(255, 159, 64, 0.2)',
+                  'rgba(153, 102, 255, 0.2)',
+                ],
+                borderColor: [
+                  'rgba(54, 162, 235, 1)',
+                  'rgba(255, 206, 86, 1)',
+                  'rgba(75, 192, 192, 1)',
+                  'rgba(255, 159, 64, 1)',
+                  'rgba(153, 102, 255, 1)',
+                ],
+                borderWidth: 1,
+              },
+            ],
+          });
+        } else {
+          console.error('La respuesta de pacientesporlocalidad no es un array:', altapaciente);
+        }
       } catch (error) {
         console.error('Error al obtener los datos de la API:', error);
       }

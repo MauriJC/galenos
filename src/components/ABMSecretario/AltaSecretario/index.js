@@ -17,6 +17,7 @@ const AltaSecretario = () => {
     const [fechaDesde, setFechaDesde] = useState('');
     const [fechaNacimiento, setFechaNacimiento] = useState('');
     const [localidades, setLocalidades] = useState([]);
+    const [errors, setErrors] = useState({});
 
     let navigate = useNavigate();
 
@@ -33,7 +34,72 @@ const AltaSecretario = () => {
         fetchLocalidades();
     }, []);
     
+    const validateForm = () => {
+        let formErrors = {};
+        let isValid = true;
+
+        if (!nombre) {
+            formErrors.nombre = "Nombre es requerido";
+            isValid = false;
+        }
+
+        if (!apellido) {
+            formErrors.apellido = "Apellido es requerido";
+            isValid = false;
+        }
+
+        if (!dni || !/^\d+$/.test(dni)) {
+            formErrors.dni = "DNI es requerido y debe ser un número";
+            isValid = false;
+        }
+
+        if (!mail || !/\S+@\S+\.\S+/.test(mail)) {
+            formErrors.mail = "Email es requerido y debe ser válido";
+            isValid = false;
+        }
+
+        if (!telefono || !/^\d+$/.test(telefono)) {
+            formErrors.telefono = "Teléfono es requerido y debe ser un número";
+            isValid = false;
+        }
+        if (!legajo || !/^\d+$/.test(legajo)) {
+            formErrors.legajo = "Legajo es requerido y debe ser un número";
+            isValid = false;
+        }
+        if (!localidad) {
+            formErrors.localidad = "Localidad es requerido";
+            isValid = false;
+        }
+        if (!calleSuperior) {
+            formErrors.calleSuperior = "La calle superior es requerida";
+            isValid = false;
+        }
+        if (!direccion) {
+            formErrors.direccion = "La dirección es requerida";
+            isValid = false;
+        }
+        if (!calleInferior) {
+            formErrors.calleInferior = "La calle inferior es requerida";
+            isValid = false;
+        }
+        if (!fechaNacimiento) {
+            formErrors.fechaNacimiento = "La fecha de nacimiento es requerida";
+            isValid = false;
+        }
+        if (!fechaDesde) {
+            formErrors.fechaDesde = "La fecha desde que trabaja en Galeno es requerida";
+            isValid = false;
+        }
+
+        setErrors(formErrors);
+        return isValid;
+    };
+
     const postSecretario = async () => {
+        if (!validateForm()) {
+            return;
+        }
+
         const secretario = {
             nombre,
             apellido,
@@ -84,6 +150,7 @@ const AltaSecretario = () => {
                                     onChange={(e) => setNombre(e.target.value)}
                                     placeholder='Nombre'
                                 />
+                                {errors.nombre && <div className="ui pointing red basic label">{errors.nombre}</div>}
                             </div>
                             <div className="field">
                                 <input
@@ -92,6 +159,7 @@ const AltaSecretario = () => {
                                     onChange={(e) => setApellido(e.target.value)}
                                     placeholder='Apellido'
                                 />
+                                {errors.apellido && <div className="ui pointing red basic label">{errors.apellido}</div>}
                             </div>
                         </div>
                     </div>
@@ -105,6 +173,7 @@ const AltaSecretario = () => {
                                 onChange={(e) => setDni(e.target.value)}
                                 placeholder='DNI'
                             />
+                            {errors.dni && <div className="ui pointing red basic label">{errors.dni}</div>}
                         </div>
                         <div className="eight wide field">
                             <label>Fecha de nacimiento</label>
@@ -113,6 +182,8 @@ const AltaSecretario = () => {
                                 value={fechaNacimiento}
                                 onChange={(e) => setFechaNacimiento(e.target.value)}
                             />
+                            {errors.fechaNacimiento && <div className="ui pointing red basic label">{errors.fechaNacimiento}</div>}
+
                         </div>
                     </div>
 
@@ -130,6 +201,8 @@ const AltaSecretario = () => {
                                 <option key={loc.id} value={loc.nombre}>{loc.nombre}</option>
                             ))}
                         </select>
+                        {errors.localidad && <div className="ui pointing red basic label">{errors.localidad}</div>}
+
                     </div>
 
                     <div className="field">
@@ -139,6 +212,8 @@ const AltaSecretario = () => {
                             value={fechaDesde}
                             onChange={(e) => setFechaDesde(e.target.value)}
                         />
+                        {errors.fechaDesde && <div className="ui pointing red basic label">{errors.fechaDesde}</div>}
+                        
                     </div>
 
                     <div className="field">
@@ -149,6 +224,8 @@ const AltaSecretario = () => {
                             onChange={(e) => setDireccion(e.target.value)}
                             placeholder='Calle 123'
                         />
+                        {errors.direccion && <div className="ui pointing red basic label">{errors.direccion}</div>}
+
                     </div>
 
                     <div className="field">
@@ -161,6 +238,7 @@ const AltaSecretario = () => {
                                     onChange={(e) => setCalleSuperior(e.target.value)}
                                     placeholder='Calle'
                                 />
+                                {errors.calleSuperior && <div className="ui pointing red basic label">{errors.calleSuperior}</div>}
                             </div>
                             <div className="field">
                                 <label>Calle inferior</label>
@@ -170,6 +248,7 @@ const AltaSecretario = () => {
                                     onChange={(e) => setCalleInferior(e.target.value)}
                                     placeholder='Calle'
                                 />
+                                {errors.calleInferior && <div className="ui pointing red basic label">{errors.calleInferior}</div>}
                             </div>
                         </div>
                     </div>
@@ -182,6 +261,7 @@ const AltaSecretario = () => {
                             onChange={(e) => setTelefono(e.target.value)}
                             placeholder='381-441122'
                         />
+                        {errors.telefono && <div className="ui pointing red basic label">{errors.telefono}</div>}
                     </div>
 
                     <div className="field">
@@ -192,6 +272,7 @@ const AltaSecretario = () => {
                             onChange={(e) => setMail(e.target.value)}
                             placeholder='JohnDoe@gmail.com'
                         />
+                        {errors.mail && <div className="ui pointing red basic label">{errors.mail}</div>}
                     </div>
 
                     <div className="field">
@@ -202,6 +283,8 @@ const AltaSecretario = () => {
                             onChange={(e) => setLegajo(e.target.value)}
                             placeholder='Legajo'
                         />
+                        {errors.legajo && <div className="ui pointing red basic label">{errors.legajo}</div>}
+
                     </div>
                 </div>
             </div>
