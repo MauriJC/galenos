@@ -19,6 +19,7 @@ const AltaRadiologo = () => {
     const [fechaNacimiento, setFechaNacimiento] = useState('');
     const [legajo, setLegajo] = useState('');
     const [localidades, setLocalidades] = useState([]);
+    const [errors, setErrors] = useState({});
 
     let navigate = useNavigate();
 
@@ -35,8 +36,85 @@ const AltaRadiologo = () => {
         fetchLocalidades();
     }, []);
 
+    const validateForm = () => {
+        let formErrors = {};
+        let isValid = true;
+
+        if (!nombre) {
+            formErrors.nombre = "Nombre es requerido";
+            isValid = false;
+        }
+
+        if (!apellido) {
+            formErrors.apellido = "Apellido es requerido";
+            isValid = false;
+        }
+
+        if (!dni || !/^\d+$/.test(dni)) {
+            formErrors.dni = "DNI es requerido y debe ser un número";
+            isValid = false;
+        }
+
+        if (!mail || !/\S+@\S+\.\S+/.test(mail)) {
+            formErrors.mail = "Email es requerido y debe ser válido";
+            isValid = false;
+        }
+
+        if (!telefono || !/^\d+$/.test(telefono)) {
+            formErrors.telefono = "Teléfono es requerido y debe ser un número";
+            isValid = false;
+        }
+        
+        if (!matricula || !/^\d+$/.test(matricula)) {
+            formErrors.matricula = "Matrícula es requerida y debe ser un número";
+            isValid = false;
+        }
+        
+        if (!localidad) {
+            formErrors.localidad = "Localidad es requerida";
+            isValid = false;
+        }
+        
+        if (!calleSuperior) {
+            formErrors.calleSuperior = "La calle superior es requerida";
+            isValid = false;
+        }
+        
+        if (!direccion) {
+            formErrors.direccion = "La dirección es requerida";
+            isValid = false;
+        }
+        
+        if (!calleInferior) {
+            formErrors.calleInferior = "La calle inferior es requerida";
+            isValid = false;
+        }
+        
+        if (!fechaNacimiento) {
+            formErrors.fechaNacimiento = "La fecha de nacimiento es requerida";
+            isValid = false;
+        }
+        
+        if (!fechaDesde) {
+            formErrors.fechaDesde = "La fecha desde que trabaja en Galeno es requerida";
+            isValid = false;
+        }
+        
+        if (!legajo || !/^\d+$/.test(legajo)) {
+            formErrors.legajo = "Legajo es requerido y debe ser un número";
+            isValid = false;
+        }
+
+        setErrors(formErrors);
+        return isValid;
+    };
+
     const postInfoRadiologo = async (e) => {
         e.preventDefault();
+        if (!validateForm()) {
+            return;
+        }
+
         const radiologo = {
             nombre, apellido, dni, direccion, telefono, email: mail, numero_matricula: matricula,
             localidad, entre_calle_sup: calleSuperior, entre_calle_inf: calleInferior,
@@ -48,7 +126,7 @@ const AltaRadiologo = () => {
             const response = await api.post('/radiologos', radiologo, { headers });
             console.log(response.data); // Añadimos un log para ver la respuesta del servidor
 
-            if (response.data.status == 200) {
+            if (response.data.status === 200) {
                 swal("Éxito", response.data.message, "success").then((ok) => {
                     if (ok) {
                         navigate('/radiologos/listadoradiologos');
@@ -72,6 +150,7 @@ const AltaRadiologo = () => {
                     <option value={loc.nombre} key={loc.id}>{loc.nombre}</option>
                 ))}
             </select>
+            {errors.localidad && <div className="ui pointing red basic label">{errors.localidad}</div>}
         </div>
     );
 
@@ -87,10 +166,12 @@ const AltaRadiologo = () => {
                             <div className="field">
                                 <label>Nombre</label>
                                 <input type="text" value={nombre} onChange={e => setNombre(e.target.value)} />
+                                {errors.nombre && <div className="ui pointing red basic label">{errors.nombre}</div>}
                             </div>
                             <div className="field">
                                 <label>Apellido</label>
                                 <input type="text" value={apellido} onChange={e => setApellido(e.target.value)} />
+                                {errors.apellido && <div className="ui pointing red basic label">{errors.apellido}</div>}
                             </div>
                         </div>
                     </div>
@@ -99,10 +180,12 @@ const AltaRadiologo = () => {
                             <div className="field">
                                 <label>DNI</label>
                                 <input type="text" value={dni} onChange={e => setDni(e.target.value)} placeholder='DNI' />
+                                {errors.dni && <div className="ui pointing red basic label">{errors.dni}</div>}
                             </div>
                             <div className="field">
                                 <label>Fecha de nacimiento</label>
                                 <input type="date" value={fechaNacimiento} onChange={e => setFechaNacimiento(e.target.value)} />
+                                {errors.fechaNacimiento && <div className="ui pointing red basic label">{errors.fechaNacimiento}</div>}
                             </div>
                         </div>
                     </div>
@@ -111,51 +194,55 @@ const AltaRadiologo = () => {
                     <div className="field">
                         <label htmlFor="">Fecha desde:</label>
                         <input type="date" value={fechaDesde} onChange={e => setFechaDesde(e.target.value)} />
+                        {errors.fechaDesde && <div className="ui pointing red basic label">{errors.fechaDesde}</div>}
                     </div>
                     <div className="field">
                         <label htmlFor="">Direccion</label>
                         <input type="text" value={direccion} onChange={e => setDireccion(e.target.value)} />
+                        {errors.direccion && <div className="ui pointing red basic label">{errors.direccion}</div>}
                     </div>
                     <div className="field">
                         <div className="two fields">
                             <div className="field">
                                 <label htmlFor="">Calle Superior</label>
                                 <input type="text" value={calleSuperior} onChange={e => setCalleSuperior(e.target.value)} />
+                                {errors.calleSuperior && <div className="ui pointing red basic label">{errors.calleSuperior}</div>}
                             </div>
                             <div className="field">
                                 <label htmlFor="">Calle Inferior</label>
                                 <input type="text" value={calleInferior} onChange={e => setCalleInferior(e.target.value)} />
+                                {errors.calleInferior && <div className="ui pointing red basic label">{errors.calleInferior}</div>}
                             </div>
                         </div>
                     </div>
                     <div className="field">
                         <label htmlFor="">Telefono</label>
                         <input type='text' value={telefono} onChange={e => setTelefono(e.target.value)} />
+                        {errors.telefono && <div className="ui pointing red basic label">{errors.telefono}</div>}
                     </div>
                     <div className="field">
-                        <label htmlFor="">E-mail</label>
-                        <input type="email" value={mail} onChange={e => setMail(e.target.value)} />
+                        <label htmlFor="">Correo electrónico</label>
+                        <input type='text' value={mail} onChange={e => setMail(e.target.value)} />
+                        {errors.mail && <div className="ui pointing red basic label">{errors.mail}</div>}
                     </div>
                     <div className="field">
-                        <div className="two fields">
-                            <div className="field">
-                                <label htmlFor="">Nro de Matricula</label>
-                                <input type="text" value={matricula} onChange={e => setMatricula(e.target.value)} />
-                            </div>
-                            <div className="field">
-                                <label htmlFor="">Nro de Legajo</label>
-                                <input type="text" value={legajo} onChange={e => setLegajo(e.target.value)} />
-                            </div>
-                        </div>
+                        <label htmlFor="">Matrícula</label>
+                        <input type='text' value={matricula} onChange={e => setMatricula(e.target.value)} />
+                        {errors.matricula && <div className="ui pointing red basic label">{errors.matricula}</div>}
                     </div>
-                    <div className="ui header centered">
-                        <button className='ui blue button' onClick={postInfoRadiologo}>Confirmar</button>
-                        <Link className='ui negative button' to='/radiologos/listadoradiologos'>Cancelar</Link>
+                    <div className="field">
+                        <label htmlFor="">Legajo</label>
+                        <input type='text' value={legajo} onChange={e => setLegajo(e.target.value)} />
+                        {errors.legajo && <div className="ui pointing red basic label">{errors.legajo}</div>}
+                    </div>
+                    <div>
+                        <button onClick={postInfoRadiologo} className="ui primary button">Registrar</button>
+                        <Link to='/radiologos/listadoradiologos' className="ui button">Cancelar</Link>
                     </div>
                 </div>
             </div>
         </div>
     );
-}
+};
 
 export default AltaRadiologo;
