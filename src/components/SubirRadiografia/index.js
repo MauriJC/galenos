@@ -1,5 +1,5 @@
-import api from '../../apis'
-import React, { useState, useEffect } from 'react'
+import api from '../../apis';
+import React, { useState, useEffect } from 'react';
 import swal from 'sweetalert';
 import { useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';
@@ -9,101 +9,126 @@ const SubirRadiografia = () => {
   const [infoAfiliado, setInfoAfiliado] = useState(null);
   const [radiografia, setRadiografia] = useState(null);
   const [inputFileState, setInputFileState] = useState(true);
-  const [nromatricularadiologo, setnromatricularadiologo] = useState('')
-  const [listadoRadiologos, setlistadoRadiologos] = useState([])
-  const [listaMedicos, setlistaMedicos] = useState([])
-  const [matriculaMedico, setmatriculaMedico] = useState('')
-  const [fechaRadiografia, setfechaRadiografia] = useState('')
-  const [tipoRadiografia, settipoRadiografia] = useState('Radiografía de Torax')
-  const [descripcion, setdescripcion] = useState('')
-  const [loaderState, setloaderState] = useState('disabled')
-  const [loaderCargar, setloaderCargar] = useState('disabled')
-  let navigate = useNavigate()
+  const [nromatricularadiologo, setnromatricularadiologo] = useState('');
+  const [listadoRadiologos, setlistadoRadiologos] = useState([]);
+  const [listaMedicos, setlistaMedicos] = useState([]);
+  const [matriculaMedico, setmatriculaMedico] = useState('');
+  const [fechaRadiografia, setfechaRadiografia] = useState('');
+  const [tipoRadiografia, settipoRadiografia] = useState('Radiografía de Torax');
+  const [descripcion, setdescripcion] = useState('');
+  const [loaderState, setloaderState] = useState('disabled');
+  const [loaderCargar, setloaderCargar] = useState('disabled');
+  const [errors, setErrors] = useState({});
+  let navigate = useNavigate();
 
   useEffect(() => {
     getRadiologos();
     getListadoMedicos();
-  }, [])
+  }, []);
 
   const getInfoAfiliado = async (e) => {
-    e.preventDefault()
-    const headers = { "Content-Type": "application/json" }
-    const params = { paciente: nroAfiliado }
-    setloaderState('active')
+    e.preventDefault();
+    const headers = { "Content-Type": "application/json" };
+    const params = { paciente: nroAfiliado };
+    setloaderState('active');
 
-    const response = await api.get(`/altapaciente`, { params }, { headers });
-    setInputFileState(false);
-    setInfoAfiliado(response.data.paciente);
+    try {
+      const response = await api.get(`/altapaciente`, { params }, { headers });
+      setInputFileState(false);
+      setInfoAfiliado(response.data.paciente);
 
-    if (response.data.status === 200) { 
-      swal(`${response.data.status}`, "Afiliado encontrado!", "success") 
-      setloaderState('disabled')
+      if (response.data.status === 200) { 
+        swal(`${response.data.status}`, "Afiliado encontrado!", "success");
+      } else {
+        swal(`${response.data.status}`, response.data.message, 'error');
+      }
+    } catch (error) {
+      swal("Error", "No se pudo encontrar el afiliado", "error");
+    } finally {
+      setloaderState('disabled');
     }
-    if (response.data.status === 404) {
-      swal(`${response.data.status}`, response.data.message, 'error')
-      setloaderState('disabled')
-    }
-  }
+  };
 
   const getRadiologos = async () => {
-    const headers = { "Content-Type": "application/json" }
-    const response = await api.get('/radiologos', { headers })
-    console.log(response.data)
-    setlistadoRadiologos(response.data)
-  }
+    const headers = { "Content-Type": "application/json" };
+    try {
+      const response = await api.get('/radiologos', { headers });
+      setlistadoRadiologos(response.data);
+    } catch (error) {
+      console.error("Error fetching radiologos:", error);
+    }
+  };
 
   const getListadoMedicos = async () => {
-    const response = await api.get(`/altamedico`)
-    setlistaMedicos(response.data.medicos);
-    console.log(listaMedicos)
-  }
+    try {
+      const response = await api.get(`/altamedico`);
+      setlistaMedicos(response.data.medicos);
+    } catch (error) {
+      console.error("Error fetching medicos:", error);
+    }
+  };
 
-  const renderRadiologos = () => {
-    return (
-      <div className="field">
-        <label> Radiologo </label>
-        <select className="ui fluid dropdown" onChange={e => setnromatricularadiologo(e.target.value)} value={nromatricularadiologo}>
-          <option value='' >Seleccione radiologo</option>
-          {listadoRadiologos.map(radiologo => {
-            return (<option value={radiologo.numero_matricula} key={radiologo.numero_matricula}>{radiologo.nombre}</option>)
-          })}
-        </select>
-      </div>
-    )
-  }
+  const validateForm = () => {
+    let formErrors = {};
+    let isValid = true;
 
-  const renderMedicos = () => {
-    return (
-      <div className="field">
-        <label> Medico </label>
-        <select className="ui fluid dropdown" onChange={e => setmatriculaMedico(e.target.value)} value={matriculaMedico}>
-          <option value='' >Seleccione medico</option>
-          {listaMedicos.map(medico => {
-            return (<option value={medico.numero_matricula} key={medico.numero_matricula}>{medico.nombre}</option>)
-          })}
-        </select>
-      </div>
-    )
-  }
+    if (!nroAfiliado || !/^\d+$/.test(nroAfiliado)) {
+      formErrors.nroAfiliado = "Número de afiliado es requerido y debe ser un número";
+      isValid = false;
+    }
+
+    if (!matriculaMedico) {
+      formErrors.matriculaMedico = "Médico es requerido";
+      isValid = false;
+    }
+
+    if (!nromatricularadiologo) {
+      formErrors.nromatricularadiologo = "Radiólogo es requerido";
+      isValid = false;
+    }
+
+    if (!fechaRadiografia) {
+      formErrors.fechaRadiografia = "Fecha es requerida";
+      isValid = false;
+    }
+
+    if (!tipoRadiografia) {
+      formErrors.tipoRadiografia = "Tipo de radiografía es requerido";
+      isValid = false;
+    }
+
+    if (!radiografia) {
+      formErrors.radiografia = "Archivo de radiografía es requerido";
+      isValid = false;
+    }
+
+    setErrors(formErrors);
+    return isValid;
+  };
 
   const uploadRx = async (e) => {
     e.preventDefault();
-    const formData = new FormData()
-    formData.append('numero_afiliado', infoAfiliado['numero_afiliado'])
-    formData.append('estudio', tipoRadiografia)
-    formData.append('matricula_medico', parseInt(matriculaMedico))    
-    formData.append('matricula_radiologo', parseInt(nromatricularadiologo))
-    formData.append('placa', radiografia) // Asegúrate de usar 'placa' aquí
-    formData.append('descripcion', descripcion)
-    formData.append('fecha', fechaRadiografia)
 
-    const headers = { "Content-Type": "multipart/form-data" }
+    if (!validateForm()) {
+      swal("Error", "Por favor, corrige los errores en el formulario", "error");
+      return;
+    }
 
-    setloaderCargar('active')
+    const formData = new FormData();
+    formData.append('numero_afiliado', infoAfiliado['numero_afiliado']);
+    formData.append('estudio', tipoRadiografia);
+    formData.append('matricula_medico', parseInt(matriculaMedico));    
+    formData.append('matricula_radiologo', parseInt(nromatricularadiologo));
+    formData.append('placa', radiografia);
+    formData.append('descripcion', descripcion);
+    formData.append('fecha', fechaRadiografia);
+
+    const headers = { "Content-Type": "multipart/form-data" };
+
+    setloaderCargar('active');
 
     try {
       const response = await api.post(`/subiradiografia`, formData, { headers });
-      console.log(response.data.status);
       setloaderCargar('disabled');
 
       if (response.data.status === 200) {
@@ -112,14 +137,41 @@ const SubirRadiografia = () => {
           text: "La radiografia ha sido enviada correctamente",
           icon: "success"
         }).then(() => {
-          navigate('/diagnosticos/listadodiagnosticos')
+          navigate('/diagnosticos/listadodiagnosticos');
         });
       }
     } catch (error) {
       console.log(error);
+      swal("Error", "No se pudo subir la radiografía", "error");
       setloaderCargar('disabled');
     }
-  }
+  };
+
+  const renderRadiologos = () => (
+    <div className="field">
+      <label> Radiologo </label>
+      <select className="ui fluid dropdown" onChange={e => setnromatricularadiologo(e.target.value)} value={nromatricularadiologo}>
+        <option value=''>Seleccione radiologo</option>
+        {listadoRadiologos.map(radiologo => (
+          <option value={radiologo.numero_matricula} key={radiologo.numero_matricula}>{radiologo.nombre}</option>
+        ))}
+      </select>
+      {errors.nromatricularadiologo && <div className="ui pointing red basic label">{errors.nromatricularadiologo}</div>}
+    </div>
+  );
+
+  const renderMedicos = () => (
+    <div className="field">
+      <label> Medico </label>
+      <select className="ui fluid dropdown" onChange={e => setmatriculaMedico(e.target.value)} value={matriculaMedico}>
+        <option value=''>Seleccione medico</option>
+        {listaMedicos.map(medico => (
+          <option value={medico.numero_matricula} key={medico.numero_matricula}>{medico.nombre}</option>
+        ))}
+      </select>
+      {errors.matriculaMedico && <div className="ui pointing red basic label">{errors.matriculaMedico}</div>}
+    </div>
+  );
 
   return (
     <div>
@@ -129,11 +181,13 @@ const SubirRadiografia = () => {
           <div className='inline fields'>
             <div className='eight wide field'>
               <label htmlFor="" >Nro de Afiliado</label>
-              <input type="text" 
+              <input 
+                type="text" 
                 value={nroAfiliado}
                 placeholder={'Ingrese Numero de afiliado'}
                 onChange={(e) => setNroAfiliado(e.target.value)}
               />
+              {errors.nroAfiliado && <div className="ui pointing red basic label">{errors.nroAfiliado}</div>}
             </div>
             <button className='ui button' onClick={getInfoAfiliado}>
               Buscar
@@ -156,10 +210,12 @@ const SubirRadiografia = () => {
           <div className="inline fields">
             <label htmlFor="">Fecha</label>
             <input type="date" value={fechaRadiografia} onChange={e => setfechaRadiografia(e.target.value)} />
+            {errors.fechaRadiografia && <div className="ui pointing red basic label">{errors.fechaRadiografia}</div>}
           </div>
           <div className="inline fields">
             <label>Tipo de estudio</label>
             <input type="text" value={tipoRadiografia} onChange={e => settipoRadiografia(e.target.value)} />
+            {errors.tipoRadiografia && <div className="ui pointing red basic label">{errors.tipoRadiografia}</div>}
           </div>
         </div>
       </div>
@@ -173,7 +229,14 @@ const SubirRadiografia = () => {
           <label htmlFor="">DNI: {infoAfiliado ? infoAfiliado['dni'] : '' }</label> 
           <br />
           <label htmlFor="">Archivo: </label>
-          <input type="file" name="image" accept='image/*' onChange={e => setRadiografia(e.target.files[0])} disabled={inputFileState} />
+          <input 
+            type="file" 
+            name="image" 
+            accept='image/*' 
+            onChange={e => setRadiografia(e.target.files[0])} 
+            disabled={inputFileState} 
+          />
+          {errors.radiografia && <div className="ui pointing red basic label">{errors.radiografia}</div>}
           <br />
           <div className="inline fields"> 
             <label htmlFor="">Observaciones: </label>
@@ -187,7 +250,7 @@ const SubirRadiografia = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default SubirRadiografia
+export default SubirRadiografia;

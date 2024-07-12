@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import api from '../../apis';
 
 const MapaCalor = () => {
     const [base64String, setBase64String] = useState('');
@@ -6,10 +7,12 @@ const MapaCalor = () => {
     useEffect(() => {
       const fetchImagen = async () => {
         try {
-          const response = await fetch('http://localhost:3001/mapadecalor');
-          const data = await response.json();
-          if (data.imagen_base64) {
-            setBase64String(data.imagen_base64);
+          const headers = { "Content-Type": "application/json" };
+
+          const response = await api.get(`/mapadecalor`, { headers });
+
+          if (response.data.imagen_base64) {
+            setBase64String(response.data.imagen_base64);
           } else {
             console.error('No se recibió ninguna imagen válida desde el servidor.');
           }
@@ -19,7 +22,7 @@ const MapaCalor = () => {
       };
   
       fetchImagen();
-    }, []); // La dependencia vacía [] asegura que useEffect se ejecute solo una vez al montar el componente
+    }, []); 
   
     return (
       <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
@@ -34,4 +37,4 @@ const MapaCalor = () => {
   );
 };
   
-  export default MapaCalor;
+export default MapaCalor;
