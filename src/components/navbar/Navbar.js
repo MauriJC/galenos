@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './Navbar.css';
+import {logout} from '../../apis';
+
 
 const Navbar = () => {
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [menuVisible, setMenuVisible] = useState(false);
+  const navigate = useNavigate(); 
 
   const handleDropdownClick = (dropdownName) => {
     if (activeDropdown === dropdownName) {
@@ -16,6 +19,15 @@ const Navbar = () => {
 
   const toggleMenuVisibility = () => {
     setMenuVisible(!menuVisible);
+  };
+
+  const handleLogout = async () => {
+    const logoutSuccess = await logout();
+    if (logoutSuccess) {
+      navigate('/login');
+    } else {
+      console.error('Error al cerrar sesión.');
+    }
   };
 
   return (
@@ -83,7 +95,9 @@ const Navbar = () => {
               <Link className='item' to='/secretarios/listadosecretarios'>Listado Secretarios</Link>
             </div>
           </div>
-          <Link className='ui item logout-button' to='/login'>Cerrar sesión</Link>
+          <div className='ui item logout-button' onClick={handleLogout}>
+            Cerrar sesión
+          </div>
         </div>
       </div>
     </nav>

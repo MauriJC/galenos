@@ -61,7 +61,12 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const diagnosticosResponse = await axios.get('http://localhost:3001/diagnosticos');
+        const token = localStorage.getItem('Authorization'); // O de donde obtengas el token
+        const diagnosticosResponse = await axios.get('http://localhost:3001/diagnosticos', {
+          headers: {
+            Authorization: token,
+          },
+        });
         const diagnosticos = diagnosticosResponse.data;
 
         // Procesar datos para el gráfico de patologías
@@ -98,7 +103,11 @@ const Dashboard = () => {
           ],
         });
 
-        const response = await axios.get('http://localhost:3001/pacientesporlocalidad');
+        const response = await axios.get('http://localhost:3001/pacientesporlocalidad', {
+          headers: {
+            Authorization: token,
+          },
+        });
         const altapaciente = response.data;
 
         // Verificar que altapaciente es un array
