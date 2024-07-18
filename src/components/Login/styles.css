@@ -26,3 +26,22 @@
   align-items: center;
   height: 100vh; /* Altura del 100% del viewport */
 }
+.logo-container {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.logo {
+  width: 80px; /* Ajusta el tamaño del logo según tus necesidades */
+  height: auto;
+  display: block;
+
+}
+
+.logo-text {
+  font-size: 25px; /* Ajusta el tamaño del texto según tus necesidades */
+  font-weight: bold;
+  margin-top: 10px;
+  display: block;
+  text-align: center;
+}

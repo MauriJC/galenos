@@ -6,10 +6,11 @@ import swal from 'sweetalert';
 
 const Diagnostico = () => {
     let { idDiagnostico, nroAfiliado } = useParams();
-    const [info, setinfo] = useState({ radiografia: { paciente: { nombre: '' } } });
+    const [info, setinfo] = useState({ radiografia: { paciente: { nombre: '', edad: 0 } } });
     const [mail, setmail] = useState('');
     const [loaderState, setloaderState] = useState('disabled');
     const [errors, setErrors] = useState({});
+    const [sugerencia, setSugerencia] = useState('');
 
     useEffect(() => {
         getDiagnostico();
@@ -29,11 +30,27 @@ const Diagnostico = () => {
         try {
             const response = await api.get('/diagnostico', { params }, { headers });
             setinfo(response.data);
+            sugerirEnfermedad(response.data);
         } catch (error) {
             console.error("Error fetching diagnostico:", error);
             swal("Error", "No se pudo cargar el diagnóstico", "error");
         }
         setloaderState('disabled');
+    };
+
+    const sugerirEnfermedad = async (diagnosticoData) => {
+        const params = {
+            numero_afiliado: diagnosticoData.radiografia.paciente.numero_afiliado,
+            diagnostico: diagnosticoData.resultado
+        };
+    
+        try {
+            const response = await api.get('/sugerir_enfermedad/', { params });
+            setSugerencia(response.data.sugerencia);
+        } catch (error) {
+            console.error("Error al sugerir enfermedad:", error.response ? error.response.data : error);
+            swal("Error", "No se pudo sugerir la enfermedad", "error");
+        }
     };
 
     const validateEmail = (email) => {
@@ -57,10 +74,23 @@ const Diagnostico = () => {
         return isValid;
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         if (validateForm()) {
-            swal("Success", "El correo electrónico ha sido enviado", "success");
+            try {
+                const response = await api.post('/enviardiagnostico', {
+                    id_diagnostico: idDiagnostico,
+                    email: mail
+                });
+                if (response.data.success) {
+                    swal("Success", "El correo electrónico ha sido enviado", "success");
+                } else {
+                    swal("Error", response.data.error, "error");
+                }
+            } catch (error) {
+                console.error("Error sending email:", error.response ? error.response.data : error);
+                swal("Error", "No se pudo enviar el correo electrónico", "error");
+            }
         } else {
             swal("Error", "Por favor, corrige los errores en el formulario", "error");
         }
@@ -94,11 +124,11 @@ const Diagnostico = () => {
                     <img className="ui small left floated image" src={`//159.223.186.3/${info.radiografia.placa}`} alt='Radiografia' />
                     <h4>Diagnostico de la IA: {info.resultado}</h4>
                     <h4>Recomendaciones:</h4>
-                    <p>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga illum beatae 
-                        consequuntur quos inventore minima atque doloribus necessitatibus quo. Inventore sequi sunt magnam? Quo 
-                        veritatis culpa mollitia distinctio beatae.
-                    </p>
+                    <ul>
+                        {sugerencia.split('<br>').map((line, index) => (
+                            <li key={index}>{line}</li>
+                        ))}
+                    </ul>
                 </div>
 
                 <form className="ui form" onSubmit={handleSubmit}>
