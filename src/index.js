@@ -36,41 +36,191 @@ import ListadoSecretarios from './components/ABMSecretario/ListadoSecretarios';
 import BajaSecretario from './components/ABMSecretario/BajaSecretario';
 import ModificarSecretario from './components/ABMSecretario/ModificarSecretario';
 
+//Mapa
 import ImagenBase64 from './components/Mapa';
+
+//proteccion de turas
+import PrivateRoute from './components/PrivateRoute/PrivateRoute';
+
 
 const App = () => {
   const location = useLocation();
 
   const showNavbar = location.pathname !== '/login';
-
   return (
     <>
       {showNavbar && <Navbar />}
       <div className='ui container'>
         <Routes>
-          <Route path='/subirradiografia' element={<SubirRadiografia />} />
-          <Route path='/medicos/listadomedicos' element={<ListadoMedicos />} />
-          <Route path='/medicos/altamedico' element={<AltaMedico />} />
-          <Route path='/medicos/modificarmedico/:numero_matricula' element={<ModificarMedico />} />
-          <Route path='/medicos/bajamedico/:nmatricula' element={<BajaMedico />} />
-          <Route path='/radiologos/listadoradiologos' element={<ListadoRadiologos />} />
-          <Route path='/radiologos/altaradiologo' element={<AltaRadiologo />} />
-          <Route path='/radiologos/modificarradiologo/:nmatricula' element={<ModificarRadiologo />} />
-          <Route path='/radiologos/bajaradiologo/:nmatricula' element={<BajaRadiologo />} />
-          <Route path='/pacientes/altapaciente' element={<AltaPaciente />} />
-          <Route path='/pacientes/modificarpaciente/:nafiliado' element={<ModificarPaciente />} />
-          <Route path='/pacientes/listadopacientes' element={<ListadoPacientes />} />
-          <Route path='/pacientes/bajapaciente/:nafiliado' element={<BajaPaciente />} />
-          <Route path='/secretarios/altasecretario' element={<AltaSecretario />} />
-          <Route path='/secretarios/listadosecretarios' element={<ListadoSecretarios />} />
-          <Route path='/secretarios/bajasecretario/:nlegajo' element={<BajaSecretario />} />
-          <Route path='/secretarios/modificarsecretario/:nlegajo' element={<ModificarSecretario />} />
-          <Route path='/diagnosticos/listadodiagnosticos' element={<ListadoDiagnosticos />} />
-          <Route path='/diagnosticos/listadodiagnosticos/ver/:idDiagnostico/:nroAfiliado' element={<Diagnostico />} />
-          <Route path='/mapa' element={<ImagenBase64 />} />
-
-          <Route path='/' element={<Menu />} />
           <Route path='/login' element={<Login />} />
+          <Route 
+            path='/' 
+            element={
+              <PrivateRoute>
+                <Menu />
+              </PrivateRoute>
+            } 
+          />
+          <Route 
+            path='/subirradiografia' 
+            element={
+              <PrivateRoute>
+                <SubirRadiografia />
+              </PrivateRoute>
+            } 
+          />
+          <Route 
+            path='/medicos/listadomedicos' 
+            element={
+              <PrivateRoute>
+                <ListadoMedicos />
+              </PrivateRoute>
+            } 
+          />
+          <Route 
+            path='/medicos/altamedico' 
+            element={
+              <PrivateRoute>
+                <AltaMedico />
+              </PrivateRoute>
+            } 
+          />
+          <Route 
+            path='/medicos/modificarmedico/:numero_matricula' 
+            element={
+              <PrivateRoute>
+                <ModificarMedico />
+              </PrivateRoute>
+            } 
+          />
+          <Route 
+            path='/medicos/bajamedico/:nmatricula' 
+            element={
+              <PrivateRoute>
+                <BajaMedico />
+              </PrivateRoute>
+            } 
+          />
+          <Route 
+            path='/radiologos/listadoradiologos' 
+            element={
+              <PrivateRoute>
+                <ListadoRadiologos />
+              </PrivateRoute>
+            } 
+          />
+          <Route 
+            path='/radiologos/altaradiologo' 
+            element={
+              <PrivateRoute>
+                <AltaRadiologo />
+              </PrivateRoute>
+            } 
+          />
+          <Route 
+            path='/radiologos/modificarradiologo/:nmatricula' 
+            element={
+              <PrivateRoute>
+                <ModificarRadiologo />
+              </PrivateRoute>
+            } 
+          />
+          <Route 
+            path='/radiologos/bajaradiologo/:nmatricula' 
+            element={
+              <PrivateRoute>
+                <BajaRadiologo />
+              </PrivateRoute>
+            } 
+          />
+          <Route 
+            path='/pacientes/altapaciente' 
+            element={
+              <PrivateRoute>
+                <AltaPaciente />
+              </PrivateRoute>
+            } 
+          />
+          <Route 
+            path='/pacientes/modificarpaciente/:nafiliado' 
+            element={
+              <PrivateRoute>
+                <ModificarPaciente />
+              </PrivateRoute>
+            } 
+          />
+          <Route 
+            path='/pacientes/listadopacientes' 
+            element={
+              <PrivateRoute>
+                <ListadoPacientes />
+              </PrivateRoute>
+            } 
+          />
+          <Route 
+            path='/pacientes/bajapaciente/:nafiliado' 
+            element={
+              <PrivateRoute>
+                <BajaPaciente />
+              </PrivateRoute>
+            } 
+          />
+          <Route 
+            path='/secretarios/altasecretario' 
+            element={
+              <PrivateRoute>
+                <AltaSecretario />
+              </PrivateRoute>
+            } 
+          />
+          <Route 
+            path='/secretarios/listadosecretarios' 
+            element={
+              <PrivateRoute>
+                <ListadoSecretarios />
+              </PrivateRoute>
+            } 
+          />
+          <Route 
+            path='/secretarios/bajasecretario/:nlegajo' 
+            element={
+              <PrivateRoute>
+                <BajaSecretario />
+              </PrivateRoute>
+            } 
+          />
+          <Route 
+            path='/secretarios/modificarsecretario/:nlegajo' 
+            element={
+              <PrivateRoute>
+                <ModificarSecretario />
+              </PrivateRoute>
+            } 
+          />
+          <Route 
+            path='/diagnosticos/listadodiagnosticos' 
+            element={
+              <PrivateRoute>
+                <ListadoDiagnosticos />
+              </PrivateRoute>
+            } 
+          />
+          <Route 
+            path='/diagnosticos/listadodiagnosticos/ver/:idDiagnostico/:nroAfiliado' 
+            element={
+              <PrivateRoute>
+                <Diagnostico />
+              </PrivateRoute>
+            } 
+          />
+          <Route 
+            path='/mapa' 
+            element={
+              <PrivateRoute>
+                <ImagenBase64 />
+              </PrivateRoute>
+            } 
+          />
         </Routes>
       </div>
     </>

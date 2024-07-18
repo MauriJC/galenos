@@ -144,8 +144,8 @@ const ListadoMedicos = () => {
                                 {renderAdminFunctions(medico)}
                                 <i className="large middle aligned icon doctor" />
                                 <div className="content">
-                                    Nombre del médico: {medico.nombre}
-                                    <div className="description"> Apellido del médico: {medico.apellido}</div>
+                                    Nombre del médico: {medico.nombre} {medico.apellido}
+                                    <div className="description"> Matricula N°: {medico.numero_matricula}</div>
                                 </div>
                             </div>
                         );

@@ -144,8 +144,8 @@ const ListadoSecretarios = () => {
                                 {renderAdminFunctions(secretario)}
                                 <i className="large middle aligned icon doctor" />
                                 <div className="content">
-                                    Nombre del secretario: {secretario.nombre}
-                                    <div className="description"> Apellido del secretario: {secretario.apellido}</div>
+                                    Nombre del secretario: {secretario.nombre} {secretario.apellido}
+                                    <div className="description"> Legajo N°: {secretario.legajo}</div>
                                 </div>
                             </div>
                         );
