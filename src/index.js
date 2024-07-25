@@ -39,29 +39,33 @@ import ModificarSecretario from './components/ABMSecretario/ModificarSecretario'
 const App = () => {
   return (
     <BrowserRouter>
-      <Navbar />
+
+
       <div className='ui container'>
         <Routes>
-          <Route path='/subirRadiografia' element={<SubirRadiografia />} />
-          <Route path='/medicos/listadoMedicos' element={<ListadoMedicos />} />
-          <Route path='/medicos/altaMedico' element={<AltaMedico />} />
-          <Route path='/medicos/modificarMedico/:numero_matricula' element={<ModificarMedico />} />
-          <Route path='/medicos/bajamedico/:nmatricula' element={<BajaMedico />} />
-          <Route path='/radiologos/listadoRadiologos' element={<ListadoRadiologos />} />
-          <Route path='/radiologos/altaradiologo' element={<AltaRadiologo />} />
-          <Route path='/radiologos/modificarRadiologo/:nmatricula' element={<ModificarRadiologo />} />
-          <Route path='/radiologos/bajaradiologo/:nmatricula' element={<BajaRadiologo />} />
-          <Route path='/pacientes/altapaciente' element={<AltaPaciente />} />
-          <Route path='/pacientes/modificarpaciente/:nafiliado' element={<ModificarPaciente />} />
-          <Route path='/pacientes/listadopacientes' element={<ListadoPacientes />} />
-          <Route path='/pacientes/bajapaciente/:nafiliado' element={<BajaPaciente />} />
-          <Route path='/secretarios/altasecretario' element={<AltaSecretario />} />
-          <Route path='/secretarios/listadosecretarios' element={<ListadoSecretarios />} />
-          <Route path='/secretarios/bajasecretario/:nlegajo' element={<BajaSecretario />} />
-          <Route path='/secretarios/modificarsecretario/:nlegajo' element={<ModificarSecretario />} />
-          <Route path='/diagnosticos/listadodiagnosticos' element={<ListadoDiagnosticos />} />
-          <Route path='/diagnosticos/listadodiagnosticos/ver/:idDiagnostico/:nroAfiliado' element={<Diagnostico />} />
-          <Route path='/' element={<Menu />} />
+          <Route path='/login' element={<Login></Login>} />
+          <Navbar>
+            <Route path='/subirRadiografia' element={<SubirRadiografia />} />
+            <Route path='/medicos/listadoMedicos' element={<ListadoMedicos />} />
+            <Route path='/medicos/altaMedico' element={<AltaMedico />} />
+            <Route path='/medicos/modificarMedico/:numero_matricula' element={<ModificarMedico />} />
+            <Route path='/medicos/bajamedico/:nmatricula' element={<BajaMedico />} />
+            <Route path='/radiologos/listadoRadiologos' element={<ListadoRadiologos />} />
+            <Route path='/radiologos/altaradiologo' element={<AltaRadiologo />} />
+            <Route path='/radiologos/modificarRadiologo/:nmatricula' element={<ModificarRadiologo />} />
+            <Route path='/radiologos/bajaradiologo/:nmatricula' element={<BajaRadiologo />} />
+            <Route path='/pacientes/altapaciente' element={<AltaPaciente />} />
+            <Route path='/pacientes/modificarpaciente/:nafiliado' element={<ModificarPaciente />} />
+            <Route path='/pacientes/listadopacientes' element={<ListadoPacientes />} />
+            <Route path='/pacientes/bajapaciente/:nafiliado' element={<BajaPaciente />} />
+            <Route path='/secretarios/altasecretario' element={<AltaSecretario />} />
+            <Route path='/secretarios/listadosecretarios' element={<ListadoSecretarios />} />
+            <Route path='/secretarios/bajasecretario/:nlegajo' element={<BajaSecretario />} />
+            <Route path='/secretarios/modificarsecretario/:nlegajo' element={<ModificarSecretario />} />
+            <Route path='/diagnosticos/listadodiagnosticos' element={<ListadoDiagnosticos />} />
+            <Route path='/diagnosticos/listadodiagnosticos/ver/:idDiagnostico/:nroAfiliado' element={<Diagnostico />} />
+            <Route path='/' element={<Menu />} />
+          </Navbar>
         </Routes>
       </div>
     </BrowserRouter>
