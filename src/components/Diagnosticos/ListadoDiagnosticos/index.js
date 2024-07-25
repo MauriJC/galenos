@@ -1,126 +1,119 @@
-
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import api from '../../../apis'
-
+import api from '../../../apis';
+import swal from 'sweetalert';
 
 const ListadoDiagnosticos = () => {
     const [nroAfiliado, setnroAfiliado] = useState('');
-    const [matricula, setmatricula] = useState('')
-    const [listaMedicos, setlistaMedicos] = useState([]) //{ nombre: "Jose", numero_matricula: 1 }, { nombre: "Eduardo Elric", numero_matricula: 2 }
-    const [diagnosticos, setdiagnosticos] = useState([{ id: 1 }, { id: 2 }])
-    const [infoPaciente, setinfoPaciente] = useState({})
-    const [nombreMedico, setnombreMedico] = useState('')
-
-    //console.log(matricula, nroAfiliado)
-    //console.log("que hace esto")
-
-    setinfoPaciente({});
+    const [matricula, setmatricula] = useState('');
+    const [listaMedicos, setlistaMedicos] = useState([]);
+    const [diagnosticos, setdiagnosticos] = useState([]);
+    const [infoPaciente, setinfoPaciente] = useState({});
+    const [nombreMedico, setnombreMedico] = useState('');
+    const [errors, setErrors] = useState({});
+    const [noDiagnosticosMessage, setNoDiagnosticosMessage] = useState('');
 
     useEffect(() => {
-        //console.log('entra useeffect')
-        getMedicos()
-        const medicoSeleccionado = listaMedicos.filter(medico => medico.numero_matricula == matricula)
+        getMedicos();
+    }, []);
 
-        if (medicoSeleccionado.length != 0) {
-            //console.log('entra')
-            setnombreMedico(medicoSeleccionado[0].nombre)
+    useEffect(() => {
+        const medicoSeleccionado = listaMedicos.find(medico => medico.numero_matricula === parseInt(matricula));
+        if (medicoSeleccionado) {
+            setnombreMedico(medicoSeleccionado.nombre);
+        } else {
+            setnombreMedico('');
         }
-    })
+    }, [matricula, listaMedicos]);
 
-    //, [matricula])
-
-    //API comms
     const getMedicos = async () => {
-        console.log('obteniendo medicos');
-        const response = await api.get(`/altamedico`);
-        setlistaMedicos(response.data.medicos);
-    }
+        try {
+            const response = await api.get(`/altamedico`);
+            setlistaMedicos(response.data.medicos);
+        } catch (error) {
+            console.error("Error fetching medicos:", error);
+            swal("Error", "No se pudieron cargar los médicos", "error");
+        }
+    };
 
-    /** 
-     * 
-     * const getInfoPaciente=async(e)=>{
-        e.preventDefault()
-         const headers = {
-            "Content-Type":"application/json"
+    const validateForm = () => {
+        let formErrors = {};
+        let isValid = true;
+
+        if (!nroAfiliado || !/^\d+$/.test(nroAfiliado)) {
+            formErrors.nroAfiliado = "Número de afiliado es requerido y debe ser un número";
+            isValid = false;
         }
 
-        const params = {
-        paciente: nroAfiliado
+        if (!matricula) {
+            formErrors.matricula = "Médico es requerido";
+            isValid = false;
         }
 
+        setErrors(formErrors);
+        return isValid;
+    };
 
-        const response = await api.get(`/pacientes`,{params},{headers});
-        setinfoPaciente(response.data.paciente);
-    }
-    */
+    const getDiagnosticos = async (e) => {
+        e.preventDefault();
 
+        if (!validateForm()) {
+            return;
+        }
 
-
-    const getDiagnosticos = async () => {
         const headers = {
             "Content-Type": "application/json"
-        }
+        };
 
         const params = {
             matricula_medico: matricula,
             numero_afiliado: nroAfiliado
+        };
+
+        try {
+            const response = await api.get('/radiografias', { params }, { headers });
+            setdiagnosticos(response.data);
+            if (response.data.length === 0) {
+                setNoDiagnosticosMessage("El paciente no tiene diagnósticos.");
+            } else {
+                setNoDiagnosticosMessage("");
+            }
+        } catch (error) {
+            console.error("Error fetching diagnosticos:", error);
+            swal("Error", "No se pudieron cargar los diagnósticos", "error");
         }
+    };
 
-        const response = await api.get('/radiografias', { params }, { headers })
-        console.log(response.data)
-
-        setdiagnosticos(response.data)
-
-    }
-
-
-
-    //renders
     const renderListaMedicos = () => {
         return (
             <div className="field">
-                <label> Medico </label>
+                <label>Medico</label>
                 <select className="ui selection dropdown" onChange={e => setmatricula(e.target.value)} value={matricula}>
-                    <option value='' >Seleccione médico</option>
-                    {listaMedicos.map(medico => {
-                        return (<option key={medico.numero_matricula} value={medico.numero_matricula}>{medico.nombre}</option>)
-                    })}
-
+                    <option value=''>Seleccione médico</option>
+                    {listaMedicos.map(medico => (
+                        <option key={medico.numero_matricula} value={medico.numero_matricula}>{medico.nombre}</option>
+                    ))}
                 </select>
-
+                {errors.matricula && <div className="ui pointing red basic label">{errors.matricula}</div>}
             </div>
-        )
-
-
-    }
+        );
+    };
 
     const renderDiagnosticos = () => {
-        return diagnosticos.map(diagnostico => {
-            return (
-                <div className="item" key={Math.random()}>
-                    <div className="right floated content">
-                        <Link className='ui button' to={`ver/${diagnostico.id}/${nroAfiliado}`}>
-                            <i className="eye icon"></i>
-                        </Link>
-                    </div>
-                    <img src="" alt="" />
-                    <div className="content">
-                        <div className="header">Diagnostico n {diagnostico.id}</div>
-                        Fecha: {diagnostico.fecha}
-
-                    </div>
+        return diagnosticos.map(diagnostico => (
+            <div className="item" key={diagnostico.id}>
+                <div className="right floated content">
+                    <Link className='ui button' to={`ver/${diagnostico.id}/${nroAfiliado}`}>
+                        <i className="eye icon"></i>
+                    </Link>
                 </div>
-            )
-
-
-        })
-
-
-
-    }
-
-
+                <div className="content">
+                    <div className="header">Diagnostico n {diagnostico.id}</div>
+                    Fecha: {diagnostico.fecha}
+                </div>
+            </div>
+        ));
+    };
 
     return (
         <div className='ui container'>
@@ -128,46 +121,30 @@ const ListadoDiagnosticos = () => {
                 <div className="ui form">
                     <div className="two fields">
                         <div className="field">
-                            <label> Numero de afiliado</label>
+                            <label>Número de afiliado</label>
                             <input type="text" value={nroAfiliado} onChange={e => setnroAfiliado(e.target.value)} />
+                            {errors.nroAfiliado && <div className="ui pointing red basic label">{errors.nroAfiliado}</div>}
                         </div>
                         {renderListaMedicos()}
                     </div>
                     <div className="ui center aligned inverted segment">
                         <button className='ui primary button' onClick={getDiagnosticos}>Listar</button>
                     </div>
-
-
-
                 </div>
-
             </div>
             <div className="ui segment">
-                <h1 className='header'> Listado de diagnosticos del paciente {infoPaciente.apellido}{infoPaciente.nombre}
-                    con el medico {nombreMedico}</h1>
-
+                <h1 className='header'>Listado de diagnosticos del paciente {infoPaciente.apellido} {infoPaciente.nombre} con el medico {nombreMedico}</h1>
                 <div className="ui middle aligned celled list">
-                    {renderDiagnosticos()}
+                    {diagnosticos.length > 0 ? renderDiagnosticos() : <p>{noDiagnosticosMessage}</p>}
                 </div>
             </div>
-
-
             <div style={{ textAlign: 'right' }}>
                 <Link to="/" className="ui button positive">
                     Volver al menu
                 </Link>
             </div>
-
-
-
-
-
-
-
-
-
         </div>
-    )
-}
+    );
+};
 
-export default ListadoDiagnosticos
+export default ListadoDiagnosticos;

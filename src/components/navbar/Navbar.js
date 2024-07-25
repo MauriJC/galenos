@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './Navbar.css';
+import {logout} from '../../apis';
+
 
 const Navbar = () => {
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [menuVisible, setMenuVisible] = useState(false);
+  const navigate = useNavigate(); 
 
   const handleDropdownClick = (dropdownName) => {
     if (activeDropdown === dropdownName) {
@@ -18,6 +21,15 @@ const Navbar = () => {
     setMenuVisible(!menuVisible);
   };
 
+  const handleLogout = async () => {
+    const logoutSuccess = await logout();
+    if (logoutSuccess) {
+      navigate('/login');
+    } else {
+      console.error('Error al cerrar sesión.');
+    }
+  };
+
   return (
     <nav className='ui secondary pointing menu'>
       <div className='ui container'>
@@ -29,6 +41,9 @@ const Navbar = () => {
           <i className={`bars icon ${menuVisible ? 'open' : ''}`}></i>
         </button>
         <div className={`right menu ${menuVisible ? 'visible' : ''}`}>
+          <Link className='item' to='/mapa'>
+            Mapa
+          </Link>
           <div 
             className={`ui simple dropdown item ${activeDropdown === 'medicos' ? 'active' : ''}`}
             onClick={() => handleDropdownClick('medicos')}
@@ -80,7 +95,9 @@ const Navbar = () => {
               <Link className='item' to='/secretarios/listadosecretarios'>Listado Secretarios</Link>
             </div>
           </div>
-          <Link className='ui item logout-button' to='/logout'>Cerrar sesión</Link>
+          <div className='ui item logout-button' onClick={handleLogout}>
+            Cerrar sesión
+          </div>
         </div>
       </div>
     </nav>

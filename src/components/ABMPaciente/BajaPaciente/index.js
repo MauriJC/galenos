@@ -1,334 +1,101 @@
-import React, { useState, useEffect } from 'react'
-import { useNavigate, useParams } from 'react-router'
-import api from '../../../apis'
-import { Link } from 'react-router-dom'
-import swal from 'sweetalert'
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router';
+import api from '../../../apis';
+import { Link } from 'react-router-dom';
+import swal from 'sweetalert';
 
 const BajaPaciente = () => {
+    let { nafiliado } = useParams();
+    let navigate = useNavigate();
 
-    let { nafiliado } = useParams()
-
-
-    const paises = ['Argentina', 'Peru']
-    const provinciasArg = [
-        "Buenos Aires",
-        "Capital Federal",
-        "Catamarca",
-        "Chaco",
-        "Chubut",
-        "Córdoba",
-        "Corrientes",
-        "Entre Ríos",
-        "Formosa",
-        "Jujuy",
-        "La Pampa",
-        "La Rioja",
-        "Mendoza",
-        "Misiones",
-        "Neuquén",
-        "Río Negro",
-        "Salta",
-        "San Juan",
-        "San Luis",
-        "Santa Cruz",
-        "Santa Fe",
-        "Santiago del Estero",
-        "Tierra del Fuego",
-        "Tucumán"
-    ]
-
-    const [nombre, setnombre] = useState('');
-    const [apellido, setapellido] = useState('');
-    const [dni, setdni] = useState('');
-    const [direccion, setdireccion] = useState('');
-    const [localidad, setlocalidad] = useState('');
-    const [provincia, setprovincia] = useState('')
-    const [pais, setpais] = useState('');
-    const [calleSuperior, setcalleSuperior] = useState('');
-    const [calleInferior, setcalleInferior] = useState('');
-    const [fechaDesde, setfechaDesde] = useState('');
-    const [telefono, settelefono] = useState('');
-    const [mail, setmail] = useState('');
-    const [fechaNacimiento, setfechaNacimiento] = useState('')
-    const [nroAfiliado, setnroAfiliado] = useState('')
-    const [id, setid] = useState('')
-
-
-    let navigate = useNavigate()
-
-
-
-    //renders
-    const renderPaises = () => {
-        return (
-            <div className="field">
-                <label>Pais</label>
-                <select className="ui fluid dropdown" onChange={e => setpais(e.target.value)} value={pais}>
-                    <option >Seleccione Pais</option>
-                    {paises.map(pais => {
-                        return (
-                            <option value={pais}>{pais}</option>
-                        )
-                    })}
-                </select>
-            </div>
-        )
-
-    }
-
-    const renderProvincias = () => {
-        return (
-            <div className="field">
-                <label> Provincia </label>
-                <select className="ui fluid dropdown" onChange={e => setprovincia(e.target.value)} value={provincia}>
-                    <option value='' >Seleccione Provincia</option>
-                    {provinciasArg.map(provincia => {
-                        return (<option value={provincia}>{provincia}</option>)
-                    })}
-
-                </select>
-
-            </div>
-        )
-    }
-
-
-
-    const renderLocalidades = () => {
-        return (
-            <div className="field">
-                <label> Localidad </label>
-
-                <select className="ui fluid dropdown" onChange={(e) => setlocalidad(e.target.value)}
-                    value={localidad}
-                >
-                    <option value="">Localidad</option>
-                    <option value="San Miguel de Tucuman">San Miguel de Tucuman</option>
-                    <option value="Aguilares">Aguilares</option>
-                </select>
-
-
-            </div>
-
-        )
-
-
-    }
-
+    const [nombre, setNombre] = useState('');
+    const [apellido, setApellido] = useState('');
+    const [dni, setDni] = useState('');
+    const [nroAfiliado, setNroAfiliado] = useState('');
+    const [id, setId] = useState('');
 
     useEffect(() => {
-        getPaciente()
-    }, [])
-
-
-
-    // API comms
+        getPaciente();
+    }, []);
 
     const getPaciente = async () => {
+        const headers = { "Content-Type": "application/json" };
 
-        const headers = {
-            "Content-Type": "application/json"
+        const params = { paciente: nafiliado };
+
+        try {
+            const response = await api.get('/altapaciente', { params }, { headers });
+            const datos = response.data.paciente;
+
+            setNombre(datos.nombre);
+            setApellido(datos.apellido);
+            setDni(datos.dni);
+            setNroAfiliado(datos.numero_afiliado);
+
+            setId(response.data.id);
+        } catch (error) {
+            console.error("Error fetching paciente:", error);
+            swal("Error", "No se pudo obtener la información del paciente", "error");
         }
-
-        console.log('el nafiliado es', nafiliado)
-
-
-        const params = {
-            paciente: nafiliado
-        }
-
-        const response = await api.get('/altapaciente', { params }, { headers })
-        console.log(response.data)
-
-        setnombre(response.data.paciente['nombre'])
-        setapellido(response.data.paciente['apellido'])
-        setdni(response.data.paciente['dni'])
-        setdireccion(response.data.paciente['direccion'])
-        settelefono(response.data.paciente['telefono'])
-        setmail(response.data.paciente['email'])
-        setlocalidad(response.data.paciente.localidad)
-        setcalleSuperior(response.data.paciente.entre_calle_sup)
-        setcalleInferior(response.data.paciente.entre_calle_inf)
-        setfechaDesde(response.data.paciente.fecha_desde)
-        setfechaNacimiento(response.data.paciente.fecha_nacimiento)
-        setnroAfiliado(response.data.paciente.numero_afiliado)
-        setid(response.data.id)
-
-
-    }
-
+    };
 
     const deletePaciente = async () => {
+        const params = { numero_afiliado: nafiliado };
 
-        const params = {
-            numero_afiliado: nafiliado
-        }
+        const headers = { "Content-Type": "application/json" };
 
-        const headers = {
-            "Content-Type": "application/json"
-        }
-
-
-        await api.delete(`/altapaciente`, { params }, { headers })
-            .then(response => {
-
-                if (response.data.status == 200) {
-                    swal(`${response.data.status}`, response.data.message, "success").then(
-                        ok => {
-                            if (ok) navigate('/pacientes/listadopacientes')
-                        }
-                    )
-                }
-                if (response.data.status == 500) {
-                    swal(`${response.data.status}`, response.data.message, "error")
-                }
-
-            })
-            .catch(error => {
-                swal('Ha ocurrido un error en la baja del paciente', "", 'error')
+        try {
+            const response = await api.delete(`/altapaciente`, { params }, { headers });
+            if (response.status === 200) {
+                swal(`${response.status}`, response.data.message, "success").then(ok => {
+                    if (ok) navigate('/pacientes/listadopacientes');
+                });
+            } else {
+                swal(`${response.status}`, response.data.message, "error");
             }
-            )
-
-
-
-
-
-    }
-
-
-
-
-
-
-
-
-
+        } catch (error) {
+            console.error("Error deleting paciente:", error);
+            swal("Error", "Ha ocurrido un error en la baja del paciente", "error");
+        }
+    };
 
     return (
         <div className='ui container'>
-
             <div className="ui center aligned segment">
                 <h1>Baja de paciente</h1>
             </div>
-
             <div className="ui segment">
-                <div className='ui center aligned form '>
+                <div className="ui center aligned form">
                     <div className="field">
+                        <label>Nombre completo</label>
                         <div className="two fields">
                             <div className="field">
-                                <label> Nombre</label>
-                                <input type="text"
-                                    value={nombre}
-                                    onChange={(e) => setnombre(e.target.value)
-                                    }
-                                    placeholder='Nombre'
-                                />
+                                <span>{nombre}</span>
                             </div>
-
                             <div className="field">
-                                <label htmlFor=""> Apellido</label>
-                                <input type="text"
-                                    value={apellido}
-                                    onChange={(e) => setapellido(e.target.value)}
-                                />
+                                <span>{apellido}</span>
                             </div>
                         </div>
                     </div>
-
-
-
-                    <div className="field">
-                        <div className="two fields">
-                            <div className="field">
-                                <label>DNI</label>
-                                <input type="text"
-                                    value={dni}
-                                    onChange={(e) => setdni(e.target.value)}
-                                    placeholder='DNI'
-                                />
-                            </div>
-
-                            <div className="field">
-                                <label >Fecha de nacimiento</label>
-
-                                <input type="date" value={fechaNacimiento} onChange={e => setfechaNacimiento(e.target.value)} />
-                            </div>
+                    <div className="fields">
+                        <div className="eight wide field">
+                            <label>DNI</label>
+                            <span>{dni}</span>
+                        </div>
+                        <div className="eight wide field">
+                            <label>Número de afiliado</label>
+                            <span>{nroAfiliado}</span>
                         </div>
                     </div>
-
-
-                    <h4 className="ui dividing header">Domicilio</h4>
-
-                    {renderPaises()}
-
-
-                    <div className="two fields">
-                        {renderProvincias()}
-
-                        {renderLocalidades()}
-                    </div>
-
-                    <div className="field">
-
-                        <label htmlFor="">Fecha desde:</label>
-                        <input type="date" name="" id="" value={fechaDesde} onChange={e => setfechaDesde(e.target.value)} />
-                    </div>
-
-
-
-                    <div className="field">
-                        <label>Dirección</label>
-                        <input type="text" value={direccion} onChange={e => setdireccion(e.target.value)} placeholder='Calle 123' />
-                    </div>
-
-                    <div className="field">
-                        <div className="two fields">
-                            <div className="field">
-                                <label htmlFor="">Calle Superior </label>
-                                <input type="text"
-                                    value={calleSuperior}
-                                    onChange={(e) => setcalleSuperior(e.target.value)}
-                                    placeholder='Calle'
-                                />
-                            </div>
-                            <div className="field">
-                                <label htmlFor="">Calle inferior </label>
-                                <input type="text"
-                                    value={calleInferior}
-                                    onChange={(e) => setcalleInferior(e.target.value)}
-                                    placeholder='Calle'
-                                />
-
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <div className="field">
-                        <label>Teléfono</label>
-                        <input type="text" value={telefono} onChange={e => settelefono(e.target.value)} placeholder='381-441122' />
-                    </div>
-
-                    <div className="field">
-                        <label>Email</label>
-                        <input type="text" value={mail} onChange={e => setmail(e.target.value)} placeholder='JohnDoe@gmail.com' />
-                    </div>
-
+                    
                 </div>
-
-
-                <div className="ui header centered">
-                    <button className='ui blue button' onClick={deletePaciente}>Confirmar</button>
-                    <Link className='ui negative button' to='/pacientes/listadopacientes' >Cancelar</Link>
-
+                <div className="ui center aligned segment">
+                    <button className='ui red button' onClick={deletePaciente}>Eliminar</button>
+                    <Link to='/pacientes/listadopacientes' className='ui blue button'>Cancelar</Link>
                 </div>
-
             </div>
-
         </div>
+    );
+};
 
-    )
-
-}
-
-export default BajaPaciente
+export default BajaPaciente;
