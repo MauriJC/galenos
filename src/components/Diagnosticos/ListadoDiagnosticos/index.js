@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../../../apis';
 import swal from 'sweetalert';
+import 'semantic-ui-css/semantic.min.css';
 
 const ListadoDiagnosticos = () => {
     const [nroAfiliado, setnroAfiliado] = useState('');
@@ -118,6 +119,7 @@ const ListadoDiagnosticos = () => {
     return (
         <div className='ui container'>
             <div className="ui segment">
+                <h2 className="ui header">Listado de Diagnósticos</h2>
                 <div className="ui form">
                     <div className="two fields">
                         <div className="field">
@@ -127,20 +129,20 @@ const ListadoDiagnosticos = () => {
                         </div>
                         {renderListaMedicos()}
                     </div>
-                    <div className="ui center aligned inverted segment">
+                    <div className="ui center aligned segment">
                         <button className='ui primary button' onClick={getDiagnosticos}>Listar</button>
                     </div>
                 </div>
             </div>
             <div className="ui segment">
-                <h1 className='header'>Listado de diagnosticos del paciente {infoPaciente.apellido} {infoPaciente.nombre} con el medico {nombreMedico}</h1>
-                <div className="ui middle aligned celled list">
+                <h3 className='ui header'>Listado de diagnósticos del paciente {infoPaciente.apellido} {infoPaciente.nombre} con el médico {nombreMedico}</h3>
+                <div className="ui middle aligned divided list">
                     {diagnosticos.length > 0 ? renderDiagnosticos() : <p>{noDiagnosticosMessage}</p>}
                 </div>
             </div>
             <div style={{ textAlign: 'right' }}>
                 <Link to="/" className="ui button positive">
-                    Volver al menu
+                    Volver al menú
                 </Link>
             </div>
         </div>
