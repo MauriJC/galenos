@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router';
-import { Link } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import api from '../../../apis';
 import swal from 'sweetalert';
+import 'semantic-ui-css/semantic.min.css';
 
 const Diagnostico = () => {
     let { idDiagnostico, nroAfiliado } = useParams();
@@ -43,7 +43,7 @@ const Diagnostico = () => {
             numero_afiliado: diagnosticoData.radiografia.paciente.numero_afiliado,
             diagnostico: diagnosticoData.resultado
         };
-    
+
         try {
             const response = await api.get('/sugerir_enfermedad/', { params });
             setSugerencia(response.data.sugerencia);
@@ -96,6 +96,11 @@ const Diagnostico = () => {
         }
     };
 
+    const formatDate = (dateString) => {
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        return new Date(dateString).toLocaleDateString(undefined, options);
+    };
+
     return (
         <div className='ui container'>
             <div className="ui segment">
@@ -110,7 +115,7 @@ const Diagnostico = () => {
                             <div className="center aligned row">
                                 <div className="column">
                                     <h3>Paciente: {info.radiografia.paciente.apellido} {info.radiografia.paciente.nombre}</h3>
-                                    <h3>Fecha: {info.fecha}</h3>
+                                    <h3>Fecha: {info.fecha ? formatDate(info.fecha) : 'No disponible'}</h3>
                                 </div>
                                 <div className="column">
                                     <h3>Nro de afiliado: {nroAfiliado}</h3>
@@ -119,20 +124,28 @@ const Diagnostico = () => {
                         </div>
                     </div>
                 </div>
-
                 <div className="ui segment">
-                    <img className="ui small left floated image" src={`//159.223.186.3/${info.radiografia.placa}`} alt='Radiografia' />
-                    <h4>Diagnostico de la IA: {info.resultado}</h4>
-                    <h4>Recomendaciones:</h4>
-                    <ul>
-                        {sugerencia.split('<br>').map((line, index) => (
-                            <li key={index}>{line}</li>
-                        ))}
-                    </ul>
+                    <div className="ui vertical stripe quote segment">
+                        <div className="ui equal width stackable internally celled grid">
+                                <div className="column">
+                                    <img className="ui large image" src={`${api.defaults.baseURL}${info.radiografia.placa}`} alt='Radiografia' />
+
+                                </div>
+                                <div className="column">
+                                    <h3>Diagnóstico de la IA: {info.resultado}</h3>
+                                    <h3>Recomendaciones:</h3>
+                                    <ul>
+                                        {sugerencia.split('<br>').map((line, index) => (
+                                            <li key={index}>{line}</li>
+                                        ))}
+                                    </ul>                                
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <form className="ui form" onSubmit={handleSubmit}>
-                    <div className="inline fields">
+                <div className="ui segment">
+                    <form className="ui form" onSubmit={handleSubmit}>
                         <div className="field">
                             <input
                                 type="text"
@@ -143,10 +156,12 @@ const Diagnostico = () => {
                             {errors.mail && <div className="ui pointing red basic label">{errors.mail}</div>}
                         </div>
                         <button className='ui button' type="submit">Enviar</button>
-                    </div>
-                </form>
+                    </form>
+                </div>
 
-                <Link to='/diagnosticos/listadodiagnosticos' className='ui button'>Volver al listado</Link>
+                <div className="ui segment">
+                    <Link to='/diagnosticos/listadodiagnosticos' className='ui button'>Volver al listado</Link>
+                </div>
             </div>
         </div>
     );

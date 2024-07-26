@@ -16,12 +16,12 @@ api.interceptors.request.use((config) => {
 
 export const logout = async () => {
     try {
-      // Lógica para cerrar sesión en el frontend
-      localStorage.removeItem('Authorization'); // Elimina el token de Authorization
-      return true; // Indica que el cierre de sesión fue exitoso
+      
+      localStorage.removeItem('Authorization'); 
+      return true; 
     } catch (error) {
       console.error('Error al cerrar sesión:', error);
-      return false; // Indica que hubo un error al cerrar sesión
+      return false; 
     }
 };
 

@@ -12,6 +12,11 @@
 
 .ui.menu .item {
   padding: 1em; /* Ajusta el padding de los ítems para hacerlos más grandes */
+  cursor: pointer; /* Asegura que el cursor cambie a pointer en los ítems interactivos */
+}
+
+.ui.menu .item:hover {
+  background-color: rgba(0, 0, 0, 0.1); /* Fondo en hover para los ítems */
 }
 
 .ui.simple.dropdown.item .menu .item {
@@ -25,6 +30,7 @@
   padding: 1em; /* Ajusta el padding del botón */
   border-radius: 5px; /* Redondea las esquinas del botón */
   margin-left: 1em; /* Añade un margen a la izquierda del botón */
+  cursor: pointer; /* Asegura que el cursor cambie a pointer */
 }
 
 .logout-button:hover {

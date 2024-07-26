@@ -42,7 +42,11 @@ const Login = () => {
       });
 
       const token = response.data.token;
-      localStorage.setItem('Authorization', `Token ${token}`); 
+      const user = response.data.user; // Suponiendo que el usuario viene en la respuesta
+
+      localStorage.setItem('Authorization', `Token ${token}`);
+      localStorage.setItem('username', user.username); // Guardar el nombre del usuario
+
       navigate('/'); 
     } catch (err) {
       if (err.response) {
@@ -60,48 +64,55 @@ const Login = () => {
   };
 
   return (
-    <div className="ui middle aligned center aligned ">
-      <div className="column">
-        <div className="logo-container">
-          <img src={`${process.env.PUBLIC_URL}/logo2.png`} alt='GALENOS' className='logo' />
-          <span className='logo-text'>GALENOS</span>
-        </div>
-        <h2 className="ui image header">
-          <div className="content">Accede a tu cuenta</div>
-        </h2>
-        <form className="ui large form" onSubmit={handleLogin}>
-          <div className="ui stacked secondary segment">
-            <div className="field">
-              <div className="ui left icon input">
-                <i className="user icon"></i>
-                <input
-                  type="text"
-                  value={username}
-                  placeholder="Nombre de usuario"
-                  onChange={(e) => setUsername(e.target.value)}
-                />
-              </div>
-              {validationErrors.username && <div className="ui pointing red basic label">{validationErrors.username}</div>}
+    <div className="login-page">
+      <div className="ui middle aligned center aligned grid login-grid">
+        <div className="column login-column">
+          <div className="ui segment login-segment">
+            <div className="logo-container">
+              <img src={`${process.env.PUBLIC_URL}/logo2.png`} alt='GALENOS' className='logo' />
+              <span className='logo-text'>GALENOS</span>
             </div>
-            <div className="field">
-              <div className="ui left icon input">
-                <i className="lock icon"></i>
-                <input
-                  type="password"
-                  name="password"
-                  placeholder="Password"
-                  value={pass}
-                  onChange={(e) => setPass(e.target.value)}
-                />
+            <h2 className="ui image header login-header">
+              <div className="content">Accede a tu cuenta</div>
+            </h2>
+            <form className="ui large form login-form" onSubmit={handleLogin}>
+              <div className="ui stacked secondary segment login-inputs">
+                <div className="field">
+                  <div className="ui left icon input">
+                    <i className="user icon"></i>
+                    <input
+                      type="text"
+                      value={username}
+                      placeholder="Nombre de usuario"
+                      onChange={(e) => setUsername(e.target.value)}
+                    />
+                  </div>
+                  {validationErrors.username && <div className="ui pointing red basic label">{validationErrors.username}</div>}
+                </div>
+                <div className="field">
+                  <div className="ui left icon input">
+                    <i className="lock icon"></i>
+                    <input
+                      type="password"
+                      name="password"
+                      placeholder="Contraseña"
+                      value={pass}
+                      onChange={(e) => setPass(e.target.value)}
+                    />
+                  </div>
+                  {validationErrors.pass && <div className="ui pointing red basic label">{validationErrors.pass}</div>}
+                </div>
+                <button type="submit" className="ui fluid large blue submit button">
+                  Iniciar sesión
+                </button>
               </div>
-              {validationErrors.pass && <div className="ui pointing red basic label">{validationErrors.pass}</div>}
+              {error && <div className="ui negative message">{error}</div>}
+            </form>
+            <div className="ui message">
+              ¿Nuevo usuario? <Link to="/">Regístrate</Link>
             </div>
-            <button type="submit" className="ui fluid large blue submit button">
-              Login
-            </button>
           </div>
-          {error && <div className="ui negative message">{error}</div>}
-        </form>
+        </div>
       </div>
     </div>
   );
