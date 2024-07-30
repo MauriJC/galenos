@@ -25,7 +25,7 @@ const Diagnostico = () => {
             id_diagnostico: idDiagnostico,
             numero_afiliado: nroAfiliado
         };
-
+        
         setloaderState('active');
         try {
             const response = await api.get('/diagnostico', { params }, { headers });
@@ -80,7 +80,8 @@ const Diagnostico = () => {
             try {
                 const response = await api.post('/enviardiagnostico', {
                     id_diagnostico: idDiagnostico,
-                    email: mail
+                    email: mail,
+                    numero_afiliado: nroAfiliado // Asegúrate de enviar el número de afiliado
                 });
                 if (response.data.success) {
                     swal("Success", "El correo electrónico ha sido enviado", "success");
@@ -129,7 +130,6 @@ const Diagnostico = () => {
                         <div className="ui equal width stackable internally celled grid">
                                 <div className="column">
                                     <img className="ui large image" src={`${api.defaults.baseURL}${info.radiografia.placa}`} alt='Radiografia' />
-
                                 </div>
                                 <div className="column">
                                     <h3>Diagnóstico de la IA: {info.resultado}</h3>

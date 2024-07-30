@@ -6,7 +6,6 @@
   right: 0;
   bottom: 0;
   background-color: #f0f0f0; /* Fondo gris claro */
-
   display: flex;
   justify-content: center;
   align-items: center;
@@ -15,7 +14,6 @@
 /* Limitando el ancho de la columna */
 .login-column {
   max-width: 450px;
-
   margin: auto; /* Centra la columna horizontalmente */
   background-color: #ffffff; /* Fondo blanco */
   padding: 2em; /* Espaciado interno */
@@ -44,7 +42,6 @@
   padding: 2em; /* Añade padding para un mejor espaciado interno */
   border: none; /* Elimina bordes */
   box-shadow: none; /* Elimina sombras */
-
 }
 
 /* Logo y texto centrados */
@@ -52,24 +49,15 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-=======
-  height: 100vh;
-  /* Altura del 100% del viewport */
+  text-align: center;
+  margin-bottom: 20px;
 }
-
-.logo-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
 
 .login-logo {
   width: 80px; /* Ajusta el tamaño del logo según tus necesidades */
-=======
-.logo {
-  width: 80px;
-  /* Ajusta el tamaño del logo según tus necesidades */
-  
+  height: auto;
+}
+
 .login-logo-text {
   font-size: 25px; /* Ajusta el tamaño del texto según tus necesidades */
   font-weight: bold;
@@ -96,4 +84,3 @@ body, html {
   height: 100%;
   width: 100%;
 }
-

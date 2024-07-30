@@ -71,7 +71,7 @@ const Dashboard = () => {
 
         // Procesar datos para el gráfico de patologías
         const patologias = diagnosticos.reduce((acc, diagnostico) => {
-          const patologia = diagnostico.resultado;
+          const patologia = diagnostico.resultado.toUpperCase(); 
           if (!acc[patologia]) {
             acc[patologia] = 0;
           }
