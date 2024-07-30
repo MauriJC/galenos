@@ -17,7 +17,8 @@ api.interceptors.request.use((config) => {
 export const logout = async () => {
     try {
       
-      localStorage.removeItem('Authorization'); 
+      localStorage.removeItem('Authorization');
+      localStorage.removeItem('rol'); 
       return true; 
     } catch (error) {
       console.error('Error al cerrar sesión:', error);

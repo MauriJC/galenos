@@ -42,12 +42,14 @@ const Login = () => {
       });
 
       const token = response.data.token;
-      const user = response.data.user; // Suponiendo que el usuario viene en la respuesta
+      const user = response.data.user;
+      const role = response.data.user.role; // Obtener el rol del usuario
 
       localStorage.setItem('Authorization', `Token ${token}`);
-      localStorage.setItem('username', user.username); // Guardar el nombre del usuario
+      localStorage.setItem('username', user.username);
+      localStorage.setItem('rol', role); // Guardar el rol del usuario
 
-      navigate('/'); 
+      navigate('/');
     } catch (err) {
       if (err.response) {
         if (err.response.status === 404) {
@@ -109,7 +111,7 @@ const Login = () => {
               {error && <div className="ui negative message">{error}</div>}
             </form>
             <div className="ui message">
-              ¿Nuevo usuario? <Link to="/">Regístrate</Link>
+              ¿Nuevo usuario? <Link to="/register">Regístrate</Link>
             </div>
           </div>
         </div>
