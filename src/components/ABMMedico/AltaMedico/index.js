@@ -6,20 +6,20 @@ import swal from 'sweetalert';
 import { useNavigate } from 'react-router';
 
 const AltaMedico = () => {
-    const [nombre, setnombre] = useState('');
-    const [apellido, setapellido] = useState('');
-    const [dni, setdni] = useState('');
-    const [direccion, setdireccion] = useState('');
-    const [telefono, settelefono] = useState('');
-    const [mail, setmail] = useState('');
-    const [matricula, setmatricula] = useState('');
-    const [legajo, setlegajo] = useState('');
-    const [localidad, setlocalidad] = useState('');
-    const [calleSuperior, setcalleSuperior] = useState('');
-    const [calleInferior, setcalleInferior] = useState('');
-    const [fechaDesde, setfechaDesde] = useState('');
-    const [fechaNacimiento, setfechaNacimiento] = useState('');
-    const [loaderState, setloaderState] = useState('disabled');
+    const [nombre, setNombre] = useState('');
+    const [apellido, setApellido] = useState('');
+    const [dni, setDni] = useState('');
+    const [direccion, setDireccion] = useState('');
+    const [telefono, setTelefono] = useState('');
+    const [mail, setMail] = useState('');
+    const [matricula, setMatricula] = useState('');
+    const [legajo, setLegajo] = useState('');
+    const [localidad, setLocalidad] = useState('');
+    const [calleSuperior, setCalleSuperior] = useState('');
+    const [calleInferior, setCalleInferior] = useState('');
+    const [fechaDesde, setFechaDesde] = useState('');
+    const [fechaNacimiento, setFechaNacimiento] = useState('');
+    const [loaderState, setLoaderState] = useState('disabled');
     const [localidades, setLocalidades] = useState([]);
     const [errors, setErrors] = useState({});
 
@@ -67,42 +67,42 @@ const AltaMedico = () => {
             formErrors.telefono = "Teléfono es requerido y debe ser un número";
             isValid = false;
         }
-        
+
         if (!matricula || !/^\d+$/.test(matricula)) {
             formErrors.matricula = "Matrícula es requerida y debe ser un número";
             isValid = false;
         }
-        
+
         if (!localidad) {
             formErrors.localidad = "Localidad es requerida";
             isValid = false;
         }
-        
+
         if (!calleSuperior) {
             formErrors.calleSuperior = "La calle superior es requerida";
             isValid = false;
         }
-        
+
         if (!direccion) {
             formErrors.direccion = "La dirección es requerida";
             isValid = false;
         }
-        
+
         if (!calleInferior) {
             formErrors.calleInferior = "La calle inferior es requerida";
             isValid = false;
         }
-        
+
         if (!fechaNacimiento) {
             formErrors.fechaNacimiento = "La fecha de nacimiento es requerida";
             isValid = false;
         }
-        
+
         if (!fechaDesde) {
             formErrors.fechaDesde = "La fecha desde que trabaja en Galeno es requerida";
             isValid = false;
         }
-        
+
         if (!legajo || !/^\d+$/.test(legajo)) {
             formErrors.legajo = "Legajo es requerido y debe ser un número";
             isValid = false;
@@ -128,12 +128,12 @@ const AltaMedico = () => {
             "Content-Type": "application/json"
         };
 
-        setloaderState('active');
+        setLoaderState('active');
 
         try {
             const response = await api.post('/altamedico', medico, { headers });
-            setloaderState('disabled');
-            if (response.data.status === 200) {
+            setLoaderState('disabled');
+            if (response.status === 200) {
                 swal("Éxito", response.data.message, "success").then((ok) => {
                     if (ok) {
                         navigate('/medicos/listadomedicos');
@@ -145,14 +145,14 @@ const AltaMedico = () => {
         } catch (error) {
             console.error(error);
             swal("Ocurrió un error inesperado", '', 'error');
-            setloaderState('disabled');
+            setLoaderState('disabled');
         }
     };
 
     const renderLocalidades = () => (
         <div className="field">
             <label>Localidad</label>
-            <select className="ui fluid dropdown" onChange={(e) => setlocalidad(e.target.value)} value={localidad}>
+            <select className="ui fluid dropdown" onChange={(e) => setLocalidad(e.target.value)} value={localidad}>
                 <option value="">Seleccione Localidad</option>
                 {localidades.map(loc => (
                     <option value={loc.nombre} key={loc.id}>{loc.nombre}</option>
@@ -173,11 +173,11 @@ const AltaMedico = () => {
                         <label>Nombre completo</label>
                         <div className="two fields">
                             <div className="field">
-                                <input type="text" value={nombre} onChange={(e) => setnombre(e.target.value)} placeholder='Nombre' />
+                                <input type="text" value={nombre} onChange={(e) => setNombre(e.target.value)} placeholder='Nombre' />
                                 {errors.nombre && <div className="ui pointing red basic label">{errors.nombre}</div>}
                             </div>
                             <div className="field">
-                                <input type="text" value={apellido} onChange={(e) => setapellido(e.target.value)} placeholder='Apellido' />
+                                <input type="text" value={apellido} onChange={(e) => setApellido(e.target.value)} placeholder='Apellido' />
                                 {errors.apellido && <div className="ui pointing red basic label">{errors.apellido}</div>}
                             </div>
                         </div>
@@ -185,12 +185,12 @@ const AltaMedico = () => {
                     <div className="fields">
                         <div className="eight wide field">
                             <label>DNI</label>
-                            <input type="text" value={dni} onChange={(e) => setdni(e.target.value)} placeholder='DNI' />
+                            <input type="text" value={dni} onChange={(e) => setDni(e.target.value)} placeholder='DNI' />
                             {errors.dni && <div className="ui pointing red basic label">{errors.dni}</div>}
                         </div>
                         <div className="eight wide field">
                             <label>Fecha de nacimiento</label>
-                            <input type="date" value={fechaNacimiento} onChange={e => setfechaNacimiento(e.target.value)} />
+                            <input type="date" value={fechaNacimiento} onChange={e => setFechaNacimiento(e.target.value)} />
                             {errors.fechaNacimiento && <div className="ui pointing red basic label">{errors.fechaNacimiento}</div>}
                         </div>
                     </div>
@@ -198,48 +198,48 @@ const AltaMedico = () => {
                     {renderLocalidades()}
                     <div className="field">
                         <label htmlFor="">Fecha desde:</label>
-                        <input type="date" value={fechaDesde} onChange={e => setfechaDesde(e.target.value)} />
+                        <input type="date" value={fechaDesde} onChange={e => setFechaDesde(e.target.value)} />
                         {errors.fechaDesde && <div className="ui pointing red basic label">{errors.fechaDesde}</div>}
                     </div>
                     <div className="field">
                         <label>Dirección</label>
-                        <input type="text" value={direccion} onChange={e => setdireccion(e.target.value)} placeholder='Calle 123' />
+                        <input type="text" value={direccion} onChange={e => setDireccion(e.target.value)} placeholder='Calle 123' />
                         {errors.direccion && <div className="ui pointing red basic label">{errors.direccion}</div>}
                     </div>
                     <div className="field">
                         <div className="two fields">
                             <div className="field">
                                 <label htmlFor="">Calle Superior</label>
-                                <input type="text" value={calleSuperior} onChange={(e) => setcalleSuperior(e.target.value)} placeholder='Calle' />
+                                <input type="text" value={calleSuperior} onChange={(e) => setCalleSuperior(e.target.value)} placeholder='Calle' />
                                 {errors.calleSuperior && <div className="ui pointing red basic label">{errors.calleSuperior}</div>}
                             </div>
                             <div className="field">
                                 <label htmlFor="">Calle Inferior</label>
-                                <input type="text" value={calleInferior} onChange={(e) => setcalleInferior(e.target.value)} placeholder='Calle' />
+                                <input type="text" value={calleInferior} onChange={(e) => setCalleInferior(e.target.value)} placeholder='Calle' />
                                 {errors.calleInferior && <div className="ui pointing red basic label">{errors.calleInferior}</div>}
                             </div>
                         </div>
                     </div>
                     <div className="field">
                         <label>Teléfono</label>
-                        <input type="text" value={telefono} onChange={e => settelefono(e.target.value)} placeholder='381-441122' />
+                        <input type="text" value={telefono} onChange={e => setTelefono(e.target.value)} placeholder='381-441122' />
                         {errors.telefono && <div className="ui pointing red basic label">{errors.telefono}</div>}
                     </div>
                     <div className="field">
                         <label>Email</label>
-                        <input type="text" value={mail} onChange={e => setmail(e.target.value)} placeholder='JohnDoe@gmail.com' />
+                        <input type="text" value={mail} onChange={e => setMail(e.target.value)} placeholder='JohnDoe@gmail.com' />
                         {errors.mail && <div className="ui pointing red basic label">{errors.mail}</div>}
                     </div>
                     <div className="field">
                         <div className="two fields">
                             <div className="field">
                                 <label>Número de matrícula</label>
-                                <input type="text" value={matricula} onChange={e => setmatricula(e.target.value)} />
+                                <input type="text" value={matricula} onChange={e => setMatricula(e.target.value)} />
                                 {errors.matricula && <div className="ui pointing red basic label">{errors.matricula}</div>}
                             </div>
                             <div className="field">
                                 <label>Número de legajo</label>
-                                <input type="text" value={legajo} onChange={(e) => setlegajo(e.target.value)} placeholder='Legajo' />
+                                <input type="text" value={legajo} onChange={(e) => setLegajo(e.target.value)} placeholder='Legajo' />
                                 {errors.legajo && <div className="ui pointing red basic label">{errors.legajo}</div>}
                             </div>
                         </div>

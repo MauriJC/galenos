@@ -49,20 +49,12 @@ const Navbar = () => {
             </Link>
           )}
           {role === 'MEDICO' && (
-            <>
-              <div 
+            <>            <Link className='item' to='/mapa'>
+              Mapa
+            </Link>
+              <div
                 className={`ui simple dropdown item ${activeDropdown === 'medicos' ? 'active' : ''}`}
                 onClick={() => handleDropdownClick('medicos')}
-              >
-                Medicos
-                <i className='dropdown icon'></i>
-                <div className='menu'>
-                  <Link className='item' to='/medicos/listadomedicos'>Listado Medicos</Link>
-                </div>
-              </div>
-              <div 
-                className={`ui simple dropdown item ${activeDropdown === 'pacientes' ? 'active' : ''}`}
-                onClick={() => handleDropdownClick('pacientes')}
               >
                 Pacientes
                 <i className='dropdown icon'></i>
@@ -70,7 +62,7 @@ const Navbar = () => {
                   <Link className='item' to='/pacientes/listadopacientes'>Listado Pacientes</Link>
                 </div>
               </div>
-              <div 
+              <div
                 className={`ui simple dropdown item ${activeDropdown === 'diagnosticos' ? 'active' : ''}`}
                 onClick={() => handleDropdownClick('diagnosticos')}
               >
@@ -85,19 +77,9 @@ const Navbar = () => {
           )}
           {role === 'RADIOLOGO' && (
             <>
-              <div 
+              <div
                 className={`ui simple dropdown item ${activeDropdown === 'radiologos' ? 'active' : ''}`}
                 onClick={() => handleDropdownClick('radiologos')}
-              >
-                Radiologos
-                <i className='dropdown icon'></i>
-                <div className='menu'>
-                  <Link className='item' to='/radiologos/listadoradiologos'>Listado Radiologos</Link>
-                </div>
-              </div>
-              <div 
-                className={`ui simple dropdown item ${activeDropdown === 'pacientes' ? 'active' : ''}`}
-                onClick={() => handleDropdownClick('pacientes')}
               >
                 Pacientes
                 <i className='dropdown icon'></i>
@@ -105,7 +87,7 @@ const Navbar = () => {
                   <Link className='item' to='/pacientes/listadopacientes'>Listado Pacientes</Link>
                 </div>
               </div>
-              <div 
+              <div
                 className={`ui simple dropdown item ${activeDropdown === 'diagnosticos' ? 'active' : ''}`}
                 onClick={() => handleDropdownClick('diagnosticos')}
               >
@@ -120,7 +102,7 @@ const Navbar = () => {
           )}
           {role === 'SECRETARIO' && (
             <>
-              <div 
+              <div
                 className={`ui simple dropdown item ${activeDropdown === 'medicos' ? 'active' : ''}`}
                 onClick={() => handleDropdownClick('medicos')}
               >
@@ -130,7 +112,7 @@ const Navbar = () => {
                   <Link className='item' to='/medicos/listadomedicos'>Listado Medicos</Link>
                 </div>
               </div>
-              <div 
+              <div
                 className={`ui simple dropdown item ${activeDropdown === 'pacientes' ? 'active' : ''}`}
                 onClick={() => handleDropdownClick('pacientes')}
               >
@@ -140,7 +122,7 @@ const Navbar = () => {
                   <Link className='item' to='/pacientes/listadopacientes'>Listado Pacientes</Link>
                 </div>
               </div>
-              <div 
+              <div
                 className={`ui simple dropdown item ${activeDropdown === 'diagnosticos' ? 'active' : ''}`}
                 onClick={() => handleDropdownClick('diagnosticos')}
               >
@@ -151,7 +133,7 @@ const Navbar = () => {
                   <Link className='item' to='/subirradiografia'>Subir Radiografia</Link>
                 </div>
               </div>
-              <div 
+              <div
                 className={`ui simple dropdown item ${activeDropdown === 'radiologos' ? 'active' : ''}`}
                 onClick={() => handleDropdownClick('radiologos')}
               >
@@ -161,7 +143,7 @@ const Navbar = () => {
                   <Link className='item' to='/radiologos/listadoradiologos'>Listado Radiologos</Link>
                 </div>
               </div>
-              <div 
+              <div
                 className={`ui simple dropdown item ${activeDropdown === 'secretarios' ? 'active' : ''}`}
                 onClick={() => handleDropdownClick('secretarios')}
               >

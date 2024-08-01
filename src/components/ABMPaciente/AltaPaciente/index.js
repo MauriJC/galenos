@@ -168,7 +168,7 @@ const AltaPaciente = () => {
             console.log(paciente);
 
             if (response.data.status === '200') {
-                swal(response.data.status, response.data.message, "success").then(
+                swal("Éxito", "Paciente creado exitosamente", "success").then(
                     ok => {
                         if (ok) navigate('/pacientes/listadopacientes');
                     }
