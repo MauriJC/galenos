@@ -84,7 +84,7 @@ const Diagnostico = () => {
                     numero_afiliado: nroAfiliado // Asegúrate de enviar el número de afiliado
                 });
                 if (response.data.success) {
-                    swal("Success", "El correo electrónico ha sido enviado", "success");
+                    swal("Éxito", "El correo electrónico ha sido enviado", "success");
                 } else {
                     swal("Error", response.data.error, "error");
                 }

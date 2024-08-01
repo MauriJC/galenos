@@ -12,17 +12,16 @@ const BajaMedico = () => {
     const [nombre, setnombre] = useState('');
     const [apellido, setapellido] = useState('');
     const [dni, setdni] = useState('');
-    const [direccion, setdireccion] = useState('');
-    const [telefono, settelefono] = useState('');
-    const [mail, setmail] = useState('');
+    const [setdireccion] = useState('');
+    const [settelefono] = useState('');
+    const [setmail] = useState('');
     const [matricula, setmatricula] = useState('');
     const [legajo, setlegajo] = useState('');
-    const [localidad, setlocalidad] = useState('');
-    const [calleSuperior, setcalleSuperior] = useState('');
-    const [calleInferior, setcalleInferior] = useState('');
-    const [fechaDesde, setfechaDesde] = useState('');
-    const [fechaHasta, setfechaHasta] = useState('');
-    const [id, setid] = useState('');
+    const [setlocalidad] = useState('');
+    const [setcalleSuperior] = useState('');
+    const [setcalleInferior] = useState('');
+    const [setfechaDesde] = useState('');
+    const [ setid] = useState('');
     const [loaderState, setloaderState] = useState('disabled');
     const [fechaNacimiento, setfechaNacimiento] = useState('');
 
@@ -72,18 +71,22 @@ const BajaMedico = () => {
             "Content-Type": "application/json"
         };
 
+        setloaderState('active');
+
         try {
             const response = await api.delete(`/altamedico`, { params }, { headers });
-            if (response.data.status === 200) {
-                swal(`${response.data.status}`, response.data.message, "success").then(ok => {
+            setloaderState('disabled');
+            if (response.status === 200) {
+                swal("Éxito", response.data.message, "success").then(ok => {
                     if (ok) navigate('/medicos/listadomedicos');
                 });
             } else {
-                swal(`${response.data.status}`, response.data.message, "error");
+                swal("Error", response.data.message, "error");
             }
         } catch (error) {
             console.error("Error deleting medico:", error);
             swal("Error", "Ha ocurrido un error en la baja del médico", "error");
+            setloaderState('disabled');
         }
     };
 

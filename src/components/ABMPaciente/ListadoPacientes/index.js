@@ -84,17 +84,63 @@ const ListadoPacientes = () => {
 
     const renderPagination = () => {
         const pages = [];
-        for (let i = 1; i <= totalPages; i++) {
-            pages.push(
-                <button
-                    key={i}
-                    onClick={() => setCurrentPage(i)}
-                    className={`ui button ${i === currentPage ? 'blue' : ''}`}
-                >
-                    {i}
-                </button>
-            );
+        const maxPagesToShow = 5; // Número máximo de páginas a mostrar
+        const halfMaxPages = Math.floor(maxPagesToShow / 2);
+
+        if (totalPages <= maxPagesToShow) {
+            // Si hay menos páginas que el número máximo a mostrar, mostrar todas
+            for (let i = 1; i <= totalPages; i++) {
+                pages.push(
+                    <button
+                        key={i}
+                        onClick={() => setCurrentPage(i)}
+                        className={`ui button ${i === currentPage ? 'blue' : ''}`}
+                    >
+                        {i}
+                    </button>
+                );
+            }
+        } else {
+            // Mostrar las páginas circundantes al número actual
+            if (currentPage > halfMaxPages) {
+                pages.push(
+                    <button
+                        key={1}
+                        onClick={() => setCurrentPage(1)}
+                        className={`ui button ${1 === currentPage ? 'blue' : ''}`}
+                    >
+                        1
+                    </button>
+                );
+                pages.push(<span key="ellipsis-start">...</span>);
+            }
+
+            for (let i = Math.max(1, currentPage - halfMaxPages); i <= Math.min(totalPages, currentPage + halfMaxPages); i++) {
+                pages.push(
+                    <button
+                        key={i}
+                        onClick={() => setCurrentPage(i)}
+                        className={`ui button ${i === currentPage ? 'blue' : ''}`}
+                    >
+                        {i}
+                    </button>
+                );
+            }
+
+            if (currentPage < totalPages - halfMaxPages) {
+                pages.push(<span key="ellipsis-end">...</span>);
+                pages.push(
+                    <button
+                        key={totalPages}
+                        onClick={() => setCurrentPage(totalPages)}
+                        className={`ui button ${totalPages === currentPage ? 'blue' : ''}`}
+                    >
+                        {totalPages}
+                    </button>
+                );
+            }
         }
+
         return (
             <div className="ui buttons">
                 {currentPage > 1 && (
