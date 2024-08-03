@@ -5,6 +5,8 @@ import 'semantic-ui-css/semantic.min.css';
 
 import Navbar from './components/navbar/Navbar';
 import Login from './components/Login';
+import Register from './components/Registrar/Register';
+import ChangePassword from './components/ChangePassword/ChangePassword'; // Agrega esta línea
 import SubirRadiografia from './components/SubirRadiografia';
 import ListadoMedicos from './components/ABMMedico/ListadoMedicos';
 import AltaMedico from './components/ABMMedico/AltaMedico';
@@ -27,7 +29,6 @@ import BajaSecretario from './components/ABMSecretario/BajaSecretario';
 import ModificarSecretario from './components/ABMSecretario/ModificarSecretario';
 import ImagenBase64 from './components/Mapa';
 import PrivateRoute from './components/PrivateRoute/PrivateRoute';
-import Register from './components/Registrar/Register';
 import PageNotFound from './components/notFound/PageNotFound';
 
 const App = () => {
@@ -35,12 +36,11 @@ const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    // Actualiza el estado de autenticación al montar el componente y en cada cambio de ruta
     const token = localStorage.getItem('Authorization');
     setIsAuthenticated(!!token);
   }, [location]);
 
-  const showNavbar = isAuthenticated && location.pathname !== '/login' && location.pathname !== '/register';
+  const showNavbar = isAuthenticated && location.pathname !== '/login' && location.pathname !== '/register' && location.pathname !== '/change-password';
 
   return (
     <>
@@ -49,6 +49,11 @@ const App = () => {
         <Routes>
           <Route path='/login' element={<Login />} />
           <Route path='/register' element={<Register />} />
+          <Route path='/change-password' element={
+            <PrivateRoute>
+              <ChangePassword />
+            </PrivateRoute>
+          } />
           <Route 
             path='/' 
             element={
@@ -217,7 +222,6 @@ const App = () => {
               </PrivateRoute>
             } 
           />
-          {/* Ruta Catch-All para páginas no encontradas */}
           <Route path='*' element={<PageNotFound />} />
         </Routes>
       </div>

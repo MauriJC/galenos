@@ -118,6 +118,9 @@ const AltaMedico = () => {
             return;
         }
 
+        const username = mail.split('@')[0]; // Calcular el nombre de usuario (puedes ajustar esto según tus necesidades)
+        const password = `${apellido}${dni}`; // Calcular la contraseña
+
         const medico = {
             nombre, apellido, dni, direccion, telefono, email: mail, numero_matricula: matricula,
             legajo, localidad, entre_calle_sup: calleSuperior, entre_calle_inf: calleInferior,
@@ -131,20 +134,34 @@ const AltaMedico = () => {
         setLoaderState('active');
 
         try {
-            const response = await api.post('/altamedico', medico, { headers });
-            setLoaderState('disabled');
-            if (response.status === 200) {
-                swal("Éxito", response.data.message, "success").then((ok) => {
-                    if (ok) {
-                        navigate('/medicos/listadomedicos');
-                    }
-                });
+            // Primero, crear el médico
+            const responseMedico = await api.post('/altamedico', medico, { headers });
+            if (responseMedico.status === 200) {
+                // Luego, crear el usuario
+                const user = {
+                    username,
+                    password,
+                    email: mail,
+                    role: 'MEDICO' // Asignar el rol correspondiente
+                };
+    
+                const responseUser = await api.post('/register', user, { headers });
+                if (responseUser.status === 201) {
+                    swal("Éxito", responseUser.data.message, "success").then((ok) => {
+                        if (ok) {
+                            navigate('/medicos/listadomedicos');
+                        }
+                    });
+                } else {
+                    swal("Error", responseUser.data.error, "error");
+                }
             } else {
-                swal("Error", response.data.message, "error");
+                swal("Error", responseMedico.data.message, "error");
             }
         } catch (error) {
             console.error(error);
             swal("Ocurrió un error inesperado", '', 'error');
+        } finally {
             setLoaderState('disabled');
         }
     };

@@ -16,6 +16,7 @@ const AltaSecretario = () => {
     const [calleInferior, setCalleInferior] = useState('');
     const [fechaDesde, setFechaDesde] = useState('');
     const [fechaNacimiento, setFechaNacimiento] = useState('');
+    const [loaderState, setLoaderState] = useState('disabled');
     const [localidades, setLocalidades] = useState([]);
     const [errors, setErrors] = useState({});
 
@@ -62,30 +63,37 @@ const AltaSecretario = () => {
             formErrors.telefono = "Teléfono es requerido y debe ser un número";
             isValid = false;
         }
+
         if (!legajo || !/^\d+$/.test(legajo)) {
             formErrors.legajo = "Legajo es requerido y debe ser un número";
             isValid = false;
         }
+
         if (!localidad) {
             formErrors.localidad = "Localidad es requerido";
             isValid = false;
         }
+
         if (!calleSuperior) {
             formErrors.calleSuperior = "La calle superior es requerida";
             isValid = false;
         }
+
         if (!direccion) {
             formErrors.direccion = "La dirección es requerida";
             isValid = false;
         }
+
         if (!calleInferior) {
             formErrors.calleInferior = "La calle inferior es requerida";
             isValid = false;
         }
+
         if (!fechaNacimiento) {
             formErrors.fechaNacimiento = "La fecha de nacimiento es requerida";
             isValid = false;
         }
+
         if (!fechaDesde) {
             formErrors.fechaDesde = "La fecha desde que trabaja en Galeno es requerida";
             isValid = false;
@@ -99,6 +107,8 @@ const AltaSecretario = () => {
         if (!validateForm()) {
             return;
         }
+        const username = mail.split('@')[0]; // Calcular el nombre de usuario (puedes ajustar esto según tus necesidades)
+        const password = `${apellido}${dni}`; // Calcular la contraseña
 
         const secretario = {
             nombre,
@@ -116,20 +126,41 @@ const AltaSecretario = () => {
         };
 
         const headers = { "Content-Type": "application/json" };
+        setLoaderState('active');
 
         try {
-            const response = await api.post('/altasecretario', secretario, { headers });
-            if (response.status === 200) {
-                swal(response.data.status, response.data.message, "success").then(ok => {
-                    if (ok) {
-                        navigate('/secretarios/listadosecretarios');
-                    }
-                });
+            // Primero, crear el secretario
+            const responseSecretario = await api.post('/altasecretario', secretario, { headers });
+            if (responseSecretario.status === 200) {
+                // Luego, crear el usuario
+                const user = {
+                    username,
+                    password,
+                    email: mail,
+                    role: 'SECRETARIO' // Asignar el rol correspondiente
+                };
+
+                
+                const responseUser = await api.post('/register', user, { headers });
+                if (responseUser.status === 201) {
+                    swal("Éxito", responseUser.data.message, "success").then((ok) => {
+                        if (ok) {
+                            navigate('/secretarios/listadosecretarios');
+                        }
+                    });
+                } else {
+                    console.error("Error en respuesta del servidor al crear usuario:", responseUser);
+                    swal("Error", responseUser.data.error || "Error al crear usuario", "error");
+                }
             } else {
-                swal(response.data.status, response.data.message, "error");
+                console.error("Error en respuesta del servidor al crear secretario:", responseSecretario);
+                swal("Error", responseSecretario.data.message || "Error al crear secretario", "error");
             }
         } catch (error) {
+            console.error("Error inesperado:", error);
             swal("Ocurrió un error inesperado", '', 'error');
+        } finally {
+            setLoaderState('disabled');
         }
     };
 
@@ -183,7 +214,6 @@ const AltaSecretario = () => {
                                 onChange={(e) => setFechaNacimiento(e.target.value)}
                             />
                             {errors.fechaNacimiento && <div className="ui pointing red basic label">{errors.fechaNacimiento}</div>}
-
                         </div>
                     </div>
 
@@ -202,7 +232,6 @@ const AltaSecretario = () => {
                             ))}
                         </select>
                         {errors.localidad && <div className="ui pointing red basic label">{errors.localidad}</div>}
-
                     </div>
 
                     <div className="field">
@@ -213,7 +242,6 @@ const AltaSecretario = () => {
                             onChange={(e) => setFechaDesde(e.target.value)}
                         />
                         {errors.fechaDesde && <div className="ui pointing red basic label">{errors.fechaDesde}</div>}
-                        
                     </div>
 
                     <div className="field">
@@ -225,7 +253,6 @@ const AltaSecretario = () => {
                             placeholder='Calle 123'
                         />
                         {errors.direccion && <div className="ui pointing red basic label">{errors.direccion}</div>}
-
                     </div>
 
                     <div className="field">
@@ -284,7 +311,6 @@ const AltaSecretario = () => {
                             placeholder='Legajo'
                         />
                         {errors.legajo && <div className="ui pointing red basic label">{errors.legajo}</div>}
-
                     </div>
                 </div>
             </div>
