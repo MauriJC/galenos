@@ -18,7 +18,6 @@ const Register = () => {
     username: '',
     email: '',
     password: '',
-    role: ''
   });
 
   const handleChange = (e, data) => {

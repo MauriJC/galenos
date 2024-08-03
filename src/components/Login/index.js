@@ -30,26 +30,28 @@ const Login = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-
+  
     if (!validateForm()) {
       return;
     }
-
+  
     try {
       const response = await api.post('/login', {
         username,
         password: pass,
       });
-
-      const token = response.data.token;
-      const user = response.data.user;
-      const role = response.data.user.role; // Obtener el rol del usuario
-
+  
+      const { token, user, password_change_required } = response.data;
+  
       localStorage.setItem('Authorization', `Token ${token}`);
       localStorage.setItem('username', user.username);
-      localStorage.setItem('rol', role); // Guardar el rol del usuario
-
-      navigate('/');
+      localStorage.setItem('rol', user.role);
+  
+      if (password_change_required) {
+        navigate('/change-password'); // Redirigir a la página de cambio de contraseña
+      } else {
+        navigate('/');
+      }
     } catch (err) {
       if (err.response) {
         if (err.response.status === 404) {
@@ -64,7 +66,6 @@ const Login = () => {
       }
     }
   };
-
   return (
     <div className="login-page">
       <div className="ui middle aligned center aligned grid login-grid">
