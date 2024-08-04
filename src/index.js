@@ -30,6 +30,8 @@ import ModificarSecretario from './components/ABMSecretario/ModificarSecretario'
 import ImagenBase64 from './components/Mapa';
 import PrivateRoute from './components/PrivateRoute/PrivateRoute';
 import PageNotFound from './components/notFound/PageNotFound';
+import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
+import Unauthorized from './components/Unauthorized/Unauthorized';
 
 const App = () => {
   const location = useLocation();
@@ -48,7 +50,6 @@ const App = () => {
       <div className='ui container'>
         <Routes>
           <Route path='/login' element={<Login />} />
-          <Route path='/register' element={<Register />} />
           <Route path='/change-password' element={
             <PrivateRoute>
               <ChangePassword />
@@ -73,65 +74,73 @@ const App = () => {
           <Route 
             path='/medicos/listadomedicos' 
             element={
-              <PrivateRoute>
-                <ListadoMedicos />
-              </PrivateRoute>
+              <ProtectedRoute 
+                element={<ListadoMedicos />} 
+                allowedRoles={['ADMIN','SECRETARIO']} 
+              />
             } 
           />
           <Route 
             path='/medicos/altamedico' 
             element={
-              <PrivateRoute>
-                <AltaMedico />
-              </PrivateRoute>
+              <ProtectedRoute 
+                element={<AltaMedico />} 
+                allowedRoles={['ADMIN','SECRETARIO']} 
+              />
             } 
           />
           <Route 
             path='/medicos/modificarmedico/:numero_matricula' 
             element={
-              <PrivateRoute>
-                <ModificarMedico />
-              </PrivateRoute>
+              <ProtectedRoute 
+                element={<ModificarMedico />} 
+                allowedRoles={['ADMIN','SECRETARIO']} 
+              />
             } 
           />
           <Route 
             path='/medicos/bajamedico/:nmatricula' 
             element={
-              <PrivateRoute>
-                <BajaMedico />
-              </PrivateRoute>
+              <ProtectedRoute 
+                element={<BajaMedico />} 
+                allowedRoles={['ADMIN','SECRETARIO']} 
+              />
             } 
           />
           <Route 
             path='/radiologos/listadoradiologos' 
             element={
-              <PrivateRoute>
-                <ListadoRadiologos />
-              </PrivateRoute>
+              <ProtectedRoute 
+                element={<ListadoRadiologos />} 
+                allowedRoles={['ADMIN','SECRETARIO']} 
+              />
             } 
           />
           <Route 
             path='/radiologos/altaradiologo' 
             element={
-              <PrivateRoute>
-                <AltaRadiologo />
-              </PrivateRoute>
+              <ProtectedRoute 
+                element={<AltaRadiologo />} 
+                allowedRoles={['ADMIN','SECRETARIO']} 
+              />
             } 
           />
           <Route 
             path='/radiologos/modificarradiologo/:nmatricula' 
             element={
-              <PrivateRoute>
-                <ModificarRadiologo />
-              </PrivateRoute>
+              <ProtectedRoute 
+                element={<ModificarRadiologo />} 
+                allowedRoles={['ADMIN','SECRETARIO']} 
+              />
             } 
           />
           <Route 
             path='/radiologos/bajaradiologo/:nmatricula' 
             element={
-              <PrivateRoute>
-                <BajaRadiologo />
-              </PrivateRoute>
+              <ProtectedRoute 
+                element={<BajaRadiologo />} 
+                allowedRoles={['ADMIN','SECRETARIO']} 
+              />
             } 
           />
           <Route 
@@ -169,49 +178,55 @@ const App = () => {
           <Route 
             path='/secretarios/altasecretario' 
             element={
-              <PrivateRoute>
-                <AltaSecretario />
-              </PrivateRoute>
+              <ProtectedRoute 
+                element={<AltaSecretario />} 
+                allowedRoles={['ADMIN']} 
+              />
             } 
           />
           <Route 
             path='/secretarios/listadosecretarios' 
             element={
-              <PrivateRoute>
-                <ListadoSecretarios />
-              </PrivateRoute>
+              <ProtectedRoute 
+                element={<ListadoSecretarios />} 
+                allowedRoles={['ADMIN']} 
+              />
             } 
           />
           <Route 
             path='/secretarios/bajasecretario/:nlegajo' 
             element={
-              <PrivateRoute>
-                <BajaSecretario />
-              </PrivateRoute>
+              <ProtectedRoute 
+                element={<BajaSecretario />} 
+                allowedRoles={['ADMIN']} 
+              />
             } 
           />
           <Route 
             path='/secretarios/modificarsecretario/:nlegajo' 
             element={
-              <PrivateRoute>
-                <ModificarSecretario />
-              </PrivateRoute>
+              <ProtectedRoute 
+                element={<ModificarSecretario />} 
+                allowedRoles={['ADMIN']} 
+              />
             } 
           />
           <Route 
             path='/diagnosticos/listadodiagnosticos' 
             element={
-              <PrivateRoute>
-                <ListadoDiagnosticos />
-              </PrivateRoute>
+              <ProtectedRoute 
+                element={<ListadoDiagnosticos />} 
+                allowedRoles={['ADMIN','MEDICO','SECRETARIO']} 
+              />
             } 
           />
           <Route 
             path='/diagnosticos/listadodiagnosticos/ver/:idDiagnostico/:nroAfiliado' 
             element={
-              <PrivateRoute>
-                <Diagnostico />
-              </PrivateRoute>
+              <ProtectedRoute 
+                element={<Diagnostico />} 
+                allowedRoles={['ADMIN','MEDICO','SECRETARIO']} 
+              />
             } 
           />
           <Route 
@@ -222,6 +237,7 @@ const App = () => {
               </PrivateRoute>
             } 
           />
+          <Route path='/unauthorized' element={<Unauthorized />} />
           <Route path='*' element={<PageNotFound />} />
         </Routes>
       </div>
