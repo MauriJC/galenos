@@ -111,9 +111,6 @@ const Login = () => {
               </div>
               {error && <div className="ui negative message">{error}</div>}
             </form>
-            <div className="ui message">
-              ¿Nuevo usuario? <Link to="/register">Regístrate</Link>
-            </div>
           </div>
         </div>
       </div>
