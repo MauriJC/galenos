@@ -239,12 +239,13 @@ const ModificarPaciente = () => {
                             placeholder="JohnDoe@gmail.com"
                         />
                     </div>
-                    <div className="field">
+                        <div className="field">
                         <label>Número de afiliado</label>
                         <input
                             type="text"
                             value={nroAfiliado}
                             onChange={(e) => setNroAfiliado(e.target.value)}
+                            disabled
                         />
                     </div>
                     <div className="ui center aligned segment">

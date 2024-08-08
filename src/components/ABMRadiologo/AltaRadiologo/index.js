@@ -253,9 +253,9 @@ const AltaRadiologo = () => {
                         <input type='text' value={legajo} onChange={e => setLegajo(e.target.value)} />
                         {errors.legajo && <div className="ui pointing red basic label">{errors.legajo}</div>}
                     </div>
-                    <div>
-                        <button onClick={postInfoRadiologo} className="ui primary button">Registrar</button>
-                        <Link to='/radiologos/listadoradiologos' className="ui button">Cancelar</Link>
+                    <div className="ui center aligned segment">
+                    <button onClick={postInfoRadiologo} className="ui primary button">Registrar</button>
+                        <Link to='/radiologos/listadoradiologos' className="ui negative button">Cancelar</Link>
                     </div>
                 </div>
             </div>

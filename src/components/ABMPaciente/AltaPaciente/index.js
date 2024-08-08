@@ -275,7 +275,7 @@ const AltaPaciente = () => {
                     
                     <div className="field">
                         <label>Código Postal</label>
-                        <input type="text" value={codigoPostal} readOnly />
+                        <input type="text" value={codigoPostal} readOnly disabled/>
                     </div>
                 </div>
 

@@ -92,7 +92,7 @@ const ListadoDiagnosticos = () => {
                 <select className="ui selection dropdown" onChange={e => setmatricula(e.target.value)} value={matricula}>
                     <option value=''>Seleccione médico</option>
                     {listaMedicos.map(medico => (
-                        <option key={medico.numero_matricula} value={medico.numero_matricula}>{medico.nombre}</option>
+                        <option key={medico.numero_matricula} value={medico.numero_matricula}>{medico.nombre} {medico.apellido} - {medico.numero_matricula}</option>
                     ))}
                 </select>
                 {errors.matricula && <div className="ui pointing red basic label">{errors.matricula}</div>}

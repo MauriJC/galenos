@@ -79,34 +79,21 @@ const BajaSecretario = () => {
                 <h1>Baja de secretario</h1>
             </div>
             <div className="ui segment">
-                <div className="ui center aligned form">
-                    <div className="field">
-                        <label>Nombre completo</label>
-                        <div className="two fields">
-                            <div className="field">
-                                <span>{nombre}</span>
-                            </div>
-                            <div className="field">
-                                <span>{apellido}</span>
-                            </div>
+            <div className="ui center aligned form">
+                    <div className="two fields">
+                        <div className="field">
+                            <label>Nombre completo</label>
+                            <span>{nombre} {apellido}</span>
                         </div>
-                    </div>
-                    <div className="fields">
-                        <div className="eight wide field">
+                        <div className="field">
                             <label>DNI</label>
                             <span>{dni}</span>
                         </div>
-                        <div className="eight wide field">
-                            <label>Fecha de nacimiento</label>
-                            <span>{fechaNacimiento}</span>
-                        </div>
                     </div>
-                    <div className="field">
-                        <div className="two fields">
-                            <div className="field">
-                                <label>Número de legajo</label>
-                                <span>{legajo}</span>
-                            </div>
+                    <div className="two fields">
+                        <div className="field">
+                            <label>Número de legajo</label>
+                            <span>{legajo}</span>
                         </div>
                     </div>
                 </div>
