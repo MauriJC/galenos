@@ -47,7 +47,7 @@ const BajaPaciente = () => {
         try {
             const response = await api.delete(`/altapaciente`, { params }, { headers });
             if (response.status === 200) {
-                swal(`${response.status}`, response.data.message, "success").then(ok => {
+                swal("Éxito", `Paciente con numero de afiliado: ${nafiliado} eliminado` , "success").then(ok => {
                     if (ok) navigate('/pacientes/listadopacientes');
                 });
             } else {

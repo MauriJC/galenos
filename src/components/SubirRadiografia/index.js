@@ -38,9 +38,9 @@ const SubirRadiografia = () => {
       setInfoAfiliado(response.data.paciente);
 
       if (response.data.status === 200) { 
-        swal(`${response.data.status}`, "Afiliado encontrado!", "success");
+        swal("Exito", "Afiliado encontrado!", "success");
       } else {
-        swal(`Error`, response.data.message, 'error');
+        swal(`Error`, "No se encontró el paciente", 'error');
       }
     } catch (error) {
       swal("Error", "No se pudo encontrar el afiliado", "error");
@@ -134,7 +134,7 @@ const SubirRadiografia = () => {
       if (response.data.status === 200) {
         swal({
           title: "Subida exitosa!",
-          text: "La radiografia ha sido enviada correctamente",
+          text: "La radiografía ha sido enviada correctamente",
           icon: "success"
         }).then(() => {
           navigate('/diagnosticos/listadodiagnosticos');

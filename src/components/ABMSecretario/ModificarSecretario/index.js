@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { useNavigate, useParams, Link } from 'react-router-dom';
 import swal from 'sweetalert';
 import api from '../../../apis';
-import { Link } from 'react-router-dom';
 
 const ModificarSecretario = () => {
     let { nlegajo } = useParams();
@@ -22,6 +21,7 @@ const ModificarSecretario = () => {
     const [fechaNacimiento, setFechaNacimiento] = useState('');
     const [id, setId] = useState('');
     const [localidades, setLocalidades] = useState([]);
+    const [formErrors, setFormErrors] = useState({});
 
     useEffect(() => {
         getSecretario();
@@ -39,30 +39,102 @@ const ModificarSecretario = () => {
     };
 
     const getSecretario = async () => {
-        const headers = { "Content-Type": "application/json" };
+        try {
+            const headers = { "Content-Type": "application/json" };
+            const params = { legajo: nlegajo };
+            const response = await api.get(`/altasecretario`, { params }, { headers });
+            const sec = response.data.secretario;
 
-        const params = { legajo: nlegajo };
+            setApellido(sec.apellido);
+            setDni(sec.dni);
+            setMail(sec.email);
+            setFechaNacimiento(sec.fecha_nacimiento);
+            setId(sec.id);
+            setLegajo(sec.legajo);
+            setNombre(sec.nombre);
+            setTelefono(sec.telefono);
+            setDireccion(sec.direccion);
+            setLocalidad(sec.localidad);
+            setCalleSuperior(sec.entre_calle_sup);
+            setCalleInferior(sec.entre_calle_inf);
+            setFechaDesde(sec.fecha_desde);
+        } catch (error) {
+            console.error("Error fetching secretario:", error);
+            swal("Error", "No se pudo cargar el secretario", "error");
+        }
+    };
 
-        const response = await api.get(`/altasecretario`, { params }, { headers });
-        const sec = response.data.secretario;
 
-        setApellido(sec.apellido);
-        setDni(sec.dni);
-        setMail(sec.email);
-        setFechaNacimiento(sec.fecha_nacimiento);
-        setId(sec.id);
-        setLegajo(sec.legajo);
-        setNombre(sec.nombre);
-        setTelefono(sec.telefono);
-        setDireccion(sec.direccion);
-        setLocalidad(sec.localidad);
-        setCalleSuperior(sec.entre_calle_sup);
-        setCalleInferior(sec.entre_calle_inf);
-        setFechaDesde(sec.fecha_desde);
+    const validateForm = () => {
+        let formErrors = {};
+        let isValid = true;
+
+        if (!nombre) {
+            formErrors.nombre = "Nombre es requerido";
+            isValid = false;
+        }
+
+        if (!apellido) {
+            formErrors.apellido = "Apellido es requerido";
+            isValid = false;
+        }
+
+        if (!dni || !/^\d+$/.test(dni)) {
+            formErrors.dni = "DNI es requerido y debe ser un número";
+            isValid = false;
+        }
+
+        if (!mail || !/\S+@\S+\.\S+/.test(mail)) {
+            formErrors.mail = "Email es requerido y debe ser válido";
+            isValid = false;
+        }
+
+        if (!telefono || !/^\d+$/.test(telefono)) {
+            formErrors.telefono = "Teléfono es requerido y debe ser un número";
+            isValid = false;
+        }
+
+        if (!localidad) {
+            formErrors.localidad = "Localidad es requerida";
+            isValid = false;
+        }
+
+        if (!calleSuperior) {
+            formErrors.calleSuperior = "La calle superior es requerida";
+            isValid = false;
+        }
+
+        if (!direccion) {
+            formErrors.direccion = "La dirección es requerida";
+            isValid = false;
+        }
+
+        if (!calleInferior) {
+            formErrors.calleInferior = "La calle inferior es requerida";
+            isValid = false;
+        }
+
+        if (!fechaNacimiento) {
+            formErrors.fechaNacimiento = "La fecha de nacimiento es requerida";
+            isValid = false;
+        }
+
+        if (!fechaDesde) {
+            formErrors.fechaDesde = "La fecha desde que vive en ese domicilio es requerida";
+            isValid = false;
+        }
+
+        setFormErrors(formErrors);
+        return isValid;
     };
 
     const putSecretario = async (e) => {
         e.preventDefault();
+
+        if (!validateForm()) {
+            return;
+        }
+
 
         const secretario = {
             nombre, apellido, dni, direccion, telefono, email: mail, legajo, localidad,
@@ -70,24 +142,23 @@ const ModificarSecretario = () => {
             fecha_nacimiento: fechaNacimiento
         };
 
-        const headers = { "Content-Type": "application/json" };
+        try {
+            const headers = { "Content-Type": "application/json" };
+            const response = await api.put(`/modificarsecretario/${id}`, secretario, { headers });
 
-        await api.put(`/modificarsecretario/${id}`, secretario, { headers })
-            .then(response => {
-                if (response.status === 200) {
-                    swal(`${response.status}`, "Modificación de secretario exitosa", "success").then(ok => {
-                        if (ok) {
-                            navigate('/secretarios/listadosecretarios');
-                        }
-                    });
-                } else if (response.status === 500) {
-                    swal(`${response.status}`, 'Error 500', 'error');
-                }
-            })
-            .catch(error => {
-                console.error(error);
-                swal("Ha ocurrido un error", '', 'error');
-            });
+            if (response.status === 200) {
+                swal("Éxito", "Modificación de secretario exitosa", "success").then(ok => {
+                    if (ok) {
+                        navigate('/secretarios/listadosecretarios');
+                    }
+                });
+            } else if (response.status === 500) {
+                swal(`${response.status}`, 'Error 500', 'error');
+            }
+        } catch (error) {
+            console.error("Error updating secretario:", error);
+            swal("Ha ocurrido un error", '', 'error');
+        }
     };
 
     const renderLocalidades = () => (
@@ -99,6 +170,7 @@ const ModificarSecretario = () => {
                     <option value={loc.nombre} key={loc.id}>{loc.nombre}</option>
                 ))}
             </select>
+            {formErrors.localidad && <div className="ui pointing red basic label">{formErrors.localidad}</div>}
         </div>
     );
 
@@ -109,16 +181,18 @@ const ModificarSecretario = () => {
             </div>
 
             <div className="ui segment">
-                <div className="ui center aligned form">
+                <form className="ui center aligned form" onSubmit={putSecretario}>
                     <div className="field">
                         <div className="two fields">
                             <div className="field">
                                 <label>Nombre</label>
                                 <input type="text" value={nombre} onChange={e => setNombre(e.target.value)} />
+                                {formErrors.nombre && <div className="ui pointing red basic label">{formErrors.nombre}</div>}
                             </div>
                             <div className="field">
                                 <label>Apellido</label>
                                 <input type="text" value={apellido} onChange={e => setApellido(e.target.value)} />
+                                {formErrors.apellido && <div className="ui pointing red basic label">{formErrors.apellido}</div>}
                             </div>
                         </div>
                     </div>
@@ -127,54 +201,67 @@ const ModificarSecretario = () => {
                             <div className="field">
                                 <label>DNI</label>
                                 <input type="text" value={dni} onChange={e => setDni(e.target.value)} placeholder='DNI' />
+                                {formErrors.dni && <div className="ui pointing red basic label">{formErrors.dni}</div>}
                             </div>
                             <div className="field">
                                 <label>Fecha de nacimiento</label>
                                 <input type="date" value={fechaNacimiento} onChange={e => setFechaNacimiento(e.target.value)} />
+                                {formErrors.fechaNacimiento && <div className="ui pointing red basic label">{formErrors.fechaNacimiento}</div>}
                             </div>
                         </div>
                     </div>
                     <h4 className="ui dividing header">Domicilio</h4>
                     <div className="field">
                         {renderLocalidades()}
+                        {formErrors.localidad && <div className="ui pointing red basic label">{formErrors.localidad}</div>}
                     </div>
                     <div className="field">
                         <label htmlFor="">Fecha desde:</label>
                         <input type="date" value={fechaDesde} onChange={e => setFechaDesde(e.target.value)} />
+                        {formErrors.fechaDesde && <div className="ui pointing red basic label">{formErrors.fechaDesde}</div>}
                     </div>
                     <div className="field">
                         <label htmlFor="">Direccion</label>
                         <input type="text" value={direccion} onChange={e => setDireccion(e.target.value)} />
+                        {formErrors.direccion && <div className="ui pointing red basic label">{formErrors.direccion}</div>}
                     </div>
                     <div className="field">
                         <div className="two fields">
                             <div className="field">
                                 <label htmlFor="">Calle Superior</label>
                                 <input type="text" value={calleSuperior} onChange={e => setCalleSuperior(e.target.value)} />
+                                {formErrors.calleSuperior && <div className="ui pointing red basic label">{formErrors.calleSuperior}</div>}
+
                             </div>
                             <div className="field">
                                 <label htmlFor="">Calle Inferior</label>
                                 <input type="text" value={calleInferior} onChange={e => setCalleInferior(e.target.value)} />
+                                {formErrors.calleInferior && <div className="ui pointing red basic label">{formErrors.calleInferior}</div>}
+
                             </div>
                         </div>
                     </div>
                     <div className="field">
                         <label htmlFor="">Telefono</label>
                         <input type='text' value={telefono} onChange={e => setTelefono(e.target.value)} />
+                        {formErrors.telefono && <div className="ui pointing red basic label">{formErrors.telefono}</div>}
                     </div>
                     <div className="field">
                         <label htmlFor="">E-mail</label>
                         <input type="email" value={mail} onChange={e => setMail(e.target.value)} />
+                        {formErrors.mail && <div className="ui pointing red basic label">{formErrors.mail}</div>}
+
                     </div>
                     <div className="field">
                         <label>Numero de Legajo</label>
-                        <input type="text" value={legajo} onChange={e => setLegajo(e.target.value)} />
+                        <input type="text" value={legajo} onChange={e => setLegajo(e.target.value)} readOnly disabled/>
+
                     </div>
                     <div className="ui header centered">
-                        <button className='ui blue button' onClick={putSecretario}>Confirmar</button>
+                        <button type="submit" className='ui blue button'>Confirmar</button>
                         <Link className='ui negative button' to='/secretarios/listadosecretarios'>Cancelar</Link>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
     );

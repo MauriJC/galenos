@@ -56,7 +56,7 @@ const BajaRadiologo = () => {
         try {
             const response = await api.delete(`/radiologos`, { params }, { headers });
             if (response.status === 200) {
-                swal(`${response.status}`, response.data.message, "success").then(ok => {
+                swal("Éxito", `Radiólogo con matrícula ${matricula} eliminado` , "success").then(ok => {
                     if (ok) navigate('/radiologos/listadoradiologos');
                 });
             } else {

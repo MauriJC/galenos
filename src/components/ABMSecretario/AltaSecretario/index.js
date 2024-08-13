@@ -95,7 +95,7 @@ const AltaSecretario = () => {
         }
 
         if (!fechaDesde) {
-            formErrors.fechaDesde = "La fecha desde que trabaja en Galeno es requerida";
+            formErrors.fechaDesde = "La fecha desde que vive en ese domicilio es requerida";
             isValid = false;
         }
 
@@ -129,21 +129,20 @@ const AltaSecretario = () => {
         setLoaderState('active');
 
         try {
-            // Primero, crear el secretario
+            // Primera solicitud: crear el secretario
             const responseSecretario = await api.post('/altasecretario', secretario, { headers });
             if (responseSecretario.status === 200) {
-                // Luego, crear el usuario
+                // Segunda solicitud: crear el usuario
                 const user = {
                     username,
                     password,
                     email: mail,
-                    role: 'SECRETARIO' // Asignar el rol correspondiente
+                    role: 'SECRETARIO'
                 };
-
-                
+        
                 const responseUser = await api.post('/register', user, { headers });
                 if (responseUser.status === 201) {
-                    swal("Éxito", responseUser.data.message, "success").then((ok) => {
+                    swal("Éxito", "Secretario creado exitosamente", "success").then((ok) => {
                         if (ok) {
                             navigate('/secretarios/listadosecretarios');
                         }
@@ -157,7 +156,7 @@ const AltaSecretario = () => {
                 swal("Error", responseSecretario.data.message || "Error al crear secretario", "error");
             }
         } catch (error) {
-            console.error("Error inesperado:", error);
+            console.error("Error inesperado:", error.response || error);
             swal("Ocurrió un error inesperado", '', 'error');
         } finally {
             setLoaderState('disabled');
@@ -235,7 +234,7 @@ const AltaSecretario = () => {
                     </div>
 
                     <div className="field">
-                        <label>Fecha desde:</label>
+                        <label>Fecha desde que vive en ese domicilio:</label>
                         <input
                             type="date"
                             value={fechaDesde}

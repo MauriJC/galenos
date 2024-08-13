@@ -92,7 +92,7 @@ const AltaPaciente = () => {
         }
         
         if (!fechaDesde) {
-            formErrors.fechaDesde = "La fecha desde que trabaja en Galeno es requerida";
+            formErrors.fechaDesde = "La fecha desde que vive en ese domicilio es requerida";
             isValid = false;
         }
         
@@ -232,7 +232,7 @@ const AltaPaciente = () => {
                     </div>
 
                     <div className="field">
-                        <label htmlFor="">Fecha desde:</label>
+                        <label htmlFor="">Fecha desde que vive en ese domicilio:</label>
                         <input type="date" value={fechaDesde} onChange={e => setFechaDesde(e.target.value)} />
                         {errors.fechaDesde && <div className="ui pointing red basic label">{errors.fechaDesde}</div>}
                     </div>

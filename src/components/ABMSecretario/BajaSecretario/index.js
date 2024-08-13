@@ -61,7 +61,7 @@ const BajaSecretario = () => {
         try {
             const response = await api.delete(`/altasecretario`, { params }, { headers });
             if (response.data.status === 200) {
-                swal(`${response.data.status}`, response.data.message, 'success').then(ok => {
+                swal("Éxito", response.data.message, 'success').then(ok => {
                     if (ok) navigate('/secretarios/listadosecretarios');
                 });
             } else {
