@@ -47,7 +47,7 @@ const BajaPaciente = () => {
         try {
             const response = await api.delete(`/altapaciente`, { params }, { headers });
             if (response.status === 200) {
-                swal(`${response.status}`, response.data.message, "success").then(ok => {
+                swal("Éxito", `Paciente con numero de afiliado: ${nafiliado} eliminado` , "success").then(ok => {
                     if (ok) navigate('/pacientes/listadopacientes');
                 });
             } else {
@@ -66,28 +66,22 @@ const BajaPaciente = () => {
             </div>
             <div className="ui segment">
                 <div className="ui center aligned form">
-                    <div className="field">
-                        <label>Nombre completo</label>
-                        <div className="two fields">
-                            <div className="field">
-                                <span>{nombre}</span>
-                            </div>
-                            <div className="field">
-                                <span>{apellido}</span>
-                            </div>
+                    <div className="two fields">
+                        <div className="field">
+                            <label>Nombre completo</label>
+                            <span>{nombre} {apellido}</span>
                         </div>
-                    </div>
-                    <div className="fields">
-                        <div className="eight wide field">
+                        <div className="field">
                             <label>DNI</label>
                             <span>{dni}</span>
                         </div>
-                        <div className="eight wide field">
+                    </div>
+                    <div className="two fields">
+                        <div className="field">
                             <label>Número de afiliado</label>
                             <span>{nroAfiliado}</span>
                         </div>
                     </div>
-                    
                 </div>
                 <div className="ui center aligned segment">
                     <button className='ui red button' onClick={deletePaciente}>Eliminar</button>

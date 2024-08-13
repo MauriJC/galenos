@@ -1,0 +1,20 @@
+.menu-container {
+    padding: 20px;
+  }
+  
+  .ui.container {
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+  
+  .ui.center.aligned.segment {
+    margin-top: 20px;
+  }
+  
+  .ui.header {
+    font-size: 2.5em;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 0;
+  }
+  

@@ -7,21 +7,21 @@ import { useNavigate } from 'react-router';
 
 const BajaMedico = () => {
     const { nmatricula } = useParams();
-    let navigate = useNavigate();
+    const navigate = useNavigate();
 
     const [nombre, setnombre] = useState('');
     const [apellido, setapellido] = useState('');
     const [dni, setdni] = useState('');
-    const [setdireccion] = useState('');
-    const [settelefono] = useState('');
-    const [setmail] = useState('');
+    const [direccion, setdireccion] = useState('');
+    const [telefono, settelefono] = useState('');
+    const [mail, setmail] = useState('');
     const [matricula, setmatricula] = useState('');
     const [legajo, setlegajo] = useState('');
-    const [setlocalidad] = useState('');
-    const [setcalleSuperior] = useState('');
-    const [setcalleInferior] = useState('');
-    const [setfechaDesde] = useState('');
-    const [ setid] = useState('');
+    const [localidad, setlocalidad] = useState('');
+    const [calleSuperior, setcalleSuperior] = useState('');
+    const [calleInferior, setcalleInferior] = useState('');
+    const [fechaDesde, setfechaDesde] = useState('');
+    const [id, setid] = useState('');
     const [loaderState, setloaderState] = useState('disabled');
     const [fechaNacimiento, setfechaNacimiento] = useState('');
 
@@ -39,9 +39,9 @@ const BajaMedico = () => {
         };
 
         try {
-            const response = await api.get(`/altamedico`, { params }, { headers });
+            const response = await api.get(`/altamedico`, { params: { matricula: nmatricula } });
             const { medico } = response.data;
-
+            
             setnombre(medico.nombre);
             setapellido(medico.apellido);
             setdni(medico.dni);
@@ -97,37 +97,24 @@ const BajaMedico = () => {
             </div>
             <div className="ui segment">
                 <div className="ui center aligned form">
-                    <div className="field">
-                        <label>Nombre completo</label>
-                        <div className="two fields">
-                            <div className="field">
-                                <span>{nombre}</span>
-                            </div>
-                            <div className="field">
-                                <span>{apellido}</span>
-                            </div>
+                    <div className="two fields">
+                        <div className="field">
+                            <label>Nombre completo</label>
+                            <span>{nombre} {apellido}</span>
                         </div>
-                    </div>
-                    <div className="fields">
-                        <div className="eight wide field">
+                        <div className="field">
                             <label>DNI</label>
                             <span>{dni}</span>
                         </div>
-                        <div className="eight wide field">
-                            <label>Fecha de nacimiento</label>
-                            <span>{fechaNacimiento}</span>
-                        </div>
                     </div>
-                    <div className="field">
-                        <div className="two fields">
-                            <div className="field">
-                                <label>Número de matrícula</label>
-                                <span>{matricula}</span>
-                            </div>
-                            <div className="field">
-                                <label>Número de legajo </label>
-                                <span>{legajo}</span>
-                            </div>
+                    <div className="two fields">
+                        <div className="field">
+                            <label>Número de matrícula</label>
+                            <span>{nmatricula}</span>
+                        </div>
+                        <div className="field">
+                            <label>Número de legajo</label>
+                            <span>{legajo}</span>
                         </div>
                     </div>
                 </div>

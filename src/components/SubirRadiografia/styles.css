@@ -1,0 +1,8 @@
+/* styles.css */
+.readonly-input {
+    background-color: #f0f0f0; /* Un color de fondo más claro */
+    border: 1px solid #ccc; /* Un borde gris */
+    cursor: not-allowed; /* Cambia el cursor para indicar que no se puede editar */
+    color: #555; /* Color de texto gris */
+  }
+  

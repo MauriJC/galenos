@@ -97,7 +97,7 @@ const AltaRadiologo = () => {
         }
         
         if (!fechaDesde) {
-            formErrors.fechaDesde = "La fecha desde que trabaja en Galeno es requerida";
+            formErrors.fechaDesde = "La fecha desde que vive en ese domicilio es requerida";
             isValid = false;
         }
         
@@ -210,7 +210,7 @@ const AltaRadiologo = () => {
                     <h4 className="ui dividing header">Domicilio</h4>
                     {renderLocalidades()}
                     <div className="field">
-                        <label htmlFor="">Fecha desde:</label>
+                        <label htmlFor="">Fecha desde que vive en ese domicilio:</label>
                         <input type="date" value={fechaDesde} onChange={e => setFechaDesde(e.target.value)} />
                         {errors.fechaDesde && <div className="ui pointing red basic label">{errors.fechaDesde}</div>}
                     </div>
@@ -253,9 +253,9 @@ const AltaRadiologo = () => {
                         <input type='text' value={legajo} onChange={e => setLegajo(e.target.value)} />
                         {errors.legajo && <div className="ui pointing red basic label">{errors.legajo}</div>}
                     </div>
-                    <div>
-                        <button onClick={postInfoRadiologo} className="ui primary button">Registrar</button>
-                        <Link to='/radiologos/listadoradiologos' className="ui button">Cancelar</Link>
+                    <div className="ui center aligned segment">
+                    <button onClick={postInfoRadiologo} className="ui primary button">Registrar</button>
+                        <Link to='/radiologos/listadoradiologos' className="ui negative button">Cancelar</Link>
                     </div>
                 </div>
             </div>

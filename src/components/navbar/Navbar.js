@@ -168,6 +168,7 @@ const Navbar = () => {
     } else if (role === 'RADIOLOGO') {
       return (
         <>
+          <Link className='item' to='/mapa'>Mapa</Link>
           <div
             className={`ui simple dropdown item ${activeDropdown === 'radiologos' ? 'active' : ''}`}
             onClick={() => handleDropdownClick('radiologos')}
@@ -185,7 +186,6 @@ const Navbar = () => {
             Diagnosticos
             <i className='dropdown icon'></i>
             <div className='menu'>
-              <Link className='item' to='/diagnosticos/listadodiagnosticos'>Listado Diagnosticos</Link>
               <Link className='item' to='/subirradiografia'>Subir Radiografia</Link>
             </div>
           </div>

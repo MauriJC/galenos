@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import swal from 'sweetalert';
 import { useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';
-
+import './styles.css'
 const SubirRadiografia = () => {
   const [nroAfiliado, setNroAfiliado] = useState(''); 
   const [infoAfiliado, setInfoAfiliado] = useState(null);
@@ -38,9 +38,9 @@ const SubirRadiografia = () => {
       setInfoAfiliado(response.data.paciente);
 
       if (response.data.status === 200) { 
-        swal(`${response.data.status}`, "Afiliado encontrado!", "success");
+        swal("Exito", "Afiliado encontrado!", "success");
       } else {
-        swal(`${response.data.status}`, response.data.message, 'error');
+        swal(`Error`, "No se encontró el paciente", 'error');
       }
     } catch (error) {
       swal("Error", "No se pudo encontrar el afiliado", "error");
@@ -134,7 +134,7 @@ const SubirRadiografia = () => {
       if (response.data.status === 200) {
         swal({
           title: "Subida exitosa!",
-          text: "La radiografia ha sido enviada correctamente",
+          text: "La radiografía ha sido enviada correctamente",
           icon: "success"
         }).then(() => {
           navigate('/diagnosticos/listadodiagnosticos');
@@ -153,7 +153,7 @@ const SubirRadiografia = () => {
       <select className="ui fluid dropdown" onChange={e => setnromatricularadiologo(e.target.value)} value={nromatricularadiologo}>
         <option value=''>Seleccione radiologo</option>
         {listadoRadiologos.map(radiologo => (
-          <option value={radiologo.numero_matricula} key={radiologo.numero_matricula}>{radiologo.nombre}</option>
+          <option value={radiologo.numero_matricula} key={radiologo.numero_matricula}>{radiologo.nombre} {radiologo.apellido} - {radiologo.numero_matricula} </option>
         ))}
       </select>
       {errors.nromatricularadiologo && <div className="ui pointing red basic label">{errors.nromatricularadiologo}</div>}
@@ -166,7 +166,7 @@ const SubirRadiografia = () => {
       <select className="ui fluid dropdown" onChange={e => setmatriculaMedico(e.target.value)} value={matriculaMedico}>
         <option value=''>Seleccione medico</option>
         {listaMedicos.map(medico => (
-          <option value={medico.numero_matricula} key={medico.numero_matricula}>{medico.nombre}</option>
+          <option value={medico.numero_matricula} key={medico.numero_matricula}>{medico.nombre} {medico.apellido} - {medico.numero_matricula}</option>
         ))}
       </select>
       {errors.matriculaMedico && <div className="ui pointing red basic label">{errors.matriculaMedico}</div>}
@@ -214,7 +214,7 @@ const SubirRadiografia = () => {
           </div>
           <div className="inline fields">
             <label>Tipo de estudio</label>
-            <input type="text" value={tipoRadiografia} onChange={e => settipoRadiografia(e.target.value)} />
+            <input type="text" value={tipoRadiografia} onChange={e => settipoRadiografia(e.target.value)} readOnly  disabled className="readonly-input"/>
             {errors.tipoRadiografia && <div className="ui pointing red basic label">{errors.tipoRadiografia}</div>}
           </div>
         </div>

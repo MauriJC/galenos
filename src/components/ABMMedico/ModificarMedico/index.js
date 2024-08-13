@@ -25,6 +25,7 @@ const ModificarMedico = () => {
     const [loaderState, setLoaderState] = useState('disabled');
     const [fechaNacimiento, setFechaNacimiento] = useState('');
     const [localidades, setLocalidades] = useState([]);
+    const [formErrors, setFormErrors] = useState({});
 
     useEffect(() => {
         getMedico();
@@ -66,8 +67,75 @@ const ModificarMedico = () => {
         }
     };
 
+    const validateForm = () => {
+        let formErrors = {};
+        let isValid = true;
+
+        if (!nombre) {
+            formErrors.nombre = "Nombre es requerido";
+            isValid = false;
+        }
+
+        if (!apellido) {
+            formErrors.apellido = "Apellido es requerido";
+            isValid = false;
+        }
+
+        if (!dni || !/^\d+$/.test(dni)) {
+            formErrors.dni = "DNI es requerido y debe ser un número";
+            isValid = false;
+        }
+
+        if (!mail || !/\S+@\S+\.\S+/.test(mail)) {
+            formErrors.mail = "Email es requerido y debe ser válido";
+            isValid = false;
+        }
+
+        if (!telefono || !/^\d+$/.test(telefono)) {
+            formErrors.telefono = "Teléfono es requerido y debe ser un número";
+            isValid = false;
+        }
+
+        if (!localidad) {
+            formErrors.localidad = "Localidad es requerida";
+            isValid = false;
+        }
+
+        if (!calleSuperior) {
+            formErrors.calleSuperior = "La calle superior es requerida";
+            isValid = false;
+        }
+
+        if (!direccion) {
+            formErrors.direccion = "La dirección es requerida";
+            isValid = false;
+        }
+
+        if (!calleInferior) {
+            formErrors.calleInferior = "La calle inferior es requerida";
+            isValid = false;
+        }
+
+        if (!fechaNacimiento) {
+            formErrors.fechaNacimiento = "La fecha de nacimiento es requerida";
+            isValid = false;
+        }
+
+        if (!fechaDesde) {
+            formErrors.fechaDesde = "La fecha desde que vive en ese domicilio es requerida";
+            isValid = false;
+        }
+
+        setFormErrors(formErrors);
+        return isValid;
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        if (!validateForm()) {
+            return;
+        }
 
         const headers = {
             'Content-Type': 'application/json'
@@ -87,7 +155,6 @@ const ModificarMedico = () => {
             entre_calle_inf: calleInferior,
             fecha_desde: fechaDesde,
             fecha_nacimiento: fechaNacimiento,
-            fecha_hasta: fechaHasta
         };
 
         try {
@@ -125,6 +192,7 @@ const ModificarMedico = () => {
                         </option>
                     ))}
                 </select>
+                {formErrors.localidad && <div className="ui pointing red basic label">{formErrors.localidad}</div>}
             </div>
         );
     };
@@ -146,6 +214,7 @@ const ModificarMedico = () => {
                                     onChange={(e) => setNombre(e.target.value)}
                                     placeholder="Nombre"
                                 />
+                                {formErrors.nombre && <div className="ui pointing red basic label">{formErrors.nombre}</div>}
                             </div>
                             <div className="field">
                                 <input
@@ -154,6 +223,7 @@ const ModificarMedico = () => {
                                     onChange={(e) => setApellido(e.target.value)}
                                     placeholder="Apellido"
                                 />
+                                {formErrors.apellido && <div className="ui pointing red basic label">{formErrors.apellido}</div>}
                             </div>
                         </div>
                     </div>
@@ -166,6 +236,7 @@ const ModificarMedico = () => {
                                 onChange={(e) => setDni(e.target.value)}
                                 placeholder="DNI"
                             />
+                            {formErrors.dni && <div className="ui pointing red basic label">{formErrors.dni}</div>}
                         </div>
                         <div className="eight wide field">
                             <label>Fecha de nacimiento</label>
@@ -174,6 +245,7 @@ const ModificarMedico = () => {
                                 value={fechaNacimiento}
                                 onChange={(e) => setFechaNacimiento(e.target.value)}
                             />
+                            {formErrors.fechaNacimiento && <div className="ui pointing red basic label">{formErrors.fechaNacimiento}</div>}
                         </div>
                     </div>
                     <h4 className="ui dividing header">Domicilio</h4>
@@ -186,14 +258,7 @@ const ModificarMedico = () => {
                                 value={fechaDesde}
                                 onChange={(e) => setFechaDesde(e.target.value)}
                             />
-                        </div>
-                        <div className="field">
-                            <label htmlFor="">Fecha hasta:</label>
-                            <input
-                                type="date"
-                                value={fechaHasta}
-                                onChange={(e) => setFechaHasta(e.target.value)}
-                            />
+                            {formErrors.fechaDesde && <div className="ui pointing red basic label">{formErrors.fechaDesde}</div>}
                         </div>
                     </div>
                     <div className="field">
@@ -202,29 +267,30 @@ const ModificarMedico = () => {
                             type="text"
                             value={direccion}
                             onChange={(e) => setDireccion(e.target.value)}
-                            placeholder="Calle 123"
+                            placeholder="Dirección"
                         />
+                        {formErrors.direccion && <div className="ui pointing red basic label">{formErrors.direccion}</div>}
                     </div>
-                    <div className="field">
-                        <div className="two fields">
-                            <div className="field">
-                                <label htmlFor="">Calle Superior </label>
-                                <input
-                                    type="text"
-                                    value={calleSuperior}
-                                    onChange={(e) => setCalleSuperior(e.target.value)}
-                                    placeholder="Calle"
-                                />
-                            </div>
-                            <div className="field">
-                                <label htmlFor="">Calle inferior </label>
-                                <input
-                                    type="text"
-                                    value={calleInferior}
-                                    onChange={(e) => setCalleInferior(e.target.value)}
-                                    placeholder="Calle"
-                                />
-                            </div>
+                    <div className="two fields">
+                        <div className="field">
+                            <label htmlFor="">Entre calle superior:</label>
+                            <input
+                                type="text"
+                                value={calleSuperior}
+                                onChange={(e) => setCalleSuperior(e.target.value)}
+                                placeholder="Entre calle superior"
+                            />
+                            {formErrors.calleSuperior && <div className="ui pointing red basic label">{formErrors.calleSuperior}</div>}
+                        </div>
+                        <div className="field">
+                            <label htmlFor="">Entre calle inferior:</label>
+                            <input
+                                type="text"
+                                value={calleInferior}
+                                onChange={(e) => setCalleInferior(e.target.value)}
+                                placeholder="Entre calle inferior"
+                            />
+                            {formErrors.calleInferior && <div className="ui pointing red basic label">{formErrors.calleInferior}</div>}
                         </div>
                     </div>
                     <div className="field">
@@ -233,47 +299,27 @@ const ModificarMedico = () => {
                             type="text"
                             value={telefono}
                             onChange={(e) => setTelefono(e.target.value)}
-                            placeholder="381-441122"
+                            placeholder="Teléfono"
                         />
+                        {formErrors.telefono && <div className="ui pointing red basic label">{formErrors.telefono}</div>}
                     </div>
                     <div className="field">
-                        <label>Email</label>
+                        <label>Mail</label>
                         <input
                             type="text"
                             value={mail}
                             onChange={(e) => setMail(e.target.value)}
-                            placeholder="JohnDoe@gmail.com"
+                            placeholder="Mail"
                         />
+                        {formErrors.mail && <div className="ui pointing red basic label">{formErrors.mail}</div>}
                     </div>
-                    <div className="field">
-                        <div className="two fields">
-                            <div className="field">
-                                <label>Número de matrícula</label>
-                                <input
-                                    type="text"
-                                    value={matricula}
-                                    onChange={(e) => setMatricula(e.target.value)}
-                                />
-                            </div>
-                            <div className="field">
-                                <label>Número de legajo </label>
-                                <input
-                                    type="text"
-                                    value={legajo}
-                                    onChange={(e) => setLegajo(e.target.value)}
-                                    placeholder="Legajo"
-                                />
-                            </div>
-                        </div>
-                    </div>
-                    <div className="ui center aligned segment">
-                        <button className="ui blue button" type="submit">
+                    <div className="ui header centered">
+                        <button type="submit" className="ui primary button">
                             Confirmar
                         </button>
                         <Link to="/medicos/listadomedicos" className="ui negative button">
                             Cancelar
                         </Link>
-                        <div className={`ui ${loaderState} inline loader`}></div>
                     </div>
                 </form>
             </div>

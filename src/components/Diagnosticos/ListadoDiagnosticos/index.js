@@ -55,10 +55,37 @@ const ListadoDiagnosticos = () => {
         return isValid;
     };
 
+    const getPaciente = async () => {
+        try {
+            const response = await api.get('/altapaciente');
+            const pacientes = response.data.message;
+
+            const paciente = pacientes.find(p => p.numero_afiliado === nroAfiliado);
+
+            if (!paciente) {
+                setinfoPaciente({});
+                setNoDiagnosticosMessage("El paciente no existe");
+                return false;
+            }
+
+            setinfoPaciente(paciente);
+            return true;
+        } catch (error) {
+            console.error("Error fetching paciente:", error);
+            swal("Error", "No se pudieron cargar los datos del paciente", "error");
+            return false;
+        }
+    };
+
     const getDiagnosticos = async (e) => {
         e.preventDefault();
 
         if (!validateForm()) {
+            return;
+        }
+
+        const pacienteExiste = await getPaciente();
+        if (!pacienteExiste) {
             return;
         }
 
@@ -75,7 +102,7 @@ const ListadoDiagnosticos = () => {
             const response = await api.get('/radiografias', { params }, { headers });
             setdiagnosticos(response.data);
             if (response.data.length === 0) {
-                setNoDiagnosticosMessage("El paciente no tiene diagnósticos.");
+                setNoDiagnosticosMessage("El paciente no tiene diagnósticos con ese médico.");
             } else {
                 setNoDiagnosticosMessage("");
             }
@@ -92,7 +119,7 @@ const ListadoDiagnosticos = () => {
                 <select className="ui selection dropdown" onChange={e => setmatricula(e.target.value)} value={matricula}>
                     <option value=''>Seleccione médico</option>
                     {listaMedicos.map(medico => (
-                        <option key={medico.numero_matricula} value={medico.numero_matricula}>{medico.nombre}</option>
+                        <option key={medico.numero_matricula} value={medico.numero_matricula}>{medico.nombre} {medico.apellido} - {medico.numero_matricula}</option>
                     ))}
                 </select>
                 {errors.matricula && <div className="ui pointing red basic label">{errors.matricula}</div>}
