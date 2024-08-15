@@ -201,7 +201,7 @@ const AltaPaciente = () => {
 
                             <div className="field">
                                 <label> Apellido</label>
-                                <input type="text" value={apellido} onChange={(e) => setApellido(e.target.value)} />
+                                <input type="text" value={apellido} onChange={(e) => setApellido(e.target.value)} placeholder='Apellido'/>
                                 {errors.apellido && <div className="ui pointing red basic label">{errors.apellido}</div>}
 
                             </div>

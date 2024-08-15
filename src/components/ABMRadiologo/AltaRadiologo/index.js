@@ -183,12 +183,12 @@ const AltaRadiologo = () => {
                         <div className="two fields">
                             <div className="field">
                                 <label>Nombre</label>
-                                <input type="text" value={nombre} onChange={e => setNombre(e.target.value)} />
+                                <input type="text" value={nombre} onChange={e => setNombre(e.target.value)} placeholder='Nombre'/>
                                 {errors.nombre && <div className="ui pointing red basic label">{errors.nombre}</div>}
                             </div>
                             <div className="field">
                                 <label>Apellido</label>
-                                <input type="text" value={apellido} onChange={e => setApellido(e.target.value)} />
+                                <input type="text" value={apellido} onChange={e => setApellido(e.target.value)} placeholder='Apellido'/>
                                 {errors.apellido && <div className="ui pointing red basic label">{errors.apellido}</div>}
                             </div>
                         </div>
@@ -216,41 +216,41 @@ const AltaRadiologo = () => {
                     </div>
                     <div className="field">
                         <label htmlFor="">Direccion</label>
-                        <input type="text" value={direccion} onChange={e => setDireccion(e.target.value)} />
+                        <input type="text" value={direccion} onChange={e => setDireccion(e.target.value)} placeholder='Calle 123'/>
                         {errors.direccion && <div className="ui pointing red basic label">{errors.direccion}</div>}
                     </div>
                     <div className="field">
                         <div className="two fields">
                             <div className="field">
                                 <label htmlFor="">Calle Superior</label>
-                                <input type="text" value={calleSuperior} onChange={e => setCalleSuperior(e.target.value)} />
+                                <input type="text" value={calleSuperior} onChange={e => setCalleSuperior(e.target.value)} placeholder='Calle'/>
                                 {errors.calleSuperior && <div className="ui pointing red basic label">{errors.calleSuperior}</div>}
                             </div>
                             <div className="field">
                                 <label htmlFor="">Calle Inferior</label>
-                                <input type="text" value={calleInferior} onChange={e => setCalleInferior(e.target.value)} />
+                                <input type="text" value={calleInferior} onChange={e => setCalleInferior(e.target.value)} placeholder='Calle'/>
                                 {errors.calleInferior && <div className="ui pointing red basic label">{errors.calleInferior}</div>}
                             </div>
                         </div>
                     </div>
                     <div className="field">
-                        <label htmlFor="">Telefono</label>
-                        <input type='text' value={telefono} onChange={e => setTelefono(e.target.value)} />
+                        <label htmlFor="">Teléfono</label>
+                        <input type='text' value={telefono} onChange={e => setTelefono(e.target.value)} placeholder='381-441122'/>
                         {errors.telefono && <div className="ui pointing red basic label">{errors.telefono}</div>}
                     </div>
                     <div className="field">
                         <label htmlFor="">Correo electrónico</label>
-                        <input type='text' value={mail} onChange={e => setMail(e.target.value)} />
+                        <input type='text' value={mail} onChange={e => setMail(e.target.value)} placeholder='JohnDoe@gmail.com'/>
                         {errors.mail && <div className="ui pointing red basic label">{errors.mail}</div>}
                     </div>
                     <div className="field">
-                        <label htmlFor="">Matrícula</label>
+                        <label htmlFor="">Número de matrícula</label>
                         <input type='text' value={matricula} onChange={e => setMatricula(e.target.value)} />
                         {errors.matricula && <div className="ui pointing red basic label">{errors.matricula}</div>}
                     </div>
                     <div className="field">
                         <label htmlFor="">Legajo</label>
-                        <input type='text' value={legajo} onChange={e => setLegajo(e.target.value)} />
+                        <input type='text' value={legajo} onChange={e => setLegajo(e.target.value)} placeholder='Legajo'/>
                         {errors.legajo && <div className="ui pointing red basic label">{errors.legajo}</div>}
                     </div>
                     <div className="ui center aligned segment">

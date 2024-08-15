@@ -34,7 +34,7 @@ const AltaSecretario = () => {
         };
         fetchLocalidades();
     }, []);
-    
+
     const validateForm = () => {
         let formErrors = {};
         let isValid = true;
@@ -139,7 +139,7 @@ const AltaSecretario = () => {
                     email: mail,
                     role: 'SECRETARIO'
                 };
-        
+
                 const responseUser = await api.post('/register', user, { headers });
                 if (responseUser.status === 201) {
                     swal("Éxito", "Secretario creado exitosamente", "success").then((ok) => {
@@ -171,9 +171,9 @@ const AltaSecretario = () => {
             <div className="ui segment">
                 <div className="ui center aligned form">
                     <div className="field">
-                        <label>Nombre completo</label>
                         <div className="two fields">
                             <div className="field">
+                                <label>Nombre completo</label>
                                 <input
                                     type="text"
                                     value={nombre}
@@ -183,6 +183,7 @@ const AltaSecretario = () => {
                                 {errors.nombre && <div className="ui pointing red basic label">{errors.nombre}</div>}
                             </div>
                             <div className="field">
+                                <label>Apellido</label>
                                 <input
                                     type="text"
                                     value={apellido}

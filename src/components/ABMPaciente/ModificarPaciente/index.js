@@ -206,9 +206,10 @@ const ModificarPaciente = () => {
             <div className="ui segment">
                 <form className="ui center aligned form" onSubmit={handleSubmit}>
                     <div className="field">
-                        <label>Nombre completo</label>
                         <div className="two fields">
+                            
                             <div className="field">
+                            <label>Nombre</label>
                                 <input
                                     type="text"
                                     value={nombre}
@@ -218,6 +219,7 @@ const ModificarPaciente = () => {
                                 {errors.nombre && <div className="ui pointing red basic label">{errors.nombre}</div>}
                             </div>
                             <div className="field">
+                            <label>Apellido</label>
                                 <input
                                     type="text"
                                     value={apellido}
@@ -253,7 +255,7 @@ const ModificarPaciente = () => {
                     {renderLocalidades()}
                     <div className="two fields">
                         <div className="field">
-                            <label>Fecha desde:</label>
+                            <label>Fecha desde que vive en ese domicilio:</label>
                             <input
                                 type="date"
                                 value={fechaDesde}
@@ -292,7 +294,6 @@ const ModificarPaciente = () => {
                             {errors.calleInferior && <div className="ui pointing red basic label">{errors.calleInferior}</div>}
                         </div>
                     </div>
-                    <h4 className="ui dividing header">Contacto</h4>
                     <div className="field">
                         <label>Teléfono</label>
                         <input
@@ -304,7 +305,7 @@ const ModificarPaciente = () => {
                         {errors.telefono && <div className="ui pointing red basic label">{errors.telefono}</div>}
                     </div>
                     <div className="field">
-                        <label>Mail</label>
+                        <label>E-mail</label>
                         <input
                             type="email"
                             value={mail}
