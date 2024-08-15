@@ -186,12 +186,12 @@ const ModificarSecretario = () => {
                         <div className="two fields">
                             <div className="field">
                                 <label>Nombre</label>
-                                <input type="text" value={nombre} onChange={e => setNombre(e.target.value)} />
+                                <input type="text" value={nombre} onChange={e => setNombre(e.target.value)} placeholder="Nombre" />
                                 {formErrors.nombre && <div className="ui pointing red basic label">{formErrors.nombre}</div>}
                             </div>
                             <div className="field">
                                 <label>Apellido</label>
-                                <input type="text" value={apellido} onChange={e => setApellido(e.target.value)} />
+                                <input type="text" value={apellido} onChange={e => setApellido(e.target.value)} placeholder="Apellido"/>
                                 {formErrors.apellido && <div className="ui pointing red basic label">{formErrors.apellido}</div>}
                             </div>
                         </div>
@@ -213,15 +213,14 @@ const ModificarSecretario = () => {
                     <h4 className="ui dividing header">Domicilio</h4>
                     <div className="field">
                         {renderLocalidades()}
-                        {formErrors.localidad && <div className="ui pointing red basic label">{formErrors.localidad}</div>}
                     </div>
                     <div className="field">
-                        <label htmlFor="">Fecha desde:</label>
+                        <label htmlFor="">Fecha desde que vive en ese domicilio:</label>
                         <input type="date" value={fechaDesde} onChange={e => setFechaDesde(e.target.value)} />
                         {formErrors.fechaDesde && <div className="ui pointing red basic label">{formErrors.fechaDesde}</div>}
                     </div>
                     <div className="field">
-                        <label htmlFor="">Direccion</label>
+                        <label htmlFor="">Dirección</label>
                         <input type="text" value={direccion} onChange={e => setDireccion(e.target.value)} />
                         {formErrors.direccion && <div className="ui pointing red basic label">{formErrors.direccion}</div>}
                     </div>
@@ -242,7 +241,7 @@ const ModificarSecretario = () => {
                         </div>
                     </div>
                     <div className="field">
-                        <label htmlFor="">Telefono</label>
+                        <label htmlFor="">Teléfono</label>
                         <input type='text' value={telefono} onChange={e => setTelefono(e.target.value)} />
                         {formErrors.telefono && <div className="ui pointing red basic label">{formErrors.telefono}</div>}
                     </div>

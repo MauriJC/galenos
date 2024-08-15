@@ -205,9 +205,9 @@ const ModificarMedico = () => {
             <div className="ui segment">
                 <form className="ui center aligned form" onSubmit={handleSubmit}>
                     <div className="field">
-                        <label>Nombre completo</label>
                         <div className="two fields">
                             <div className="field">
+                            <label>Nombre</label>
                                 <input
                                     type="text"
                                     value={nombre}
@@ -217,6 +217,7 @@ const ModificarMedico = () => {
                                 {formErrors.nombre && <div className="ui pointing red basic label">{formErrors.nombre}</div>}
                             </div>
                             <div className="field">
+                            <label>Apellido</label>
                                 <input
                                     type="text"
                                     value={apellido}
@@ -252,7 +253,7 @@ const ModificarMedico = () => {
                     {renderLocalidades()}
                     <div className="two fields">
                         <div className="field">
-                            <label htmlFor="">Fecha desde:</label>
+                            <label htmlFor="">Fecha desde que vive en ese domicilio:</label>
                             <input
                                 type="date"
                                 value={fechaDesde}
@@ -273,7 +274,7 @@ const ModificarMedico = () => {
                     </div>
                     <div className="two fields">
                         <div className="field">
-                            <label htmlFor="">Entre calle superior:</label>
+                            <label htmlFor="">Calle superior</label>
                             <input
                                 type="text"
                                 value={calleSuperior}
@@ -283,7 +284,7 @@ const ModificarMedico = () => {
                             {formErrors.calleSuperior && <div className="ui pointing red basic label">{formErrors.calleSuperior}</div>}
                         </div>
                         <div className="field">
-                            <label htmlFor="">Entre calle inferior:</label>
+                            <label htmlFor="">Calle inferior</label>
                             <input
                                 type="text"
                                 value={calleInferior}
@@ -304,7 +305,7 @@ const ModificarMedico = () => {
                         {formErrors.telefono && <div className="ui pointing red basic label">{formErrors.telefono}</div>}
                     </div>
                     <div className="field">
-                        <label>Mail</label>
+                        <label>E-mail</label>
                         <input
                             type="text"
                             value={mail}
@@ -312,6 +313,28 @@ const ModificarMedico = () => {
                             placeholder="Mail"
                         />
                         {formErrors.mail && <div className="ui pointing red basic label">{formErrors.mail}</div>}
+                    </div>
+                    <div className="field">
+                        <label>Número de Matrícula</label>
+                        <input
+                            type="text"
+                            value={matricula}
+                            onChange={e => setMatricula(e.target.value)}
+                            placeholder="Matrícula"
+                            readOnly disabled
+                        />
+                        {formErrors.matricula && <div className="ui pointing red basic label">{formErrors.matricula}</div>}
+                    </div>
+                   
+                    <div className="field">
+                        <label>Legajo</label>
+                        <input
+                            type="text"
+                            value={legajo}
+                            onChange={e => setLegajo(e.target.value)}
+                            placeholder="Legajo"
+                            readOnly disabled
+                        />
                     </div>
                     <div className="ui header centered">
                         <button type="submit" className="ui primary button">

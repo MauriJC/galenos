@@ -144,7 +144,7 @@ const AltaMedico = () => {
                     email: mail,
                     role: 'MEDICO' // Asignar el rol correspondiente
                 };
-    
+
                 const responseUser = await api.post('/register', user, { headers });
                 if (responseUser.status === 201) {
                     swal("Éxito", responseUser.data.message, "success").then((ok) => {
@@ -186,16 +186,20 @@ const AltaMedico = () => {
             </div>
             <div className="ui segment">
                 <div className="ui center aligned form">
-                    <div className="field">
-                        <label>Nombre completo</label>
+                <div className="field">
                         <div className="two fields">
                             <div className="field">
+                                <label> Nombre</label>
                                 <input type="text" value={nombre} onChange={(e) => setNombre(e.target.value)} placeholder='Nombre' />
                                 {errors.nombre && <div className="ui pointing red basic label">{errors.nombre}</div>}
+
                             </div>
+
                             <div className="field">
+                                <label> Apellido</label>
                                 <input type="text" value={apellido} onChange={(e) => setApellido(e.target.value)} placeholder='Apellido' />
                                 {errors.apellido && <div className="ui pointing red basic label">{errors.apellido}</div>}
+
                             </div>
                         </div>
                     </div>

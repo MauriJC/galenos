@@ -42,32 +42,33 @@ const ModificarRadiologo = () => {
     };
 
     const getRadiologo = async () => {
-        const headers = {
-            "Content-Type": "application/json"
-        };
-
-        const params = {
-            numero_matricula: nmatricula
-        };
-
-        const response = await api.get(`/radiologos`, { params }, { headers });
-        const datos = response.data;
-        setApellido(datos.apellido);
-        setDni(datos.dni);
-        setMail(datos.email);
-        setFechaNacimiento(datos.fecha_nacimiento);
-        setLegajo(datos.legajo);
-        setNombre(datos.nombre);
-        setMatricula(datos.numero_matricula);
-        setTelefono(datos.telefono);
-        setId(datos.id);
-        setDireccion(datos.direccion); 
-        setLocalidad(datos.localidad); 
-        setCalleSuperior(datos.entre_calle_sup);
-        setCalleInferior(datos.entre_calle_inf);
-        setFechaDesde(datos.fecha_desde);
+        try {
+            const response = await api.get(`/radiologos`, { params: { numero_matricula: nmatricula } });
+            const datos = response.data;
+    
+            setNombre(datos.nombre);
+            setApellido(datos.apellido);
+            setDni(datos.dni);
+            setTelefono(datos.telefono);
+            setMail(datos.email);
+            setMatricula(datos.numero_matricula);
+            setLegajo(datos.legajo);
+            setFechaNacimiento(datos.fecha_nacimiento);
+            setFechaDesde(datos.fecha_alta);
+            setId(datos.id);
+    
+            if (datos.domicilio) {
+                setDireccion(datos.domicilio.direccion);
+                if (datos.domicilio.localidad) {
+                    setLocalidad(datos.domicilio.localidad.id);  // Usa el ID de la localidad
+                }
+            }
+        } catch (error) {
+            console.error("Error fetching radiologo:", error);
+            swal("Error", "No se pudo cargar la información del radiólogo", "error");
+        }
     };
-
+    
     const validateForm = () => {
         let errors = {};
         if (!nombre) errors.nombre = "El nombre es requerido";
@@ -87,7 +88,7 @@ const ModificarRadiologo = () => {
     const putInfoRadiologo = async (e) => {
         e.preventDefault();
         if (!validateForm()) return;
-
+    
         const radiologo = {
             nombre,
             apellido,
@@ -96,21 +97,20 @@ const ModificarRadiologo = () => {
             telefono,
             email: mail,
             numero_matricula: matricula,
-            localidad,
+            localidad,  // Asegúrate de que este sea el ID de la localidad
             entre_calle_sup: calleSuperior,
             entre_calle_inf: calleInferior,
             fecha_desde: fechaDesde,
             fecha_nacimiento: fechaNacimiento,
             legajo
         };
-
+    
         const headers = {
             "Content-Type": "application/json"
         };
-
+    
         await api.put(`/modificaradiologo/${id}`, radiologo, { headers })
             .then(response => {
-                console.log(response);
                 if (response.status === 200) {
                     swal("Éxito", 'Radiólogo modificado con éxito', 'success').then(ok => {
                         if (ok) {
@@ -118,13 +118,14 @@ const ModificarRadiologo = () => {
                         }
                     });
                 }
-
+    
                 if (response.status === 500) {
                     swal(`${response.status}`, 'Error 500', 'error');
                 }
             })
             .catch(error => console.log(error));
     };
+    
 
     const renderLocalidades = () => (
         <div className="field">
@@ -132,12 +133,13 @@ const ModificarRadiologo = () => {
             <select className="ui fluid dropdown" onChange={e => setLocalidad(e.target.value)} value={localidad}>
                 <option value="">Seleccione Localidad</option>
                 {localidades.map(loc => (
-                    <option value={loc.nombre} key={loc.id}>{loc.nombre}</option>
+                    <option value={loc.id} key={loc.id}>{loc.nombre}</option>  // Usa el ID para el valor
                 ))}
             </select>
             {formErrors.localidad && <div className="ui pointing red basic label">{formErrors.localidad}</div>}
         </div>
     );
+    
 
     return (
         <div className='ui container'>
@@ -193,6 +195,15 @@ const ModificarRadiologo = () => {
                     <h4 className="ui dividing header">Domicilio</h4>
                     {renderLocalidades()}
                     <div className="field">
+                        <label>Fecha desde que vive en ese domicilio:</label>
+                        <input
+                            type="date"
+                            value={fechaDesde}
+                            onChange={e => setFechaDesde(e.target.value)}
+                        />
+                        {formErrors.fechaDesde && <div className="ui pointing red basic label">{formErrors.fechaDesde}</div>}
+                    </div>
+                    <div className="field">
                         <label>Dirección</label>
                         <input
                             type="text"
@@ -202,6 +213,7 @@ const ModificarRadiologo = () => {
                         />
                         {formErrors.direccion && <div className="ui pointing red basic label">{formErrors.direccion}</div>}
                     </div>
+
                     <div className="two fields">
                         <div className="field">
                             <label>Calle superior</label>
@@ -235,7 +247,7 @@ const ModificarRadiologo = () => {
                         {formErrors.telefono && <div className="ui pointing red basic label">{formErrors.telefono}</div>}
                     </div>
                     <div className="field">
-                        <label>Mail</label>
+                        <label>E-mail</label>
                         <input
                             type="email"
                             value={mail}
@@ -251,18 +263,11 @@ const ModificarRadiologo = () => {
                             value={matricula}
                             onChange={e => setMatricula(e.target.value)}
                             placeholder="Matrícula"
+                            readOnly disabled
                         />
                         {formErrors.matricula && <div className="ui pointing red basic label">{formErrors.matricula}</div>}
                     </div>
-                    <div className="field">
-                        <label>Fecha desde</label>
-                        <input
-                            type="date"
-                            value={fechaDesde}
-                            onChange={e => setFechaDesde(e.target.value)}
-                        />
-                        {formErrors.fechaDesde && <div className="ui pointing red basic label">{formErrors.fechaDesde}</div>}
-                    </div>
+                   
                     <div className="field">
                         <label>Legajo</label>
                         <input
@@ -270,6 +275,7 @@ const ModificarRadiologo = () => {
                             value={legajo}
                             onChange={e => setLegajo(e.target.value)}
                             placeholder="Legajo"
+                            readOnly disabled
                         />
                     </div>
                     <div className="ui header centered">
