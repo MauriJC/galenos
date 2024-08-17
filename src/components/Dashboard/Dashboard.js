@@ -62,7 +62,7 @@ const Dashboard = () => {
     const fetchData = async () => {
       try {
         const token = localStorage.getItem('Authorization'); // O de donde obtengas el token
-        const diagnosticosResponse = await axios.get('http://localhost:3001/diagnosticos', {
+        const diagnosticosResponse = await axios.get('http://142.93.53.173/diagnosticos', {
           headers: {
             Authorization: token,
           },
@@ -103,7 +103,7 @@ const Dashboard = () => {
           ],
         });
 
-        const response = await axios.get('http://localhost:3001/pacientesporlocalidad', {
+        const response = await axios.get('http://142.93.53.173/pacientesporlocalidad', {
           headers: {
             Authorization: token,
           },
