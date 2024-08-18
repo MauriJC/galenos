@@ -13,7 +13,6 @@ const AltaPaciente = () => {
     const [codigoPostal, setCodigoPostal] = useState(''); 
     const [calleSuperior, setCalleSuperior] = useState('');
     const [calleInferior, setCalleInferior] = useState('');
-    const [fechaDesde, setFechaDesde] = useState('');
     const [telefono, setTelefono] = useState('');
     const [mail, setMail] = useState('');
     const [fechaNacimiento, setFechaNacimiento] = useState('');
@@ -30,6 +29,7 @@ const AltaPaciente = () => {
         try {
             const response = await api.get('/localidades');
             setLocalidades(response.data);
+            
         } catch (error) {
             console.error("Error fetching localidades:", error);
             swal("Error", "No se pudieron cargar las localidades", "error");
@@ -91,10 +91,7 @@ const AltaPaciente = () => {
             isValid = false;
         }
         
-        if (!fechaDesde) {
-            formErrors.fechaDesde = "La fecha desde que vive en ese domicilio es requerida";
-            isValid = false;
-        }
+
         
 
         setErrors(formErrors);
@@ -105,7 +102,8 @@ const AltaPaciente = () => {
         const selectedLocalidad = e.target.value;
         setLocalidad(selectedLocalidad);
 
-        const localidadObj = localidades.find(loc => loc.nombre === selectedLocalidad);
+        const localidadObj = localidades.find(loc => loc.id == selectedLocalidad);
+        
         if (localidadObj) {
             setCodigoPostal(localidadObj.codigo_postal);
         } else {
@@ -120,7 +118,7 @@ const AltaPaciente = () => {
                 <select className="ui fluid dropdown" onChange={handleLocalidadChange} value={localidad}>
                     <option value="">Seleccione Localidad</option>
                     {localidades.map(loc => (
-                        <option value={loc.nombre} key={loc.id}>{loc.nombre}</option>
+                        <option value={loc.id} key={loc.id}>{loc.nombre}</option>
                     ))}
                 </select>
                 {errors.localidad && <div className="ui pointing red basic label">{errors.localidad}</div>}
@@ -147,11 +145,10 @@ const AltaPaciente = () => {
             dni,
             telefono,
             email: mail,
-            localidad,
+            localidad:parseInt(localidad),
             codigo_postal: codigoPostal, 
             entre_calle_sup: calleSuperior,
             entre_calle_inf: calleInferior,
-            fecha_desde: fechaDesde,
             fecha_nacimiento: fechaNacimiento,
             num_afiliado,
             provincia: 'TUCUMAN',
@@ -165,7 +162,6 @@ const AltaPaciente = () => {
         try {
             const response = await api.post(`/altapaciente`, paciente, { headers });
             console.log('response', response);
-            console.log(paciente);
 
             if (response.data.status === '200') {
                 swal("Éxito", "Paciente creado exitosamente", "success").then(
@@ -224,6 +220,19 @@ const AltaPaciente = () => {
                             </div>
                         </div>
                     </div>
+                    <div className="field">
+                        <label>Teléfono</label>
+                        <input type="text" value={telefono} onChange={e => setTelefono(e.target.value)} placeholder='381-441122' />
+                        {errors.telefono && <div className="ui pointing red basic label">{errors.telefono}</div>}
+
+                    </div>
+
+                    <div className="field">
+                        <label>Email</label>
+                        <input type="text" value={mail} onChange={e => setMail(e.target.value)} placeholder='JohnDoe@gmail.com' />
+                        {errors.mail && <div className="ui pointing red basic label">{errors.mail}</div>}
+
+                    </div>
 
                     <h4 className="ui dividing header">Domicilio</h4>
 
@@ -231,11 +240,6 @@ const AltaPaciente = () => {
                         {renderLocalidades()}
                     </div>
 
-                    <div className="field">
-                        <label htmlFor="">Fecha desde que vive en ese domicilio:</label>
-                        <input type="date" value={fechaDesde} onChange={e => setFechaDesde(e.target.value)} />
-                        {errors.fechaDesde && <div className="ui pointing red basic label">{errors.fechaDesde}</div>}
-                    </div>
 
                     <div className="field">
                         <label>Direccion</label>
@@ -259,19 +263,7 @@ const AltaPaciente = () => {
                         </div>
                     </div>
 
-                    <div className="field">
-                        <label>Teléfono</label>
-                        <input type="text" value={telefono} onChange={e => setTelefono(e.target.value)} placeholder='381-441122' />
-                        {errors.telefono && <div className="ui pointing red basic label">{errors.telefono}</div>}
 
-                    </div>
-
-                    <div className="field">
-                        <label>Email</label>
-                        <input type="text" value={mail} onChange={e => setMail(e.target.value)} placeholder='JohnDoe@gmail.com' />
-                        {errors.mail && <div className="ui pointing red basic label">{errors.mail}</div>}
-
-                    </div>
                     
                     <div className="field">
                         <label>Código Postal</label>

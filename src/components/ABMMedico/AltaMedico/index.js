@@ -17,7 +17,6 @@ const AltaMedico = () => {
     const [localidad, setLocalidad] = useState('');
     const [calleSuperior, setCalleSuperior] = useState('');
     const [calleInferior, setCalleInferior] = useState('');
-    const [fechaDesde, setFechaDesde] = useState('');
     const [fechaNacimiento, setFechaNacimiento] = useState('');
     const [loaderState, setLoaderState] = useState('disabled');
     const [localidades, setLocalidades] = useState([]);
@@ -98,11 +97,6 @@ const AltaMedico = () => {
             isValid = false;
         }
 
-        if (!fechaDesde) {
-            formErrors.fechaDesde = "La fecha desde que vive en ese domicilio es requerida";
-            isValid = false;
-        }
-
         if (!legajo || !/^\d+$/.test(legajo)) {
             formErrors.legajo = "Legajo es requerido y debe ser un número";
             isValid = false;
@@ -124,9 +118,9 @@ const AltaMedico = () => {
         const medico = {
             nombre, apellido, dni, direccion, telefono, email: mail, numero_matricula: matricula,
             legajo, localidad, entre_calle_sup: calleSuperior, entre_calle_inf: calleInferior,
-            fecha_desde: fechaDesde, fecha_nacimiento: fechaNacimiento
+            fecha_nacimiento: fechaNacimiento
         };
-
+        
         const headers = {
             "Content-Type": "application/json"
         };
@@ -147,7 +141,7 @@ const AltaMedico = () => {
 
                 const responseUser = await api.post('/register', user, { headers });
                 if (responseUser.status === 201) {
-                    swal("Éxito", responseUser.data.message, "success").then((ok) => {
+                    swal("Éxito", responseMedico.data.message, "success").then((ok) => {
                         if (ok) {
                             navigate('/medicos/listadomedicos');
                         }
@@ -172,7 +166,7 @@ const AltaMedico = () => {
             <select className="ui fluid dropdown" onChange={(e) => setLocalidad(e.target.value)} value={localidad}>
                 <option value="">Seleccione Localidad</option>
                 {localidades.map(loc => (
-                    <option value={loc.nombre} key={loc.id}>{loc.nombre}</option>
+                    <option value={loc.id} key={loc.id}>{loc.nombre}</option>
                 ))}
             </select>
             {errors.localidad && <div className="ui pointing red basic label">{errors.localidad}</div>}
@@ -186,7 +180,7 @@ const AltaMedico = () => {
             </div>
             <div className="ui segment">
                 <div className="ui center aligned form">
-                <div className="field">
+                    <div className="field">
                         <div className="two fields">
                             <div className="field">
                                 <label> Nombre</label>
@@ -215,32 +209,6 @@ const AltaMedico = () => {
                             {errors.fechaNacimiento && <div className="ui pointing red basic label">{errors.fechaNacimiento}</div>}
                         </div>
                     </div>
-                    <h4 className="ui dividing header">Domicilio</h4>
-                    {renderLocalidades()}
-                    <div className="field">
-                        <label htmlFor="">Fecha desde que vive en ese domicilio:</label>
-                        <input type="date" value={fechaDesde} onChange={e => setFechaDesde(e.target.value)} />
-                        {errors.fechaDesde && <div className="ui pointing red basic label">{errors.fechaDesde}</div>}
-                    </div>
-                    <div className="field">
-                        <label>Dirección</label>
-                        <input type="text" value={direccion} onChange={e => setDireccion(e.target.value)} placeholder='Calle 123' />
-                        {errors.direccion && <div className="ui pointing red basic label">{errors.direccion}</div>}
-                    </div>
-                    <div className="field">
-                        <div className="two fields">
-                            <div className="field">
-                                <label htmlFor="">Calle Superior</label>
-                                <input type="text" value={calleSuperior} onChange={(e) => setCalleSuperior(e.target.value)} placeholder='Calle' />
-                                {errors.calleSuperior && <div className="ui pointing red basic label">{errors.calleSuperior}</div>}
-                            </div>
-                            <div className="field">
-                                <label htmlFor="">Calle Inferior</label>
-                                <input type="text" value={calleInferior} onChange={(e) => setCalleInferior(e.target.value)} placeholder='Calle' />
-                                {errors.calleInferior && <div className="ui pointing red basic label">{errors.calleInferior}</div>}
-                            </div>
-                        </div>
-                    </div>
                     <div className="field">
                         <label>Teléfono</label>
                         <input type="text" value={telefono} onChange={e => setTelefono(e.target.value)} placeholder='381-441122' />
@@ -265,11 +233,31 @@ const AltaMedico = () => {
                             </div>
                         </div>
                     </div>
-                </div>
-                <div className="ui center aligned segment">
-                    <button className='ui blue button' onClick={postInfoMedico}>Confirmar</button>
-                    <Link to='/medicos/listadomedicos' className='ui negative button'>Cancelar</Link>
-                    <div className={`ui ${loaderState} inline loader`}></div>
+                    <h4 className="ui dividing header">Domicilio</h4>
+                    {renderLocalidades()}
+                    <div className="field">
+                        <label>Dirección</label>
+                        <input type="text" value={direccion} onChange={(e) => setDireccion(e.target.value)} placeholder='Calle 123' />
+                        {errors.direccion && <div className="ui pointing red basic label">{errors.direccion}</div>}
+                    </div>
+                    <div className="two fields">
+                    <div className="field">
+                        <label>Calle superior</label>
+                        <input type="text" value={calleSuperior} onChange={(e) => setCalleSuperior(e.target.value)} placeholder='Calle superior' />
+                        {errors.calleSuperior && <div className="ui pointing red basic label">{errors.calleSuperior}</div>}
+                    </div>
+                    <div className="field">
+                        <label>Calle inferior</label>
+                        <input type="text" value={calleInferior} onChange={(e) => setCalleInferior(e.target.value)} placeholder='Calle inferior' />
+                        {errors.calleInferior && <div className="ui pointing red basic label">{errors.calleInferior}</div>}
+                    </div>
+                    </div>
+
+                    <div className="ui header centered">
+                        <button className='ui blue button' onClick={postInfoMedico}>Confirmar</button>
+                        <Link to='/medicos/listadomedicos' className='ui negative button'>Cancelar</Link>
+
+                    </div>
                 </div>
             </div>
         </div>

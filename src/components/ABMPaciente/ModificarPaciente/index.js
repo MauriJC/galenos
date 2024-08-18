@@ -19,7 +19,6 @@ const ModificarPaciente = () => {
     const [localidad, setLocalidad] = useState('');
     const [calleSuperior, setCalleSuperior] = useState('');
     const [calleInferior, setCalleInferior] = useState('');
-    const [fechaDesde, setFechaDesde] = useState('');
     const [localidades, setLocalidades] = useState([]);
     const [errors, setErrors] = useState({});
 
@@ -35,6 +34,7 @@ const ModificarPaciente = () => {
         } catch (error) {
             console.error('Error fetching localidades:', error);
             swal('Error', 'No se pudieron cargar las localidades', 'error');
+            
         }
     };
 
@@ -47,16 +47,15 @@ const ModificarPaciente = () => {
                 setNombre(paciente.nombre);
                 setApellido(paciente.apellido);
                 setDni(paciente.dni);
-                setDireccion(paciente.direccion);
+                setDireccion(paciente.domicilio.direccion);
                 setTelefono(paciente.telefono);
                 setMail(paciente.email);
                 setFechaNacimiento(paciente.fecha_nacimiento);
                 setNroAfiliado(paciente.numero_afiliado);
                 setId(paciente.id ? paciente.id : '');
-                setLocalidad(paciente.localidad);
-                setCalleSuperior(paciente.entre_calle_sup);
-                setCalleInferior(paciente.entre_calle_inf);
-                setFechaDesde(paciente.fecha_desde);
+                setLocalidad(paciente.domicilio.localidad);
+                setCalleSuperior(paciente.domicilio.entre_calle_sup);
+                setCalleInferior(paciente.domicilio.entre_calle_inf);
             } else {
                 throw new Error("Paciente no encontrado");
             }
@@ -120,11 +119,6 @@ const ModificarPaciente = () => {
             isValid = false;
         }
 
-        if (!fechaDesde) {
-            formErrors.fechaDesde = "La fecha desde que vive en ese domicilio es requerida";
-            isValid = false;
-        }
-
         setErrors(formErrors);
         return isValid;
     };
@@ -146,20 +140,21 @@ const ModificarPaciente = () => {
             nombre,
             apellido,
             dni,
-            direccion,
             telefono,
             email: mail,
             fecha_nacimiento: fechaNacimiento,
             numero_afiliado: nroAfiliado,
             id: numericId,
-            localidad,
-            entre_calle_sup: calleSuperior,
-            entre_calle_inf: calleInferior,
-            fecha_desde: fechaDesde
+            domicilio: {
+                direccion,
+                localidad,
+                entre_calle_sup: calleSuperior,
+                entre_calle_inf: calleInferior
+            }
         };
-
+        
         try {
-            const response = await api.put(`/modificarpaciente/${numericId}`, paciente, { headers: { 'Content-Type': 'application/json' } });
+            const response = await api.patch(`/modificarpaciente/${numericId}/update`, paciente, { headers: { 'Content-Type': 'application/json' } });
             if (response.status === 200) {
                 swal('Éxito', 'Paciente modificado exitosamente', 'success').then(ok => {
                     if (ok) navigate('/pacientes/listadopacientes');
@@ -188,7 +183,7 @@ const ModificarPaciente = () => {
                 >
                     <option value="">Seleccione Localidad</option>
                     {localidades.map(loc => (
-                        <option key={loc.id} value={loc.nombre}>
+                        <option key={loc.id} value={loc.id}>
                             {loc.nombre}
                         </option>
                     ))}
@@ -207,9 +202,9 @@ const ModificarPaciente = () => {
                 <form className="ui center aligned form" onSubmit={handleSubmit}>
                     <div className="field">
                         <div className="two fields">
-                            
+
                             <div className="field">
-                            <label>Nombre</label>
+                                <label>Nombre</label>
                                 <input
                                     type="text"
                                     value={nombre}
@@ -219,7 +214,7 @@ const ModificarPaciente = () => {
                                 {errors.nombre && <div className="ui pointing red basic label">{errors.nombre}</div>}
                             </div>
                             <div className="field">
-                            <label>Apellido</label>
+                                <label>Apellido</label>
                                 <input
                                     type="text"
                                     value={apellido}
@@ -251,19 +246,29 @@ const ModificarPaciente = () => {
                             {errors.fechaNacimiento && <div className="ui pointing red basic label">{errors.fechaNacimiento}</div>}
                         </div>
                     </div>
+                    <div className="field">
+                        <label>Teléfono</label>
+                        <input
+                            type="text"
+                            value={telefono}
+                            onChange={(e) => setTelefono(e.target.value)}
+                            placeholder="Teléfono"
+                        />
+                        {errors.telefono && <div className="ui pointing red basic label">{errors.telefono}</div>}
+                    </div>
+                    <div className="field">
+                        <label>E-mail</label>
+                        <input
+                            type="email"
+                            value={mail}
+                            onChange={(e) => setMail(e.target.value)}
+                            placeholder="example@example.com"
+                        />
+                        {errors.mail && <div className="ui pointing red basic label">{errors.mail}</div>}
+                    </div>
                     <h4 className="ui dividing header">Domicilio</h4>
                     {renderLocalidades()}
-                    <div className="two fields">
-                        <div className="field">
-                            <label>Fecha desde que vive en ese domicilio:</label>
-                            <input
-                                type="date"
-                                value={fechaDesde}
-                                onChange={(e) => setFechaDesde(e.target.value)}
-                            />
-                            {errors.fechaDesde && <div className="ui pointing red basic label">{errors.fechaDesde}</div>}
-                        </div>
-                    </div>
+
                     <div className="field">
                         <label>Dirección</label>
                         <input
@@ -294,26 +299,7 @@ const ModificarPaciente = () => {
                             {errors.calleInferior && <div className="ui pointing red basic label">{errors.calleInferior}</div>}
                         </div>
                     </div>
-                    <div className="field">
-                        <label>Teléfono</label>
-                        <input
-                            type="text"
-                            value={telefono}
-                            onChange={(e) => setTelefono(e.target.value)}
-                            placeholder="Teléfono"
-                        />
-                        {errors.telefono && <div className="ui pointing red basic label">{errors.telefono}</div>}
-                    </div>
-                    <div className="field">
-                        <label>E-mail</label>
-                        <input
-                            type="email"
-                            value={mail}
-                            onChange={(e) => setMail(e.target.value)}
-                            placeholder="example@example.com"
-                        />
-                        {errors.mail && <div className="ui pointing red basic label">{errors.mail}</div>}
-                    </div>
+
                     <div className="ui header centered">
                         <button className="ui button primary" type="submit">
                             Confirmar

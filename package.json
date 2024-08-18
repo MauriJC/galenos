@@ -44,5 +44,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "proxy": "https://2b0f2dd1e3885581c103701e72e0cfea.serveo.net"
 }

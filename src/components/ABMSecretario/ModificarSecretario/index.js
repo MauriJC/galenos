@@ -14,7 +14,7 @@ const ModificarSecretario = () => {
     const [telefono, setTelefono] = useState('');
     const [mail, setMail] = useState('');
     const [legajo, setLegajo] = useState('');
-    const [localidad, setLocalidad] = useState('');
+    const [localidad, setLocalidad] = useState(null); // Usa null en lugar de una cadena vacía
     const [calleSuperior, setCalleSuperior] = useState('');
     const [calleInferior, setCalleInferior] = useState('');
     const [fechaDesde, setFechaDesde] = useState('');
@@ -53,11 +53,11 @@ const ModificarSecretario = () => {
             setLegajo(sec.legajo);
             setNombre(sec.nombre);
             setTelefono(sec.telefono);
-            setDireccion(sec.direccion);
-            setLocalidad(sec.localidad);
-            setCalleSuperior(sec.entre_calle_sup);
-            setCalleInferior(sec.entre_calle_inf);
-            setFechaDesde(sec.fecha_desde);
+            setDireccion(sec.domicilio.direccion);
+            setLocalidad(sec.domicilio.localidad);
+            setCalleSuperior(sec.domicilio.entre_calle_sup);
+            setCalleInferior(sec.domicilio.entre_calle_inf);
+            
         } catch (error) {
             console.error("Error fetching secretario:", error);
             swal("Error", "No se pudo cargar el secretario", "error");
@@ -119,33 +119,39 @@ const ModificarSecretario = () => {
             isValid = false;
         }
 
-        if (!fechaDesde) {
-            formErrors.fechaDesde = "La fecha desde que vive en ese domicilio es requerida";
-            isValid = false;
-        }
-
         setFormErrors(formErrors);
         return isValid;
     };
 
     const putSecretario = async (e) => {
         e.preventDefault();
-
+    
         if (!validateForm()) {
             return;
         }
-
-
+    
         const secretario = {
-            nombre, apellido, dni, direccion, telefono, email: mail, legajo, localidad,
-            entre_calle_sup: calleSuperior, entre_calle_inf: calleInferior, fecha_desde: fechaDesde,
-            fecha_nacimiento: fechaNacimiento
+            id,
+            nombre,
+            apellido,
+            dni,
+            telefono,
+            email: mail,
+            legajo,
+            fecha_nacimiento: fechaNacimiento,
+            domicilio: {
+                direccion,
+                localidad,
+                entre_calle_sup: calleSuperior,
+                entre_calle_inf: calleInferior
+            }
         };
-
+    
         try {
             const headers = { "Content-Type": "application/json" };
-            const response = await api.put(`/modificarsecretario/${id}`, secretario, { headers });
-
+    
+            const response = await api.patch(`/modificarsecretario/${id}/update`, secretario, { headers });
+    
             if (response.status === 200) {
                 swal("Éxito", "Modificación de secretario exitosa", "success").then(ok => {
                     if (ok) {
@@ -160,14 +166,20 @@ const ModificarSecretario = () => {
             swal("Ha ocurrido un error", '', 'error');
         }
     };
+const handleLocalidadChange = (e) => {
+    const selectedValue = parseInt(e.target.value, 10); // Asegúrate de convertir a número
+    setLocalidad(selectedValue);
+    console.log('Localidad seleccionada:', selectedValue); // Debería ser un número
+};
 
     const renderLocalidades = () => (
         <div className="field">
             <label>Localidad</label>
-            <select className="ui fluid dropdown" onChange={e => setLocalidad(e.target.value)} value={localidad}>
+            <select className="ui fluid dropdown" onChange={e => {setLocalidad(e.target.value); }
+            } value={localidad}>
                 <option value="">Seleccione Localidad</option>
                 {localidades.map(loc => (
-                    <option value={loc.nombre} key={loc.id}>{loc.nombre}</option>
+                    <option value={loc.id} key={loc.id}>{loc.nombre}</option>
                 ))}
             </select>
             {formErrors.localidad && <div className="ui pointing red basic label">{formErrors.localidad}</div>}
@@ -210,15 +222,27 @@ const ModificarSecretario = () => {
                             </div>
                         </div>
                     </div>
+                    <div className="field">
+                        <label htmlFor="">Teléfono</label>
+                        <input type='text' value={telefono} onChange={e => setTelefono(e.target.value)} />
+                        {formErrors.telefono && <div className="ui pointing red basic label">{formErrors.telefono}</div>}
+                    </div>
+                    <div className="field">
+                        <label htmlFor="">E-mail</label>
+                        <input type="email" value={mail} onChange={e => setMail(e.target.value)} />
+                        {formErrors.mail && <div className="ui pointing red basic label">{formErrors.mail}</div>}
+
+                    </div>
+                    <div className="field">
+                        <label>Numero de Legajo</label>
+                        <input type="text" value={legajo} onChange={e => setLegajo(e.target.value)} readOnly disabled/>
+
+                    </div>
                     <h4 className="ui dividing header">Domicilio</h4>
                     <div className="field">
                         {renderLocalidades()}
                     </div>
-                    <div className="field">
-                        <label htmlFor="">Fecha desde que vive en ese domicilio:</label>
-                        <input type="date" value={fechaDesde} onChange={e => setFechaDesde(e.target.value)} />
-                        {formErrors.fechaDesde && <div className="ui pointing red basic label">{formErrors.fechaDesde}</div>}
-                    </div>
+
                     <div className="field">
                         <label htmlFor="">Dirección</label>
                         <input type="text" value={direccion} onChange={e => setDireccion(e.target.value)} />
@@ -240,22 +264,7 @@ const ModificarSecretario = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="field">
-                        <label htmlFor="">Teléfono</label>
-                        <input type='text' value={telefono} onChange={e => setTelefono(e.target.value)} />
-                        {formErrors.telefono && <div className="ui pointing red basic label">{formErrors.telefono}</div>}
-                    </div>
-                    <div className="field">
-                        <label htmlFor="">E-mail</label>
-                        <input type="email" value={mail} onChange={e => setMail(e.target.value)} />
-                        {formErrors.mail && <div className="ui pointing red basic label">{formErrors.mail}</div>}
 
-                    </div>
-                    <div className="field">
-                        <label>Numero de Legajo</label>
-                        <input type="text" value={legajo} onChange={e => setLegajo(e.target.value)} readOnly disabled/>
-
-                    </div>
                     <div className="ui header centered">
                         <button type="submit" className='ui blue button'>Confirmar</button>
                         <Link className='ui negative button' to='/secretarios/listadosecretarios'>Cancelar</Link>

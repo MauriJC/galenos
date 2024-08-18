@@ -1,9 +1,10 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://localhost:3001/'
+  baseURL: 'http://localhost:3001'
 });
-
+//  baseURL: 'https://d104-181-80-25-21.ngrok-free.app'
+//http://localhost:3001
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('Authorization');
   if (token) {

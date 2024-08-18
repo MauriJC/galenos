@@ -15,7 +15,6 @@ const AltaRadiologo = () => {
     const [localidad, setLocalidad] = useState('');
     const [calleSuperior, setCalleSuperior] = useState('');
     const [calleInferior, setCalleInferior] = useState('');
-    const [fechaDesde, setFechaDesde] = useState('');
     const [fechaNacimiento, setFechaNacimiento] = useState('');
     const [legajo, setLegajo] = useState('');
     const [localidades, setLocalidades] = useState([]);
@@ -96,10 +95,7 @@ const AltaRadiologo = () => {
             isValid = false;
         }
         
-        if (!fechaDesde) {
-            formErrors.fechaDesde = "La fecha desde que vive en ese domicilio es requerida";
-            isValid = false;
-        }
+
         
         if (!legajo || !/^\d+$/.test(legajo)) {
             formErrors.legajo = "Legajo es requerido y debe ser un número";
@@ -122,8 +118,9 @@ const AltaRadiologo = () => {
         const radiologo = {
             nombre, apellido, dni, direccion, telefono, email: mail, numero_matricula: matricula,
             localidad, entre_calle_sup: calleSuperior, entre_calle_inf: calleInferior,
-            fecha_desde: fechaDesde, fecha_nacimiento: fechaNacimiento, legajo
+             fecha_nacimiento: fechaNacimiento, legajo
         };
+        
         const headers = { "Content-Type": "application/json" };
         setLoaderState('active'); // Si tienes un estado para mostrar el loader
         try {
@@ -140,7 +137,7 @@ const AltaRadiologo = () => {
     
                 const responseUser = await api.post('/register', user, { headers });
                 if (responseUser.status === 201) {
-                    swal("Éxito", responseUser.data.message, "success").then((ok) => {
+                    swal("Éxito", responseRadiologo.data.message, "success").then((ok) => {
                         if (ok) {
                             navigate('/radiologos/listadoradiologos');
                         }
@@ -165,7 +162,7 @@ const AltaRadiologo = () => {
             <select className="ui fluid dropdown" onChange={e => setLocalidad(e.target.value)} value={localidad}>
                 <option value="">Seleccione Localidad</option>
                 {localidades.map(loc => (
-                    <option value={loc.nombre} key={loc.id}>{loc.nombre}</option>
+                    <option value={loc.id} key={loc.id}>{loc.nombre}</option>
                 ))}
             </select>
             {errors.localidad && <div className="ui pointing red basic label">{errors.localidad}</div>}
@@ -207,32 +204,6 @@ const AltaRadiologo = () => {
                             </div>
                         </div>
                     </div>
-                    <h4 className="ui dividing header">Domicilio</h4>
-                    {renderLocalidades()}
-                    <div className="field">
-                        <label htmlFor="">Fecha desde que vive en ese domicilio:</label>
-                        <input type="date" value={fechaDesde} onChange={e => setFechaDesde(e.target.value)} />
-                        {errors.fechaDesde && <div className="ui pointing red basic label">{errors.fechaDesde}</div>}
-                    </div>
-                    <div className="field">
-                        <label htmlFor="">Direccion</label>
-                        <input type="text" value={direccion} onChange={e => setDireccion(e.target.value)} placeholder='Calle 123'/>
-                        {errors.direccion && <div className="ui pointing red basic label">{errors.direccion}</div>}
-                    </div>
-                    <div className="field">
-                        <div className="two fields">
-                            <div className="field">
-                                <label htmlFor="">Calle Superior</label>
-                                <input type="text" value={calleSuperior} onChange={e => setCalleSuperior(e.target.value)} placeholder='Calle'/>
-                                {errors.calleSuperior && <div className="ui pointing red basic label">{errors.calleSuperior}</div>}
-                            </div>
-                            <div className="field">
-                                <label htmlFor="">Calle Inferior</label>
-                                <input type="text" value={calleInferior} onChange={e => setCalleInferior(e.target.value)} placeholder='Calle'/>
-                                {errors.calleInferior && <div className="ui pointing red basic label">{errors.calleInferior}</div>}
-                            </div>
-                        </div>
-                    </div>
                     <div className="field">
                         <label htmlFor="">Teléfono</label>
                         <input type='text' value={telefono} onChange={e => setTelefono(e.target.value)} placeholder='381-441122'/>
@@ -253,8 +224,31 @@ const AltaRadiologo = () => {
                         <input type='text' value={legajo} onChange={e => setLegajo(e.target.value)} placeholder='Legajo'/>
                         {errors.legajo && <div className="ui pointing red basic label">{errors.legajo}</div>}
                     </div>
+                    <h4 className="ui dividing header">Domicilio</h4>
+                    {renderLocalidades()}
+
+                    <div className="field">
+                        <label htmlFor="">Direccion</label>
+                        <input type="text" value={direccion} onChange={e => setDireccion(e.target.value)} placeholder='Calle 123'/>
+                        {errors.direccion && <div className="ui pointing red basic label">{errors.direccion}</div>}
+                    </div>
+                    <div className="field">
+                        <div className="two fields">
+                            <div className="field">
+                                <label htmlFor="">Calle Superior</label>
+                                <input type="text" value={calleSuperior} onChange={e => setCalleSuperior(e.target.value)} placeholder='Calle'/>
+                                {errors.calleSuperior && <div className="ui pointing red basic label">{errors.calleSuperior}</div>}
+                            </div>
+                            <div className="field">
+                                <label htmlFor="">Calle Inferior</label>
+                                <input type="text" value={calleInferior} onChange={e => setCalleInferior(e.target.value)} placeholder='Calle'/>
+                                {errors.calleInferior && <div className="ui pointing red basic label">{errors.calleInferior}</div>}
+                            </div>
+                        </div>
+                    </div>
+
                     <div className="ui center aligned segment">
-                    <button onClick={postInfoRadiologo} className="ui primary button">Registrar</button>
+                    <button onClick={postInfoRadiologo} className="ui primary button">Confirmar</button>
                         <Link to='/radiologos/listadoradiologos' className="ui negative button">Cancelar</Link>
                     </div>
                 </div>
