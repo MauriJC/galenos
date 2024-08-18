@@ -33,6 +33,7 @@ const ListadoSecretarios = () => {
             setLoading(true);
             const response = await api.get('/altasecretario', { headers });
             const secretarios = response.data.secretarios || [];
+            
             setListaSecretarios(secretarios);
             setFilteredSecretarios(secretarios);
             setTotalPages(Math.ceil(secretarios.length / pageSize));

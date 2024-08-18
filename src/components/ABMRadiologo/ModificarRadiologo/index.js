@@ -18,7 +18,6 @@ const ModificarRadiologo = () => {
     const [localidad, setLocalidad] = useState('');
     const [calleSuperior, setCalleSuperior] = useState('');
     const [calleInferior, setCalleInferior] = useState('');
-    const [fechaDesde, setFechaDesde] = useState('');
     const [fechaNacimiento, setFechaNacimiento] = useState('');
     const [legajo, setLegajo] = useState('');
     const [id, setId] = useState('');
@@ -45,7 +44,7 @@ const ModificarRadiologo = () => {
         try {
             const response = await api.get(`/radiologos`, { params: { numero_matricula: nmatricula } });
             const datos = response.data;
-    
+            
             setNombre(datos.nombre);
             setApellido(datos.apellido);
             setDni(datos.dni);
@@ -54,13 +53,14 @@ const ModificarRadiologo = () => {
             setMatricula(datos.numero_matricula);
             setLegajo(datos.legajo);
             setFechaNacimiento(datos.fecha_nacimiento);
-            setFechaDesde(datos.fecha_alta);
             setId(datos.id);
-    
+
             if (datos.domicilio) {
-                setDireccion(datos.domicilio.direccion);
+                setDireccion(datos.domicilio.direccion);    
+                setCalleSuperior(datos.domicilio.entre_calle_sup);
+                setCalleInferior(datos.domicilio.entre_calle_inf);
                 if (datos.domicilio.localidad) {
-                    setLocalidad(datos.domicilio.localidad.id);  // Usa el ID de la localidad
+                    setLocalidad(datos.domicilio.localidad);  // Usa el ID de la localidad
                 }
             }
         } catch (error) {
@@ -68,7 +68,7 @@ const ModificarRadiologo = () => {
             swal("Error", "No se pudo cargar la información del radiólogo", "error");
         }
     };
-    
+
     const validateForm = () => {
         let errors = {};
         if (!nombre) errors.nombre = "El nombre es requerido";
@@ -88,28 +88,29 @@ const ModificarRadiologo = () => {
     const putInfoRadiologo = async (e) => {
         e.preventDefault();
         if (!validateForm()) return;
-    
+
         const radiologo = {
             nombre,
             apellido,
             dni,
-            direccion,
             telefono,
             email: mail,
             numero_matricula: matricula,
-            localidad,  // Asegúrate de que este sea el ID de la localidad
-            entre_calle_sup: calleSuperior,
-            entre_calle_inf: calleInferior,
-            fecha_desde: fechaDesde,
             fecha_nacimiento: fechaNacimiento,
-            legajo
+            legajo,
+            domicilio: {
+                direccion,
+                localidad,
+                entre_calle_sup: calleSuperior,
+                entre_calle_inf: calleInferior
+            }
         };
-    
+
         const headers = {
             "Content-Type": "application/json"
         };
-    
-        await api.put(`/modificaradiologo/${id}`, radiologo, { headers })
+
+        await api.patch(`/modificaradiologo/${id}/update`, radiologo, { headers })
             .then(response => {
                 if (response.status === 200) {
                     swal("Éxito", 'Radiólogo modificado con éxito', 'success').then(ok => {
@@ -118,14 +119,14 @@ const ModificarRadiologo = () => {
                         }
                     });
                 }
-    
+
                 if (response.status === 500) {
                     swal(`${response.status}`, 'Error 500', 'error');
                 }
             })
             .catch(error => console.log(error));
     };
-    
+
 
     const renderLocalidades = () => (
         <div className="field">
@@ -139,7 +140,7 @@ const ModificarRadiologo = () => {
             {formErrors.localidad && <div className="ui pointing red basic label">{formErrors.localidad}</div>}
         </div>
     );
-    
+
 
     return (
         <div className='ui container'>
@@ -192,17 +193,50 @@ const ModificarRadiologo = () => {
                             {formErrors.fechaNacimiento && <div className="ui pointing red basic label">{formErrors.fechaNacimiento}</div>}
                         </div>
                     </div>
+                    <div className="field">
+                        <label>Teléfono</label>
+                        <input
+                            type="text"
+                            value={telefono}
+                            onChange={e => setTelefono(e.target.value)}
+                            placeholder="Teléfono"
+                        />
+                        {formErrors.telefono && <div className="ui pointing red basic label">{formErrors.telefono}</div>}
+                    </div>
+                    <div className="field">
+                        <label>E-mail</label>
+                        <input
+                            type="email"
+                            value={mail}
+                            onChange={e => setMail(e.target.value)}
+                            placeholder="Mail"
+                        />
+                        {formErrors.mail && <div className="ui pointing red basic label">{formErrors.mail}</div>}
+                    </div>
+                    <div className="field">
+                        <label>Número de Matrícula</label>
+                        <input
+                            type="text"
+                            value={matricula}
+                            onChange={e => setMatricula(e.target.value)}
+                            placeholder="Matrícula"
+                            readOnly disabled
+                        />
+                        {formErrors.matricula && <div className="ui pointing red basic label">{formErrors.matricula}</div>}
+                    </div>
+
+                    <div className="field">
+                        <label>Legajo</label>
+                        <input
+                            type="text"
+                            value={legajo}
+                            onChange={e => setLegajo(e.target.value)}
+                            placeholder="Legajo"
+                            readOnly disabled
+                        />
+                    </div>
                     <h4 className="ui dividing header">Domicilio</h4>
                     {renderLocalidades()}
-                    <div className="field">
-                        <label>Fecha desde que vive en ese domicilio:</label>
-                        <input
-                            type="date"
-                            value={fechaDesde}
-                            onChange={e => setFechaDesde(e.target.value)}
-                        />
-                        {formErrors.fechaDesde && <div className="ui pointing red basic label">{formErrors.fechaDesde}</div>}
-                    </div>
                     <div className="field">
                         <label>Dirección</label>
                         <input
@@ -236,51 +270,10 @@ const ModificarRadiologo = () => {
                             {formErrors.calleInferior && <div className="ui pointing red basic label">{formErrors.calleInferior}</div>}
                         </div>
                     </div>
-                    <div className="field">
-                        <label>Teléfono</label>
-                        <input
-                            type="text"
-                            value={telefono}
-                            onChange={e => setTelefono(e.target.value)}
-                            placeholder="Teléfono"
-                        />
-                        {formErrors.telefono && <div className="ui pointing red basic label">{formErrors.telefono}</div>}
-                    </div>
-                    <div className="field">
-                        <label>E-mail</label>
-                        <input
-                            type="email"
-                            value={mail}
-                            onChange={e => setMail(e.target.value)}
-                            placeholder="Mail"
-                        />
-                        {formErrors.mail && <div className="ui pointing red basic label">{formErrors.mail}</div>}
-                    </div>
-                    <div className="field">
-                        <label>Número de Matrícula</label>
-                        <input
-                            type="text"
-                            value={matricula}
-                            onChange={e => setMatricula(e.target.value)}
-                            placeholder="Matrícula"
-                            readOnly disabled
-                        />
-                        {formErrors.matricula && <div className="ui pointing red basic label">{formErrors.matricula}</div>}
-                    </div>
-                   
-                    <div className="field">
-                        <label>Legajo</label>
-                        <input
-                            type="text"
-                            value={legajo}
-                            onChange={e => setLegajo(e.target.value)}
-                            placeholder="Legajo"
-                            readOnly disabled
-                        />
-                    </div>
+
                     <div className="ui header centered">
-                    <button type="submit" className="ui button primary">Confirmar</button>
-                    <Link to="/radiologos/listadoradiologos" className="ui negative button">Cancelar</Link>
+                        <button type="submit" className="ui button primary">Confirmar</button>
+                        <Link to="/radiologos/listadoradiologos" className="ui negative button">Cancelar</Link>
                     </div>
                 </form>
             </div>

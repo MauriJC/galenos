@@ -14,7 +14,6 @@ const AltaSecretario = () => {
     const [localidad, setLocalidad] = useState('');
     const [calleSuperior, setCalleSuperior] = useState('');
     const [calleInferior, setCalleInferior] = useState('');
-    const [fechaDesde, setFechaDesde] = useState('');
     const [fechaNacimiento, setFechaNacimiento] = useState('');
     const [loaderState, setLoaderState] = useState('disabled');
     const [localidades, setLocalidades] = useState([]);
@@ -94,11 +93,6 @@ const AltaSecretario = () => {
             isValid = false;
         }
 
-        if (!fechaDesde) {
-            formErrors.fechaDesde = "La fecha desde que vive en ese domicilio es requerida";
-            isValid = false;
-        }
-
         setErrors(formErrors);
         return isValid;
     };
@@ -107,8 +101,8 @@ const AltaSecretario = () => {
         if (!validateForm()) {
             return;
         }
-        const username = mail.split('@')[0]; // Calcular el nombre de usuario (puedes ajustar esto según tus necesidades)
-        const password = `${apellido}${dni}`; // Calcular la contraseña
+        const username = mail.split('@')[0];
+        const password = `${apellido}${dni}`;
 
         const secretario = {
             nombre,
@@ -121,8 +115,8 @@ const AltaSecretario = () => {
             localidad,
             entre_calle_sup: calleSuperior,
             entre_calle_inf: calleInferior,
-            fecha_desde: fechaDesde,
             fecha_nacimiento: fechaNacimiento
+
         };
 
         const headers = { "Content-Type": "application/json" };
@@ -216,33 +210,55 @@ const AltaSecretario = () => {
                             {errors.fechaNacimiento && <div className="ui pointing red basic label">{errors.fechaNacimiento}</div>}
                         </div>
                     </div>
+                    <div className="field">
+                        <label>Teléfono</label>
+                        <input
+                            type="text"
+                            value={telefono}
+                            onChange={(e) => setTelefono(e.target.value)}
+                            placeholder='381-441122'
+                        />
+                        {errors.telefono && <div className="ui pointing red basic label">{errors.telefono}</div>}
+                    </div>
 
+                    <div className="field">
+                        <label>Email</label>
+                        <input
+                            type="text"
+                            value={mail}
+                            onChange={(e) => setMail(e.target.value)}
+                            placeholder='JohnDoe@gmail.com'
+                        />
+                        {errors.mail && <div className="ui pointing red basic label">{errors.mail}</div>}
+                    </div>
+
+                    <div className="field">
+                        <label>Numero de legajo</label>
+                        <input
+                            type="text"
+                            value={legajo}
+                            onChange={(e) => setLegajo(e.target.value)}
+                            placeholder='Legajo'
+                        />
+                        {errors.legajo && <div className="ui pointing red basic label">{errors.legajo}</div>}
+                    </div>
                     <h4 className="ui dividing header">Domicilio</h4>
 
                     <div className="field">
                         <label>Localidad</label>
                         <select
                             className="ui fluid dropdown"
-                            onChange={(e) => setLocalidad(e.target.value)}
+                            onChange={(e) => setLocalidad(e.target.value)} // Guardar el id en lugar del nombre
                             value={localidad}
                         >
                             <option value="">Seleccione Localidad</option>
                             {localidades.map((loc) => (
-                                <option key={loc.id} value={loc.nombre}>{loc.nombre}</option>
+                                <option key={loc.id} value={loc.id}>{loc.nombre}</option> // Mostrar nombre, pero almacenar id
                             ))}
                         </select>
                         {errors.localidad && <div className="ui pointing red basic label">{errors.localidad}</div>}
                     </div>
 
-                    <div className="field">
-                        <label>Fecha desde que vive en ese domicilio:</label>
-                        <input
-                            type="date"
-                            value={fechaDesde}
-                            onChange={(e) => setFechaDesde(e.target.value)}
-                        />
-                        {errors.fechaDesde && <div className="ui pointing red basic label">{errors.fechaDesde}</div>}
-                    </div>
 
                     <div className="field">
                         <label>Dirección</label>
@@ -280,38 +296,7 @@ const AltaSecretario = () => {
                         </div>
                     </div>
 
-                    <div className="field">
-                        <label>Teléfono</label>
-                        <input
-                            type="text"
-                            value={telefono}
-                            onChange={(e) => setTelefono(e.target.value)}
-                            placeholder='381-441122'
-                        />
-                        {errors.telefono && <div className="ui pointing red basic label">{errors.telefono}</div>}
-                    </div>
 
-                    <div className="field">
-                        <label>Email</label>
-                        <input
-                            type="text"
-                            value={mail}
-                            onChange={(e) => setMail(e.target.value)}
-                            placeholder='JohnDoe@gmail.com'
-                        />
-                        {errors.mail && <div className="ui pointing red basic label">{errors.mail}</div>}
-                    </div>
-
-                    <div className="field">
-                        <label>Numero de legajo</label>
-                        <input
-                            type="text"
-                            value={legajo}
-                            onChange={(e) => setLegajo(e.target.value)}
-                            placeholder='Legajo'
-                        />
-                        {errors.legajo && <div className="ui pointing red basic label">{errors.legajo}</div>}
-                    </div>
                 </div>
             </div>
 
