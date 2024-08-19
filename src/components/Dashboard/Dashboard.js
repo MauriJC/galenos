@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Doughnut } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
-import axios from 'axios';
+
 import './Dashboard.css';
+import api from '../../apis';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -62,7 +63,7 @@ const Dashboard = () => {
     const fetchData = async () => {
       try {
         const token = localStorage.getItem('Authorization'); // O de donde obtengas el token
-        const diagnosticosResponse = await axios.get('/diagnosticos', {
+        const diagnosticosResponse = await api.get('/diagnosticos', {
           headers: {
             Authorization: token,
           },
@@ -103,7 +104,7 @@ const Dashboard = () => {
           ],
         });
 
-        const response = await axios.get('/pacientesporlocalidad', {
+        const response = await api.get('/pacientesporlocalidad', {
           headers: {
             Authorization: token,
           },
