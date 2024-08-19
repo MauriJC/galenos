@@ -30,6 +30,8 @@ const Diagnostico = () => {
         try {
             const response = await api.get('/diagnostico', { params }, { headers });
             setinfo(response.data);
+            console.log(response.data);
+            
             sugerirEnfermedad(response.data);
         } catch (error) {
             console.error("Error fetching diagnostico:", error);
