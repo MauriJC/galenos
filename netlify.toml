@@ -1,5 +1,5 @@
 [[redirects]]
-  from = "*"
+  from = "/*"
   to = "http://142.93.53.173/"
   status = 200
   force = true
