@@ -131,7 +131,7 @@ const AltaSecretario = () => {
                     username,
                     password,
                     email: mail,
-                    role: 'SECRETARIO'
+                    role: 'secretario'
                 };
 
                 const responseUser = await api.post('/register', user, { headers });

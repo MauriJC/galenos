@@ -136,7 +136,7 @@ const AltaMedico = () => {
                     username,
                     password,
                     email: mail,
-                    role: 'MEDICO' // Asignar el rol correspondiente
+                    role: 'medico' // Asignar el rol correspondiente
                 };
 
                 const responseUser = await api.post('/register', user, { headers });
