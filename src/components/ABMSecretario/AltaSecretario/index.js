@@ -167,7 +167,7 @@ const AltaSecretario = () => {
                     <div className="field">
                         <div className="two fields">
                             <div className="field">
-                                <label>Nombre completo</label>
+                                <label>Nombre</label>
                                 <input
                                     type="text"
                                     value={nombre}
